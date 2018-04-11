@@ -23,6 +23,8 @@ const FetchModel = {
 	}
 }
 
+
+
 const ResponseController = {
 	sortResponse(data){
 		console.log(data);
@@ -61,33 +63,43 @@ const View = {
 	jobContainer: document.getElementById('jobContainer'),
 
 	  displayLatestJobs(job){
-		jobContainer.innerHTML += `
-		<div>
+
+    const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
 			<p>${job.anstallningstyp}</p>
 			<p>${job.arbetsplatsnamn}</p>
-			<p>${job.kommunnamn}</p>
+			<p>${job.kommunnamn}< /p>
 			<p>${job.sista_ansokningsdag}</p>
 			<p>${job.yrkesbenamning}</p>
 			<p>${job.annonsurl}</p>
 		</div>`;
-		  
-		//Create save-button
+
+    jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
+
 		const save = document.createElement('button');
 		save.classList.add('save');
 		save.id = job.annonsid;
 		save.innerHTML = `Save`;
+
+    save.addEventListener('click',function(){
+      console.log(job.annonsid);
+      this.dataset.id;
+      updateLocalStorage(job.annonsid);
+      //View.updateLocalStorage();
+    });
+
 		jobContainer.appendChild(save);
-//		save.addEventListener('click', saveJob);
-		  	
+
+
 //		getButton(job.annonsid);
 	 }
 }
 
 
+
 //Create a function that updates the local storage.
-function updateLocalStorage(job) {
-	localStorage.setItem('savedJobs', JSON.stringify(job));
+function updateLocalStorage(annonsId) {
+	localStorage.setItem('savedJobs', JSON.stringify(annonsId));
 }
 function getButton (element) {
 	const save = document.getElementById('element');
