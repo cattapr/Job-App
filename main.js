@@ -9,6 +9,9 @@
 //let listings2 = fetchAllEmploymentAds();
 //console.log(listings2);
 
+// Array for savedJobs list
+let storedJobs = [];
+loadData();
 
 const FetchModel = {
 	fetchAll(){
@@ -95,17 +98,31 @@ const View = {
 	 }
 }
 
-
-
 //Create a function that updates the local storage.
 function updateLocalStorage(annonsId) {
-	localStorage.setItem('savedJobs', JSON.stringify(annonsId));
+  //push the annonsId into the array
+  storedJobs.push(annonsId);
+
+  // set the savedJobs on localStorage with the storedJobs data.
+	localStorage.setItem('savedJobs', JSON.stringify(storedJobs));
 }
+
 function getButton (element) {
 	const save = document.getElementById('element');
 	save.addEventListener('click', function(){
 		console.log('Hej');
 	})
+}
+
+function loadData(){
+    // Checks if there is anything in local storage,
+    // and makes storedJobs equal to savedJobs in localStorage
+    if (localStorage.getItem('savedJobs')){
+            storedJobs = JSON.parse(localStorage.getItem('savedJobs'));
+    }else{
+            storedJobs = [];
+            //updateLocalStorage();
+    }
 }
 
 
