@@ -17,7 +17,7 @@ const FetchModel = {
         .then((data) => {
         	//let listings = data.matchningslista;
 			 ResponseController.sortResponse(data);
-			 ResponseController.getAllListings(data);
+			 ResponseController.getTotalNumberOfJobs(data);
         })
 		.catch(error => console.log(error));
 	}
@@ -28,15 +28,24 @@ const ResponseController = {
 		console.log(data);
 	},
 
-	getAllListings(data) {
+	getTotalNumberOfJobs(data) {
 		console.log(data.matchningslista.antal_platsannonser);
 		let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
     let latestJobs = data.matchningslista.matchningdata;
-
+    ResponseController.getLatestJobs(latestJobs);
 		View.displayTotalNumberOfJobs(totalNumberOfJobs);
-    View.displayLatestJobs(latestJobs);
 
-	}
+	},
+
+  // Display latest 10 jobs
+  getLatestJobs(latestJobs){
+
+    for (let job of latestJobs){
+
+      View.displayLatestJobs(job);
+    }
+
+  }
 }
 
 const View = {
@@ -45,9 +54,12 @@ const View = {
 		output.innerHTML = `<h1>${totalNumberOfJobs}</h1>`;
 	},
 
-  displayLatestJobs(latestJobs){
-    console.log(latestJobs);
-  }
+  displayLatestJobs(job){
+    console.log(job);
+    console.log(job.annonsrubrik);
+  },
+
+
 }
 
 FetchModel.fetchAll();
