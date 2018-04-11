@@ -51,7 +51,11 @@ const ResponseController = {
 const View = {
 	output: document.getElementById('output'),
 	displayTotalNumberOfJobs(totalNumberOfJobs) {
-		output.innerHTML = `<h1>${totalNumberOfJobs}</h1>`;
+		output.innerHTML = `
+			<div class="numberOfJobs">
+				<h1>${totalNumberOfJobs}</h1>
+				<p>avaliable jobs in Stockholm</p>
+			</div>`;
 	},
 
 	jobContainer: document.getElementById('jobContainer'),
