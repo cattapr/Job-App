@@ -70,10 +70,29 @@ const View = {
   		<p>${job.sista_ansokningsdag}</p>
   		<p>${job.yrkesbenamning}</p>
   		<p>${job.annonsurl}</p>
+		<button class="save" id="${job.annonsid}">Save</button>
   	</div>`;
-  },
-
-
+  }
 }
+
+
+//Create a function that updates the local storage.
+function updateLocalStorage() {
+	localStorage.setItem('savedJobs', JSON.stringify(job));
+}
+
+
+
+
+//function updateLocalStorage() {
+//	localStorage.setItem('todoList', JSON.stringify(allTodoItems));
+//}
+
+
+
+
+
+
+
 
 FetchModel.fetchAll();
