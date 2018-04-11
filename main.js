@@ -54,9 +54,19 @@ const View = {
 		output.innerHTML = `<h1>${totalNumberOfJobs}</h1>`;
 	},
 
+	jobContainer: document.getElementById('jobContainer'),
+
   displayLatestJobs(job){
-    console.log(job);
-    console.log(job.annonsrubrik);
+  	jobContainer.innerHTML += `
+  	<div>
+  		<h2>${job.annonsrubrik}</h2>
+  		<p>${job.anstallningstyp}</p>
+  		<p>${job.arbetsplatsnamn}</p>
+  		<p>${job.kommunnamn}</p>
+  		<p>${job.sista_ansokningsdag}</p>
+  		<p>${job.yrkesbenamning}</p>
+  		<p>${job.annonsurl}</p>
+  	</div>`;
   },
 
 
