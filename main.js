@@ -23,6 +23,8 @@ const FetchModel = {
 	}
 }
 
+
+
 const ResponseController = {
 	sortResponse(data){
 		console.log(data);
@@ -71,23 +73,31 @@ const View = {
 			<p>${job.yrkesbenamning}</p>
 			<p>${job.annonsurl}</p>
 		</div>`;
-		  
+
 		//Create save-button
 		const save = document.createElement('button');
 		save.classList.add('save');
 		save.id = job.annonsid;
+    save.dataset.id = job.annonsid
 		save.innerHTML = `Save`;
 		jobContainer.appendChild(save);
-//		save.addEventListener('click', saveJob);
-		  	
+
+		save.addEventListener('click',function(){
+      console.log('hello');
+      this.dataset.id
+      updateLocalStorage(this);
+      //View.updateLocalStorage();
+    });
+
 //		getButton(job.annonsid);
 	 }
 }
 
 
+
 //Create a function that updates the local storage.
-function updateLocalStorage(job) {
-	localStorage.setItem('savedJobs', JSON.stringify(job));
+function updateLocalStorage(annonsId) {
+	localStorage.setItem('savedJobs', JSON.stringify(annonsId));
 }
 function getButton (element) {
 	const save = document.getElementById('element');
