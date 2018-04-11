@@ -63,31 +63,33 @@ const View = {
 	jobContainer: document.getElementById('jobContainer'),
 
 	  displayLatestJobs(job){
-		jobContainer.innerHTML += `
-		<div>
+
+    const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
 			<p>${job.anstallningstyp}</p>
 			<p>${job.arbetsplatsnamn}</p>
-			<p>${job.kommunnamn}</p>
+			<p>${job.kommunnamn}< /p>
 			<p>${job.sista_ansokningsdag}</p>
 			<p>${job.yrkesbenamning}</p>
 			<p>${job.annonsurl}</p>
 		</div>`;
 
-		//Create save-button
+    jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
+
 		const save = document.createElement('button');
 		save.classList.add('save');
 		save.id = job.annonsid;
-    save.dataset.id = job.annonsid
 		save.innerHTML = `Save`;
-		jobContainer.appendChild(save);
 
-		save.addEventListener('click',function(){
-      console.log('hello');
-      this.dataset.id
-      updateLocalStorage(this);
+    save.addEventListener('click',function(){
+      console.log(job.annonsid);
+      this.dataset.id;
+      updateLocalStorage(job.annonsid);
       //View.updateLocalStorage();
     });
+
+		jobContainer.appendChild(save);
+
 
 //		getButton(job.annonsid);
 	 }
