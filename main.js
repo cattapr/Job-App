@@ -17,6 +17,7 @@ const FetchModel = {
         .then((data) => {
         	//let listings = data.matchningslista;
 			 ResponseController.sortResponse(data);
+			 ResponseController.getAllListings(data);
         })
 		.catch(error => console.log(error));
 	}
@@ -25,14 +26,28 @@ const FetchModel = {
 const ResponseController = {
 	sortResponse(data){
 		console.log(data);
+	},
+
+	getAllListings(data) {
+		console.log(data.matchningslista.antal_platsannonser);
+		let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
+		
+		View.displayTotalNumberOfJobs(totalNumberOfJobs);
+
 	}
 }
 
+
 const View = {
-	output: document.getElementById('output')
+	output: document.getElementById('output'),
+	displayTotalNumberOfJobs(totalNumberOfJobs) {
+		output.innerHTML = `<h1>${totalNumberOfJobs}</h1>`;
+	}
 }
 
 FetchModel.fetchAll();
+
+
 
 
 
