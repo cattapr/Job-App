@@ -75,14 +75,15 @@ const View = {
 			<p>${job.sista_ansokningsdag}</p>
 			<p>${job.yrkesbenamning}</p>
 			<p>${job.annonsurl}</p>
+			<button class="save" id="${job.annonsid}">Save</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
-		const save = document.createElement('button');
-		save.classList.add('save');
-		save.id = job.annonsid;
-		save.innerHTML = `Save`;
+		const save = document.getElementById(job.annonsid);
+		//save.classList.add('save');
+		//save.id = job.annonsid;
+		//save.innerHTML = `Save`;
 
     save.addEventListener('click',function(){
       console.log(job.annonsid);
@@ -91,7 +92,7 @@ const View = {
       //View.updateLocalStorage();
     });
 
-		jobContainer.appendChild(save);
+		//jobContainer.appendChild(save);
 
 
 //		getButton(job.annonsid);
