@@ -47,13 +47,6 @@ nav {
 	padding: 120px 10px;
 }
 
-.numberOfJobs {
-	padding: 50px!important;
-	margin: auto!important;
-	text-align: center!important;
-}
-
-
 #jobContainer{	
 	&>div {
 		border: 1px solid #d0d0d0;
@@ -82,5 +75,18 @@ button {
 	&:hover {
 		transition: ease background .3s;
 		background: rgba(0,0,0,.6);
+	}
+}
+#output {
+		h1 {
+		padding: 50px 50px 0;
+		margin: auto;
+		text-align: center;
+		font-size:5rem;
+	}
+	p {
+		margin: auto;
+		text-align: center;
+		padding:0 0 50px;
 	}
 }
