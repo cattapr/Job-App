@@ -75,26 +75,19 @@ const View = {
 			<p class="municipality">${job.kommunnamn}</p>
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<p class="link">${job.annonsurl}</p>
+			<button class="save" id="${job.annonsid}">Save</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
-		const save = document.createElement('button');
-		save.classList.add('save');
-		save.id = job.annonsid;
-		save.innerHTML = `Save`;
+	const save = document.getElementById(job.annonsid);
 
     save.addEventListener('click',function(){
-      console.log(job.annonsid);
-      this.dataset.id;
-      updateLocalStorage(job.annonsid);
-      //View.updateLocalStorage();
-    });
-
-		jobContainer.appendChild(save);
-
-
-//		getButton(job.annonsid);
+		  console.log(job.annonsid);
+		  this.dataset.id;
+		  updateLocalStorage(job.annonsid);
+		  //View.updateLocalStorage();
+		});
 	 }
 }
 
