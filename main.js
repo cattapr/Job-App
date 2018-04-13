@@ -74,7 +74,7 @@ const View = {
 			<p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
 			<p class="municipality">${job.kommunnamn}</p>
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
-			<p class="link">${job.annonsurl}</p>
+			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
 			<button class="save" id="${job.annonsid}">Save</button>
 		</div>`;
 
