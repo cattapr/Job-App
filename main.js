@@ -1,13 +1,3 @@
-//function fetchAllEmploymentAds() {
-//   		return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=20&yrkesomradeid=3&lanid=1`)
-//        .then((response) => response.json())
-//        .then((data) => {
-//        	let listings = data.matchningslista;
-//        })
-//}
-
-//let listings2 = fetchAllEmploymentAds();
-//console.log(listings2);
 
 // Array for savedJobs list
 let storedJobs = [];
@@ -27,7 +17,6 @@ const FetchModel = {
 }
 
 
-
 const ResponseController = {
 	sortResponse(data){
 		console.log(data);
@@ -44,14 +33,11 @@ const ResponseController = {
 
   // Display latest 10 jobs
   getLatestJobs(latestJobs){
-
-    for (let job of latestJobs){
-
-      View.displayLatestJobs(job);
-    }
-
-  }
-}
+    	for (let job of latestJobs){
+      	View.displayLatestJobs(job);
+    	}
+  	}
+	}
 
 const View = {
 	output: document.getElementById('output'),
@@ -83,15 +69,14 @@ const View = {
 		const save = document.getElementById(job.annonsid);
 
     save.addEventListener('click',function(){
-      console.log(job.annonsid);
-      this.dataset.id;
-      updateLocalStorage(job.annonsid);
-      //View.updateLocalStorage();
+      	console.log(job.annonsid);
+      	this.dataset.id;
+      	updateLocalStorage(job.annonsid);
     });
 	 }
 }
 
-//Create a function that updates the local storage.
+// Update the local storage.
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
   storedJobs.push(annonsId);
@@ -100,12 +85,6 @@ function updateLocalStorage(annonsId) {
 	localStorage.setItem('savedJobs', JSON.stringify(storedJobs));
 }
 
-function getButton (element) {
-	const save = document.getElementById('element');
-	save.addEventListener('click', function(){
-		console.log('Hej');
-	})
-}
 
 function loadData(){
     // Checks if there is anything in local storage,
@@ -114,21 +93,8 @@ function loadData(){
             storedJobs = JSON.parse(localStorage.getItem('savedJobs'));
     }else{
             storedJobs = [];
-            //updateLocalStorage();
     }
 }
-
-
-
-//function updateLocalStorage() {
-//	localStorage.setItem('todoList', JSON.stringify(allTodoItems));
-//}
-
-
-
-
-
-
 
 
 FetchModel.fetchAll();
