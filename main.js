@@ -69,25 +69,27 @@ const View = {
 
     const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
+
 			<p class="profession">${job.yrkesbenamning}</p>
 			<p class="company">${job.arbetsplatsnamn}</p>
 			<p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
 			<p class="municipality">${job.kommunnamn}</p>
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<p class="link">${job.annonsurl}</p>
+
 			<button class="save" id="${job.annonsid}">Save</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
-	const save = document.getElementById(job.annonsid);
+		const save = document.getElementById(job.annonsid);
 
     save.addEventListener('click',function(){
-		  console.log(job.annonsid);
-		  this.dataset.id;
-		  updateLocalStorage(job.annonsid);
-		  //View.updateLocalStorage();
-		});
+      console.log(job.annonsid);
+      this.dataset.id;
+      updateLocalStorage(job.annonsid);
+      //View.updateLocalStorage();
+    });
 	 }
 }
 
