@@ -75,6 +75,7 @@ const View = {
 			<p class="municipality">${job.kommunnamn}</p>
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<p class="link">${job.annonsurl}</p>
+			<button class="save" id="${job.annonsid}">Save</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
@@ -87,8 +88,6 @@ const View = {
       updateLocalStorage(job.annonsid);
       //View.updateLocalStorage();
     });
-
-//		getButton(job.annonsid);
 	 }
 }
 
