@@ -9,6 +9,9 @@
 //let listings2 = fetchAllEmploymentAds();
 //console.log(listings2);
 
+// Array for savedJobs list
+let storedJobs = [];
+loadData();
 
 const FetchModel = {
 	fetchAll(){
@@ -22,6 +25,8 @@ const FetchModel = {
 		.catch(error => console.log(error));
 	}
 }
+
+
 
 const ResponseController = {
 	sortResponse(data){
@@ -61,39 +66,63 @@ const View = {
 	jobContainer: document.getElementById('jobContainer'),
 
 	  displayLatestJobs(job){
-		jobContainer.innerHTML += `
-		<div>
+
+    const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
 			<p>${job.anstallningstyp}</p>
 			<p>${job.arbetsplatsnamn}</p>
-			<p>${job.kommunnamn}</p>
+			<p>${job.kommunnamn}< /p>
 			<p>${job.sista_ansokningsdag}</p>
 			<p>${job.yrkesbenamning}</p>
 			<p>${job.annonsurl}</p>
 		</div>`;
-		  
-		//Create save-button
+
+    jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
+
 		const save = document.createElement('button');
 		save.classList.add('save');
 		save.id = job.annonsid;
 		save.innerHTML = `Save`;
+
+    save.addEventListener('click',function(){
+      console.log(job.annonsid);
+      this.dataset.id;
+      updateLocalStorage(job.annonsid);
+      //View.updateLocalStorage();
+    });
+
 		jobContainer.appendChild(save);
-//		save.addEventListener('click', saveJob);
-		  	
+
+
 //		getButton(job.annonsid);
 	 }
 }
 
-
 //Create a function that updates the local storage.
-function updateLocalStorage(job) {
-	localStorage.setItem('savedJobs', JSON.stringify(job));
+function updateLocalStorage(annonsId) {
+  //push the annonsId into the array
+  storedJobs.push(annonsId);
+
+  // set the savedJobs on localStorage with the storedJobs data.
+	localStorage.setItem('savedJobs', JSON.stringify(storedJobs));
 }
+
 function getButton (element) {
 	const save = document.getElementById('element');
 	save.addEventListener('click', function(){
 		console.log('Hej');
 	})
+}
+
+function loadData(){
+    // Checks if there is anything in local storage,
+    // and makes storedJobs equal to savedJobs in localStorage
+    if (localStorage.getItem('savedJobs')){
+            storedJobs = JSON.parse(localStorage.getItem('savedJobs'));
+    }else{
+            storedJobs = [];
+            //updateLocalStorage();
+    }
 }
 
 
