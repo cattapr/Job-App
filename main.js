@@ -71,7 +71,7 @@ const View = {
 			<h2>${job.annonsrubrik}</h2>
 			<p>${job.anstallningstyp}</p>
 			<p>${job.arbetsplatsnamn}</p>
-			<p>${job.kommunnamn}< /p>
+			<p>${job.kommunnamn}</p>
 			<p>${job.sista_ansokningsdag}</p>
 			<p>${job.yrkesbenamning}</p>
 			<p>${job.annonsurl}</p>
@@ -81,9 +81,6 @@ const View = {
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
 		const save = document.getElementById(job.annonsid);
-		//save.classList.add('save');
-		//save.id = job.annonsid;
-		//save.innerHTML = `Save`;
 
     save.addEventListener('click',function(){
       console.log(job.annonsid);
@@ -91,9 +88,6 @@ const View = {
       updateLocalStorage(job.annonsid);
       //View.updateLocalStorage();
     });
-
-		//jobContainer.appendChild(save);
-
 
 //		getButton(job.annonsid);
 	 }
