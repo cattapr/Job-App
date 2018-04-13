@@ -69,12 +69,12 @@ const View = {
 
     const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
-			<p>${job.anstallningstyp}</p>
-			<p>${job.arbetsplatsnamn}</p>
-			<p>${job.kommunnamn}< /p>
-			<p>${job.sista_ansokningsdag}</p>
-			<p>${job.yrkesbenamning}</p>
-			<p>${job.annonsurl}</p>
+			<p class="profession">${job.yrkesbenamning}</p>
+			<p class="company">${job.arbetsplatsnamn}</p>
+			<p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
+			<p class="municipality">${job.kommunnamn}</p>
+			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
+			<p class="link">${job.annonsurl}</p>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);

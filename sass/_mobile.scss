@@ -1,0 +1,86 @@
+
+/**************************************/
+/*************** RESET ****************/
+/**************************************/
+
+body {
+	padding:0;
+	margin:0;
+}
+h1 {
+	-webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+}
+ul {
+	list-style: none;
+	-webkit-margin-before: 0em;
+	-webkit-margin-after: 0em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	-webkit-padding-start: 0px;
+}
+
+
+/*******************************************/
+/*************** TYPOGRAPHY ****************/
+/*******************************************/
+body {
+	font-family: 'Tajawal', sans-serif;
+}
+
+nav {
+	background: rgba(0,0,0,.8);
+	width: 100%;
+	color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.3rem 2rem 1rem;
+	position: fixed;
+	box-sizing: border-box;
+}
+
+.wrapper {
+	width:100%;
+	max-width:800px;
+	margin:auto;
+	padding: 120px 10px;
+}
+
+.numberOfJobs {
+	padding: 50px!important;
+	margin: auto!important;
+	text-align: center!important;
+}
+
+
+#jobContainer{	
+	&>div {
+		border: 1px solid #d0d0d0;
+	    padding: 4% 7%;
+		border-radius: 3px;
+	}
+	.profession {
+		font-weight:700;
+		letter-spacing: 1px;
+		opacity: .5;
+	}
+}
+
+button {
+	background: rgba(0,0,0,.8);
+    color: #fff;
+    padding: .8rem 2rem .6rem;
+    font-size: 1rem;
+    font-family: inherit;
+    border-radius: 3px;
+    border: none;
+    outline: none;
+    margin: 10px 0;
+	transition: ease background .3s;
+	cursor: pointer;
+	&:hover {
+		transition: ease background .3s;
+		background: rgba(0,0,0,.6);
+	}
+}
