@@ -53,9 +53,9 @@ const ResponseController = {
 	}
 
 const View = {
-	output: document.getElementById('output'),
+	totalNumberOfJobsHeader: document.getElementById('totalNumberOfJobsHeader'),
 	displayTotalNumberOfJobs(totalNumberOfJobs) {
-		output.innerHTML = `
+		totalNumberOfJobsHeader.innerHTML = `
 			<div class="numberOfJobs">
 				<h1>${totalNumberOfJobs}</h1>
 				<p>Available jobs in Stockholm</p>
@@ -91,11 +91,11 @@ const View = {
 		showDetailsButton.addEventListener('click', function(){
 				ResponseController.getJobDetails(job.annonsid);
 				jobContainer.style.display = "none";
-				output.style.display = "none";
+			  totalNumberOfJobsHeader.style.display = "none";
 		});
 	},
 
-	 jobDetailsContainer: document.getElementById('jobDetailsContainer'),
+	 containerJobDetails: document.getElementById('containerJobDetails'),
 	 displayJobDetails(annonsId){
 		 console.log('Job details: ' , annonsId);
 		 console.log(annonsId.platsannons.annons.annonstext);
@@ -105,10 +105,31 @@ const View = {
 			<p>${annonsId.platsannons.annons.annonstext}</p>
 		 `;
 
-		 jobDetailsContainer.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
+		 containerJobDetails.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
 
 	 }
+}// End of View module
+
+
+const NavigationView = {
+	header: document.getElementById('header'),
+	mySavedJobs: document.getElementById('mySavedJobs'),
+
+	//displaySavedJobs(annonsId){
+		//Write out saved jobs here
+	//}
+
+	containerJobDetails: document.getElementById('containerJobDetails'),
+	containerSavedJobs: document.getElementById('containerSavedJobs'),
+
+	goToLandingPage(){
+		NavigationView.header.addEventListener('click', function(){
+			location.reload();
+		});
+	}
 }
+
+
 
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
@@ -130,4 +151,9 @@ function loadData(){
 }
 
 
+/***************************************/
+/************* CALL FUNCTIONS **********/
+/***************************************/
+
 FetchModel.fetchAll();
+NavigationView.goToLandingPage();
