@@ -13,9 +13,18 @@ const FetchModel = {
 			 ResponseController.getTotalNumberOfJobs(data);
         })
 		.catch(error => console.log(error));
-	}
-}
+	},
 
+	fetchById(annonsId){
+		return fetch(`http://api.arbetsformedlingen.se/af//v0/platsannonser/${annonsId}`)
+			 .then((response) => response.json())
+			 .then((job) => {
+			View.displayJobDetails(job);
+			 })
+	 .catch(error => console.log(error));
+ 	}
+
+}
 
 const ResponseController = {
 	sortResponse(data){
@@ -31,12 +40,16 @@ const ResponseController = {
 
 	},
 
-  // Display latest 10 jobs
   getLatestJobs(latestJobs){
-    	for (let job of latestJobs){
-      	View.displayLatestJobs(job);
-    	}
-  	}
+    for (let job of latestJobs){
+      View.displayLatestJob(job);
+    }
+  },
+
+	getJobDetails(annonsId){
+		FetchModel.fetchById(annonsId);
+	}
+
 	}
 
 const View = {
@@ -45,13 +58,13 @@ const View = {
 		output.innerHTML = `
 			<div class="numberOfJobs">
 				<h1>${totalNumberOfJobs}</h1>
-				<p>avaliable jobs in Stockholm</p>
+				<p>Available jobs in Stockholm</p>
 			</div>`;
 	},
 
 	jobContainer: document.getElementById('jobContainer'),
 
-	  displayLatestJobs(job){
+	  displayLatestJob(job){
 
     const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
@@ -62,21 +75,41 @@ const View = {
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
 			<button class="save" id="${job.annonsid}">Save</button>
+			<button class="show-details" id="show-details-${job.annonsid}">Show details</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
 		const save = document.getElementById(job.annonsid);
-
     save.addEventListener('click',function(){
-      	console.log(job.annonsid);
+      	//console.log(job.annonsid);
       	this.dataset.id;
       	updateLocalStorage(job.annonsid);
     });
+
+		const showDetailsButton = document.getElementById('show-details-' + job.annonsid);
+		showDetailsButton.addEventListener('click', function(){
+				ResponseController.getJobDetails(job.annonsid);
+				jobContainer.style.display = "none";
+				output.style.display = "none";
+		});
+	},
+
+	 jobDetailsContainer: document.getElementById('jobDetailsContainer'),
+	 displayJobDetails(annonsId){
+		 console.log('Job details: ' , annonsId);
+		 console.log(annonsId.platsannons.annons.annonstext);
+
+		 const jobDetailsCardHTML = `
+		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
+			<p>${annonsId.platsannons.annons.annonstext}</p>
+		 `;
+
+		 jobDetailsContainer.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
+
 	 }
 }
 
-// Update the local storage.
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
   storedJobs.push(annonsId);
