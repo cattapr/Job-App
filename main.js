@@ -14,15 +14,30 @@ const FetchModel = {
         })
 		.catch(error => console.log(error));
 	},
-
-	fetchById(annonsId){
-		return fetch(`http://api.arbetsformedlingen.se/af//v0/platsannonser/${annonsId}`)
+	fetchById(annonsId, viewType){
+		return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
 			 .then((response) => response.json())
 			 .then((job) => {
-			View.displayJobDetails(job);
+				 switch(viewType) {
+					 	case 'summary':
+							 View.displaySavedJobCard(job);
+							 break;
+				    case 'detailed':
+				        View.displayJobDetails(job);
+				        break;
+						}
 			 })
 	 .catch(error => console.log(error));
- 	}
+	}
+
+/*	fetchById(annonsId){
+		return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
+			 .then((response) => response.json())
+			 .then((job) => {
+				 View.displayJobDetails(job);
+			 })
+	 .catch(error => console.log(error));
+ } */
 
 }
 
@@ -47,7 +62,7 @@ const ResponseController = {
   },
 
 	getJobDetails(annonsId){
-		FetchModel.fetchById(annonsId);
+		FetchModel.fetchById(annonsId, 'detailed');
 	}
 
 	}
@@ -94,6 +109,26 @@ const View = {
 			  totalNumberOfJobsHeader.style.display = "none";
 		});
 	},
+	containerSavedJobs: document.getElementById('containerSavedJobs'),
+	displaySavedJobCard(annonsId){
+		let job = annonsId.platsannons;
+		console.log(job);
+
+ //TODO: Need to fix the undefined objects
+		const savedJobCardHTML = `<div>
+			<h2>${job.annons.annonsrubrik}</h2>
+			<p class="profession">${job.annons.yrkesbenamning}</p>
+			<p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
+			<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
+			<p class="municipality">${job.annons.kommunnamn}</p>
+			<p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
+			<a href="${job.annons.platsannonsUrl}" target="_blank"><p class="link">Läs mer</p></a>
+			<button class="delete" id="${job.annons.annonsid}">Delete</button>
+		</div>`;
+
+		containerSavedJobs.insertAdjacentHTML('beforeEnd', savedJobCardHTML);
+
+	},
 
 	 containerJobDetails: document.getElementById('containerJobDetails'),
 	 displayJobDetails(annonsId){
@@ -132,8 +167,15 @@ const NavigationView = {
 			NavigationView.containerLandingPage.classList.add('hidden');
 			NavigationView.containerJobDetails.classList.add('hidden');
 			NavigationView.containerSavedJobs.classList.remove('hidden');
-			
-			// 1. Grab the ID's from local storage 
+			console.log(storedJobs);
+
+			for (annonsId of storedJobs){
+				console.log(annonsId);
+				FetchModel.fetchById(annonsId, 'summary');
+			}
+
+
+			// 1. Grab the ID's from local storage
 			// 2. Loop through IDs and fetch jobs based on IDs
 			// 3. Call a view-function from the fetch where we pass in the ID's
 			//    and append the jobs to the HTML in #savedJobsList
