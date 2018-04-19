@@ -118,13 +118,25 @@ const NavigationView = {
 	//displaySavedJobs(annonsId){
 		//Write out saved jobs here
 	//}
-
+	containerLandingPage: document.getElementById('containerLandingPage'),
 	containerJobDetails: document.getElementById('containerJobDetails'),
 	containerSavedJobs: document.getElementById('containerSavedJobs'),
 
 	goToLandingPage(){
 		NavigationView.header.addEventListener('click', function(){
 			location.reload();
+		});
+	},
+	goToSavedJobs(){
+		NavigationView.mySavedJobs.addEventListener('click', function(){
+			NavigationView.containerLandingPage.classList.add('hidden');
+			NavigationView.containerJobDetails.classList.add('hidden');
+			NavigationView.containerSavedJobs.classList.remove('hidden');
+			
+			// 1. Grab the ID's from local storage 
+			// 2. Loop through IDs and fetch jobs based on IDs
+			// 3. Call a view-function from the fetch where we pass in the ID's
+			//    and append the jobs to the HTML in #savedJobsList
 		});
 	}
 }
@@ -156,4 +168,6 @@ function loadData(){
 /***************************************/
 
 FetchModel.fetchAll();
+
 NavigationView.goToLandingPage();
+NavigationView.goToSavedJobs();
