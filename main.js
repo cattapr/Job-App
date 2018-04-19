@@ -53,9 +53,9 @@ const ResponseController = {
 }
 
 const View = {
-	output: document.getElementById('output'),
+	totalNumberOfJobsHeader: document.getElementById('totalNumberOfJobsHeader'),
 	displayTotalNumberOfJobs(totalNumberOfJobs) {
-		output.innerHTML = `
+		totalNumberOfJobsHeader.innerHTML = `
 			<div class="numberOfJobs">
 				<h1>${totalNumberOfJobs}</h1>
 				<p>Available jobs in Stockholm</p>
@@ -98,7 +98,7 @@ const View = {
 		}
 	},
 
-	 jobDetailsContainer: document.getElementById('jobDetailsContainer'),
+	 containerJobDetails: document.getElementById('containerJobDetails'),
 
 	 displayJobDetails(annonsId){
 		 console.log('Job details: ' , annonsId);
@@ -110,9 +110,44 @@ const View = {
 			<button id="go-back"><a href="${window.location.href.split("?")[0]}">Go back</a></button>
 		 `;
 
-		 jobDetailsContainer.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
+
+		 containerJobDetails.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
+
 	 }
+}// End of View module
+
+
+const NavigationView = {
+	header: document.getElementById('header'),
+	mySavedJobs: document.getElementById('mySavedJobs'),
+
+	//displaySavedJobs(annonsId){
+		//Write out saved jobs here
+	//}
+	containerLandingPage: document.getElementById('containerLandingPage'),
+	containerJobDetails: document.getElementById('containerJobDetails'),
+	containerSavedJobs: document.getElementById('containerSavedJobs'),
+
+	goToLandingPage(){
+		NavigationView.header.addEventListener('click', function(){
+			location.reload();
+		});
+	},
+	goToSavedJobs(){
+		NavigationView.mySavedJobs.addEventListener('click', function(){
+			NavigationView.containerLandingPage.classList.add('hidden');
+			NavigationView.containerJobDetails.classList.add('hidden');
+			NavigationView.containerSavedJobs.classList.remove('hidden');
+			
+			// 1. Grab the ID's from local storage 
+			// 2. Loop through IDs and fetch jobs based on IDs
+			// 3. Call a view-function from the fetch where we pass in the ID's
+			//    and append the jobs to the HTML in #savedJobsList
+		});
+	}
 }
+
+
 
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
@@ -134,4 +169,11 @@ function loadData(){
 }
 
 
+/***************************************/
+/************* CALL FUNCTIONS **********/
+/***************************************/
+
 FetchModel.fetchAll();
+
+NavigationView.goToLandingPage();
+NavigationView.goToSavedJobs();
