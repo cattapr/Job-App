@@ -16,7 +16,6 @@ const FetchModel = {
 	}
 }
 
-
 const ResponseController = {
 	sortResponse(data){
 		console.log(data);
@@ -31,13 +30,13 @@ const ResponseController = {
 
 	},
 
-  // Display latest 10 jobs
   getLatestJobs(latestJobs){
     	for (let job of latestJobs){
-      	View.displayLatestJobs(job);
+      	View.displayLatestJob(job);
     	}
   	}
 	}
+
 
 const View = {
 	output: document.getElementById('output'),
@@ -45,13 +44,13 @@ const View = {
 		output.innerHTML = `
 			<div class="numberOfJobs">
 				<h1>${totalNumberOfJobs}</h1>
-				<p>avaliable jobs in Stockholm</p>
+				<p>Available jobs in Stockholm</p>
 			</div>`;
 	},
 
 	jobContainer: document.getElementById('jobContainer'),
 
-	  displayLatestJobs(job){
+	  displayLatestJob(job){
 
     const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
@@ -76,7 +75,6 @@ const View = {
 	 }
 }
 
-// Update the local storage.
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
   storedJobs.push(annonsId);
