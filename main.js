@@ -118,13 +118,20 @@ const NavigationView = {
 	//displaySavedJobs(annonsId){
 		//Write out saved jobs here
 	//}
-
+	containerLandingPage: document.getElementById('containerLandingPage'),
 	containerJobDetails: document.getElementById('containerJobDetails'),
 	containerSavedJobs: document.getElementById('containerSavedJobs'),
 
 	goToLandingPage(){
 		NavigationView.header.addEventListener('click', function(){
 			location.reload();
+		});
+	},
+	goToSavedJobs(){
+		NavigationView.mySavedJobs.addEventListener('click', function(){
+			NavigationView.containerLandingPage.classList.add('hidden');
+			NavigationView.containerJobDetails.classList.add('hidden');
+			NavigationView.containerSavedJobs.classList.toggle('hidden');
 		});
 	}
 }
@@ -156,4 +163,6 @@ function loadData(){
 /***************************************/
 
 FetchModel.fetchAll();
+
 NavigationView.goToLandingPage();
+NavigationView.goToSavedJobs();
