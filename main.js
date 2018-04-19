@@ -1,13 +1,3 @@
-//function fetchAllEmploymentAds() {
-//   		return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=20&yrkesomradeid=3&lanid=1`)
-//        .then((response) => response.json())
-//        .then((data) => {
-//        	let listings = data.matchningslista;
-//        })
-//}
-
-//let listings2 = fetchAllEmploymentAds();
-//console.log(listings2);
 
 // Array for savedJobs list
 let storedJobs = [];
@@ -23,10 +13,18 @@ const FetchModel = {
 			 ResponseController.getTotalNumberOfJobs(data);
         })
 		.catch(error => console.log(error));
-	}
+	},
+
+	fetchById(annonsId){
+		return fetch(`http://api.arbetsformedlingen.se/af//v0/platsannonser/${annonsId}`)
+			 .then((response) => response.json())
+			 .then((job) => {
+			View.displayJobDetails(job);
+			 })
+	 .catch(error => console.log(error));
+ 	}
+
 }
-
-
 
 const ResponseController = {
 	sortResponse(data){
@@ -42,16 +40,17 @@ const ResponseController = {
 
 	},
 
-  // Display latest 10 jobs
   getLatestJobs(latestJobs){
-
     for (let job of latestJobs){
-
-      View.displayLatestJobs(job);
+      View.displayLatestJob(job);
     }
+  },
 
-  }
-}
+	getJobDetails(annonsId){
+		FetchModel.fetchById(annonsId);
+	}
+
+	}
 
 const View = {
 	output: document.getElementById('output'),
@@ -59,46 +58,58 @@ const View = {
 		output.innerHTML = `
 			<div class="numberOfJobs">
 				<h1>${totalNumberOfJobs}</h1>
-				<p>avaliable jobs in Stockholm</p>
+				<p>Available jobs in Stockholm</p>
 			</div>`;
 	},
 
 	jobContainer: document.getElementById('jobContainer'),
 
-	  displayLatestJobs(job){
+	  displayLatestJob(job){
 
     const jobCardHTML = `<div>
 			<h2>${job.annonsrubrik}</h2>
-			<p>${job.anstallningstyp}</p>
-			<p>${job.arbetsplatsnamn}</p>
-			<p>${job.kommunnamn}< /p>
-			<p>${job.sista_ansokningsdag}</p>
-			<p>${job.yrkesbenamning}</p>
-			<p>${job.annonsurl}</p>
+			<p class="profession">${job.yrkesbenamning}</p>
+			<p class="company">${job.arbetsplatsnamn}</p>
+			<p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
+			<p class="municipality">${job.kommunnamn}</p>
+			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
+			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
+			<button class="save" id="${job.annonsid}">Spara</button>
+			<button class="show-details" id="show-details-${job.annonsid}">Visa detaljer</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
-		const save = document.createElement('button');
-		save.classList.add('save');
-		save.id = job.annonsid;
-		save.innerHTML = `Save`;
-
+		const save = document.getElementById(job.annonsid);
     save.addEventListener('click',function(){
-      console.log(job.annonsid);
-      this.dataset.id;
-      updateLocalStorage(job.annonsid);
-      //View.updateLocalStorage();
+      	//console.log(job.annonsid);
+      	this.dataset.id;
+      	updateLocalStorage(job.annonsid);
     });
 
-		jobContainer.appendChild(save);
+		const showDetailsButton = document.getElementById('show-details-' + job.annonsid);
+		showDetailsButton.addEventListener('click', function(){
+				ResponseController.getJobDetails(job.annonsid);
+				jobContainer.style.display = "none";
+				output.style.display = "none";
+		});
+	},
 
+	 jobDetailsContainer: document.getElementById('jobDetailsContainer'),
+	 displayJobDetails(annonsId){
+		 console.log('Job details: ' , annonsId);
+		 console.log(annonsId.platsannons.annons.annonstext);
 
-//		getButton(job.annonsid);
+		 const jobDetailsCardHTML = `
+		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
+			<p>${annonsId.platsannons.annons.annonstext}</p>
+		 `;
+
+		 jobDetailsContainer.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
+
 	 }
 }
 
-//Create a function that updates the local storage.
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
   storedJobs.push(annonsId);
@@ -107,12 +118,6 @@ function updateLocalStorage(annonsId) {
 	localStorage.setItem('savedJobs', JSON.stringify(storedJobs));
 }
 
-function getButton (element) {
-	const save = document.getElementById('element');
-	save.addEventListener('click', function(){
-		console.log('Hej');
-	})
-}
 
 function loadData(){
     // Checks if there is anything in local storage,
@@ -121,21 +126,8 @@ function loadData(){
             storedJobs = JSON.parse(localStorage.getItem('savedJobs'));
     }else{
             storedJobs = [];
-            //updateLocalStorage();
     }
 }
-
-
-
-//function updateLocalStorage() {
-//	localStorage.setItem('todoList', JSON.stringify(allTodoItems));
-//}
-
-
-
-
-
-
 
 
 FetchModel.fetchAll();
