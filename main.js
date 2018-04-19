@@ -74,8 +74,8 @@ const View = {
 			<p class="municipality">${job.kommunnamn}</p>
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
-			<button class="save" id="${job.annonsid}">Save</button>
-			<button class="show-details" id="show-details-${job.annonsid}">Show details</button>
+			<button class="save" id="${job.annonsid}">Spara</button>
+			<button class="show-details" id="show-details-${job.annonsid}">Visa detaljer</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
