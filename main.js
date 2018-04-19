@@ -107,7 +107,7 @@ const View = {
 		 const jobDetailsCardHTML = `
 		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
 			<p>${annonsId.platsannons.annons.annonstext}</p>
-			<button id="go-back"><a href="${window.location.href.split("?")[0]}">Go back</a></button>
+			<button id="go-back"><a href="${window.location.href.split("?")[0]}">Gå tillbaka</a></button>
 		 `;
 
 
