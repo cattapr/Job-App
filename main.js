@@ -1,4 +1,3 @@
-
 // Array for savedJobs list
 let storedJobs = [];
 loadData();
@@ -19,6 +18,7 @@ const FetchModel = {
 		return fetch(`http://api.arbetsformedlingen.se/af//v0/platsannonser/${annonsId}`)
 			 .then((response) => response.json())
 			 .then((job) => {
+			 	console.log('hej');
 			View.displayJobDetails(job);
 			 })
 	 .catch(error => console.log(error));
@@ -34,10 +34,9 @@ const ResponseController = {
 	getTotalNumberOfJobs(data) {
 		console.log(data.matchningslista.antal_platsannonser);
 		let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
-    let latestJobs = data.matchningslista.matchningdata;
-    ResponseController.getLatestJobs(latestJobs);
+	    let latestJobs = data.matchningslista.matchningdata;
+	    ResponseController.getLatestJobs(latestJobs);
 		View.displayTotalNumberOfJobs(totalNumberOfJobs);
-
 	},
 
   getLatestJobs(latestJobs){
@@ -47,10 +46,11 @@ const ResponseController = {
   },
 
 	getJobDetails(annonsId){
+		console.log('new', annonsId);
 		FetchModel.fetchById(annonsId);
 	}
 
-	}
+}
 
 const View = {
 	output: document.getElementById('output'),
@@ -75,7 +75,7 @@ const View = {
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
 			<button class="save" id="${job.annonsid}">Spara</button>
-			<button class="show-details" id="show-details-${job.annonsid}">Visa detaljer</button>
+			<button class="show-details id="show-details-${job.annonsid}"><a href=?jobDetail=${job.annonsid}>Visa detaljer</a></button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
@@ -87,15 +87,19 @@ const View = {
       	updateLocalStorage(job.annonsid);
     });
 
-		const showDetailsButton = document.getElementById('show-details-' + job.annonsid);
-		showDetailsButton.addEventListener('click', function(){
-				ResponseController.getJobDetails(job.annonsid);
-				jobContainer.style.display = "none";
-				output.style.display = "none";
-		});
+    	const urlString = window.location.href;
+		const url = new URL(urlString);
+		const jobID = url.searchParams.get('jobDetail');
+
+		if(jobID){
+			ResponseController.getJobDetails(jobID);
+			jobContainer.style.display = "none";
+			output.style.display = "none";	
+		}
 	},
 
 	 jobDetailsContainer: document.getElementById('jobDetailsContainer'),
+
 	 displayJobDetails(annonsId){
 		 console.log('Job details: ' , annonsId);
 		 console.log(annonsId.platsannons.annons.annonstext);
@@ -103,10 +107,10 @@ const View = {
 		 const jobDetailsCardHTML = `
 		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
 			<p>${annonsId.platsannons.annons.annonstext}</p>
+			<button id="go-back"><a href="${window.location.href.split("?")[0]}">Go back</a></button>
 		 `;
 
 		 jobDetailsContainer.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
-
 	 }
 }
 
