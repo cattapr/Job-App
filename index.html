@@ -2,11 +2,39 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Tajawal:400,500,700" rel="stylesheet">
 	<title>	Jobbannons App</title>
 </head>
 <body>
-	<div id="output"></div>
-	<div id="jobContainer"></div>
+	<header>
+		<nav>
+			<h1 id="header" class="pointer">Platsbanken</h1>
+			<ul>
+				<li id="mySavedJobs" class="pointer">Mina sparade annonser</li>
+			</ul>
+		</nav>
+	</header>
+
+	<div id="containerLandingPage" class="container container__landing-page">
+		<div id="totalNumberOfJobsHeader" class="header__number-of-jobs"></div>
+		<div id="jobContainer"></div>
+	</div>
+
+	<div id="containerJobDetails" class="container container__job-details">
+		<!-- Generated in JS -->
+	</div>
+
+	<div id="containerSavedJobs" class="container container__saved-jobs hidden">
+		<h1>Saved jobs</h1>
+		<div id="savedJobsList">
+			<!-- Generated in JS -->
+		</div>
+	</div>
+
+
 	<script src="main.js"></script>
 </body>
 </html>
