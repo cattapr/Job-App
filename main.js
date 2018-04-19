@@ -13,7 +13,17 @@ const FetchModel = {
 			 ResponseController.getTotalNumberOfJobs(data);
         })
 		.catch(error => console.log(error));
-	}
+	},
+
+	fetchById(annonsId){
+		return fetch(`http://api.arbetsformedlingen.se/af//v0/platsannonser/${annonsId}`)
+			 .then((response) => response.json())
+			 .then((job) => {
+			View.displayJobDetails(job);
+			 })
+	 .catch(error => console.log(error));
+ 	}
+
 }
 
 const ResponseController = {
@@ -31,12 +41,16 @@ const ResponseController = {
 	},
 
   getLatestJobs(latestJobs){
-    	for (let job of latestJobs){
-      	View.displayLatestJob(job);
-    	}
-  	}
+    for (let job of latestJobs){
+      View.displayLatestJob(job);
+    }
+  },
+
+	getJobDetails(annonsId){
+		FetchModel.fetchById(annonsId);
 	}
 
+	}
 
 const View = {
 	output: document.getElementById('output'),
@@ -61,17 +75,38 @@ const View = {
 			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
 			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
 			<button class="save" id="${job.annonsid}">Save</button>
+			<button class="show-details" id="show-details-${job.annonsid}">Show details</button>
 		</div>`;
 
     jobContainer.insertAdjacentHTML('beforeEnd', jobCardHTML);
 
 		const save = document.getElementById(job.annonsid);
-
     save.addEventListener('click',function(){
-      	console.log(job.annonsid);
+      	//console.log(job.annonsid);
       	this.dataset.id;
       	updateLocalStorage(job.annonsid);
     });
+
+		const showDetailsButton = document.getElementById('show-details-' + job.annonsid);
+		showDetailsButton.addEventListener('click', function(){
+				ResponseController.getJobDetails(job.annonsid);
+				jobContainer.style.display = "none";
+				output.style.display = "none";
+		});
+	},
+
+	 jobDetailsContainer: document.getElementById('jobDetailsContainer'),
+	 displayJobDetails(annonsId){
+		 console.log('Job details: ' , annonsId);
+		 console.log(annonsId.platsannons.annons.annonstext);
+
+		 const jobDetailsCardHTML = `
+		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
+			<p>${annonsId.platsannons.annons.annonstext}</p>
+		 `;
+
+		 jobDetailsContainer.insertAdjacentHTML('beforeEnd', jobDetailsCardHTML);
+
 	 }
 }
 
