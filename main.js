@@ -75,13 +75,11 @@ const ResponseController = {
       View.displayLatestJob(job);
     }
   },
+
   getJobDetails() {
     const buttons = document.getElementsByClassName("showDetails");
-    //console.log(buttons);
     for (const button of buttons) {
-      //console.log(button);
-
-      button.addEventListener("click", function() {
+        button.addEventListener("click", function() {
         console.log("ParentELementID: ", this.parentElement.id);
         FetchModel.fetchById(this.parentElement.id);
         window.location.hash = `?jobDetail=${this.parentElement.id}`;
@@ -117,17 +115,6 @@ const View = {
 		</div>`;
 
     jobContainer.insertAdjacentHTML("beforeEnd", jobCardHTML);
-
-    //   showDetailsButton.addEventListener("click", function(e) {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //     e.stopImmediatePropagation();
-    //     console.log("reloadeeer");
-    //     window.location.hash = `?jobDetail=${this.dataset.id}`;
-    //     // Fetch en annons och ersatt: innerHTML
-    //   });
-    //   const jobID = job.annonsid;
-    //   ResponseController.callJobDetailsById(jobID);
   },
 
 
@@ -162,7 +149,6 @@ const View = {
 			<button id="goBack" class="goBack">Gå tillbaka</button>
 		 `;
 
-    //containerJobDetails.insertAdjacentHTML("beforeEnd", jobDetailsCardHTML);
     containerJobDetails.innerHTML = jobDetailsCardHTML;
   }
 }; // End of View module
@@ -178,7 +164,7 @@ const NavigationView = {
   refreshLandingPage() {
     NavigationView.header.addEventListener("click", function() {
       location.reload();
-      window.location;
+      window.location = "";
       //Clear URL here
     });
   },
