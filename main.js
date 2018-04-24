@@ -26,22 +26,27 @@ const FetchModel = {
       })
       .catch(error => console.log(error));
   },
-
-  fetchById(annonsId) {
-    return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`
-    )
-      .then(response => response.json())
-      .then(job => {
-        View.displayJobDetails(job);
+	fetchById(annonsId, viewType){
+		return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
+			 .then((response) => response.json())
+			 .then((job) => {
+				 switch(viewType) {
+					 	case 'summary':
+							 View.displaySavedJobCard(job);
+							 break;
+				    case 'detailed':
+				        View.displayJobDetails(job);
+				        break;
+						}
+			  View.displayJobDetails(job);
         const goBackButton = document.getElementById("goBack");
         goBackButton.addEventListener("click", function() {
           window.history.go(-1);
           NavigationView.showLandingPage();
         });
       })
-      .catch(error => console.log(error));
-  }
+	 .catch(error => console.log(error));
+	}
 };
 
 const ResponseController = {
@@ -70,7 +75,6 @@ const ResponseController = {
       View.displayLatestJob(job);
     }
   },
-
   getJobDetails() {
     const buttons = document.getElementsByClassName("showDetails");
     //console.log(buttons);
@@ -78,16 +82,12 @@ const ResponseController = {
       //console.log(button);
 
       button.addEventListener("click", function() {
-        //debugger;
-
         console.log("ParentELementID: ", this.parentElement.id);
         FetchModel.fetchById(this.parentElement.id);
         window.location.hash = `?jobDetail=${this.parentElement.id}`;
-        // CALL DISPLAY JOB DETAILS FUNCTION
         NavigationView.showJobDetails();
       });
     }
-    //debugger;
   }
 };
 
@@ -130,7 +130,27 @@ const View = {
     //   ResponseController.callJobDetailsById(jobID);
   },
 
+
   containerJobDetails: document.getElementById("containerJobDetails"),
+	containerSavedJobs: document.getElementById('containerSavedJobs'),
+	
+  displaySavedJobCard(annonsId){
+		let job = annonsId.platsannons;
+		console.log(job);
+
+		const savedJobCardHTML = `<div>
+			<h2>${job.annons.annonsrubrik}</h2>
+			<p class="profession">${job.annons.yrkesbenamning}</p>
+			<p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
+			<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
+			<p class="municipality">${job.annons.kommunnamn}</p>
+			<p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
+			<a href="${job.annons.platsannonsUrl}" target="_blank"><p class="link">Läs mer</p></a>
+			<button class="delete" id="${job.annons.annonsid}">Delete</button>
+		</div>`;
+
+		containerSavedJobs.insertAdjacentHTML('beforeEnd', savedJobCardHTML);
+	},
 
   displayJobDetails(annonsId) {
     console.log("Job details: ", annonsId);
@@ -177,6 +197,12 @@ const NavigationView = {
       NavigationView.containerLandingPage.classList.add("hidden");
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
+      console.log(storedJobs);
+
+			for (annonsId of storedJobs){
+				console.log(annonsId);
+				FetchModel.fetchById(annonsId, 'summary');
+			}
     });
   }
 };
