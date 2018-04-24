@@ -12,6 +12,7 @@ const FetchModel = {
         //let listings = data.matchningslista;
         ResponseController.sortResponse(data);
         ResponseController.getTotalNumberOfJobs(data);
+        ResponseController.getJobDetails();
 
         const buttons = document.getElementsByClassName("save");
 
@@ -68,16 +69,23 @@ const ResponseController = {
 
   getJobDetails() {
     const buttons = document.getElementsByClassName("showDetails");
-    console.log(buttons);
+    //console.log(buttons);
     for (const button of buttons) {
-      console.log(button);
+      //console.log(button);
+
       button.addEventListener("click", function() {
-        console.log("Show details button has been clicked");
-        console.log(this.parentElement.id);
+        //debugger;
+
+        console.log("ParentELementID: ", this.parentElement.id);
         FetchModel.fetchById(this.parentElement.id);
         window.location.hash = `?jobDetail=${this.parentElement.id}`;
+        // CALL DISPLAY JOB DETAILS FUNCTION
+        NavigationView.containerLandingPage.classList.add("hidden");
+        NavigationView.containerJobDetails.classList.remove("hidden");
+        NavigationView.containerSavedJobs.classList.add("hidden");
       });
     }
+    //debugger;
   }
 };
 
@@ -194,6 +202,6 @@ if (!ResponseController.getJobId()) {
 } else {
   FetchModel.fetchById(ResponseController.getJobId());
 }
-ResponseController.getJobDetails();
+
 NavigationView.goToLandingPage();
 NavigationView.goToSavedJobs();
