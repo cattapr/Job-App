@@ -37,9 +37,7 @@ const FetchModel = {
         const goBackButton = document.getElementById("goBack");
         goBackButton.addEventListener("click", function() {
           window.history.go(-1);
-          NavigationView.containerLandingPage.classList.remove("hidden");
-          NavigationView.containerJobDetails.classList.add("hidden");
-          NavigationView.containerSavedJobs.classList.add("hidden");
+          NavigationView.showLandingPage();
         });
       })
       .catch(error => console.log(error));
@@ -86,9 +84,7 @@ const ResponseController = {
         FetchModel.fetchById(this.parentElement.id);
         window.location.hash = `?jobDetail=${this.parentElement.id}`;
         // CALL DISPLAY JOB DETAILS FUNCTION
-        NavigationView.containerLandingPage.classList.add("hidden");
-        NavigationView.containerJobDetails.classList.remove("hidden");
-        NavigationView.containerSavedJobs.classList.add("hidden");
+        NavigationView.showJobDetails();
       });
     }
     //debugger;
@@ -155,28 +151,32 @@ const NavigationView = {
   header: document.getElementById("header"),
   mySavedJobs: document.getElementById("mySavedJobs"),
 
-  //displaySavedJobs(annonsId){
-  //Write out saved jobs here
-  //}
   containerLandingPage: document.getElementById("containerLandingPage"),
   containerJobDetails: document.getElementById("containerJobDetails"),
   containerSavedJobs: document.getElementById("containerSavedJobs"),
 
-  goToLandingPage() {
+  refreshLandingPage() {
     NavigationView.header.addEventListener("click", function() {
       location.reload();
+      window.location;
+      //Clear URL here
     });
   },
-  goToSavedJobs() {
+  showLandingPage() {
+    NavigationView.containerLandingPage.classList.remove("hidden");
+    NavigationView.containerJobDetails.classList.add("hidden");
+    NavigationView.containerSavedJobs.classList.add("hidden");
+  },
+  showJobDetails() {
+    NavigationView.containerLandingPage.classList.add("hidden");
+    NavigationView.containerJobDetails.classList.remove("hidden");
+    NavigationView.containerSavedJobs.classList.add("hidden");
+  },
+  showSavedJobs() {
     NavigationView.mySavedJobs.addEventListener("click", function() {
       NavigationView.containerLandingPage.classList.add("hidden");
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
-
-      // 1. Grab the ID's from local storage
-      // 2. Loop through IDs and fetch jobs based on IDs
-      // 3. Call a view-function from the fetch where we pass in the ID's
-      //    and append the jobs to the HTML in #savedJobsList
     });
   }
 };
@@ -207,6 +207,5 @@ if (!ResponseController.getJobId()) {
 } else {
   FetchModel.fetchById(ResponseController.getJobId());
 }
-
-NavigationView.goToLandingPage();
-NavigationView.goToSavedJobs();
+NavigationView.refreshLandingPage();
+NavigationView.showSavedJobs();
