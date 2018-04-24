@@ -33,8 +33,14 @@ const FetchModel = {
     )
       .then(response => response.json())
       .then(job => {
-        console.log("hej");
         View.displayJobDetails(job);
+        const goBackButton = document.getElementById("goBack");
+        goBackButton.addEventListener("click", function() {
+          window.history.go(-1);
+          NavigationView.containerLandingPage.classList.remove("hidden");
+          NavigationView.containerJobDetails.classList.add("hidden");
+          NavigationView.containerSavedJobs.classList.add("hidden");
+        });
       })
       .catch(error => console.log(error));
   }
@@ -137,12 +143,11 @@ const View = {
     const jobDetailsCardHTML = `
 		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
 			<p>${annonsId.platsannons.annons.annonstext}</p>
-			<button id="go-back"><a href="${
-        window.location.href.split("?")[0]
-      }">Gå tillbaka</a></button>
+			<button id="goBack" class="goBack">Gå tillbaka</button>
 		 `;
 
-    containerJobDetails.insertAdjacentHTML("beforeEnd", jobDetailsCardHTML);
+    //containerJobDetails.insertAdjacentHTML("beforeEnd", jobDetailsCardHTML);
+    containerJobDetails.innerHTML = jobDetailsCardHTML;
   }
 }; // End of View module
 
