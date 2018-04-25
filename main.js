@@ -5,7 +5,7 @@ loadData();
 let numberOfJobs = 10;
 
 const FetchModel = {
-  fetchAll() {
+  fetchAll(numberOfJobs) {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=3&lanid=1`
     )
@@ -219,6 +219,7 @@ const FilterView = {
   },
 	registerNumberOfJobs() {
 		numberOfJobs = FilterView.selectNumberOfJobs();
+		FetchModel.fetchAll(numberOfJobs);
 	}
 };
 
@@ -250,3 +251,5 @@ if (!ResponseController.getJobId()) {
 }
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
+
+FilterView.registerNumberOfJobs();
