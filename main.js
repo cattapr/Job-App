@@ -2,11 +2,14 @@
 let storedJobs = [];
 loadData();
 
+let numberOfJobs = "";
+let countyID = "";
+
 const FetchModel = {
-  fetchAll(numberOfJobs) {
-    let job = numberOfJobs;
+  fetchAll() {
+    //let job = numberOfJobs;
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${job}&yrkesomradeid=3&lanid=1`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=3&lanid=${countyID}`
     )
       .then(response => response.json())
       .then(data => {
@@ -222,7 +225,8 @@ const FilterView = {
   },
   registerNumberOfJobs(filterNumber) {
     View.jobContainer.innerHTML = "";
-    FetchModel.fetchAll(filterNumber);
+    numberOfJobs = filterNumber;
+    FetchModel.fetchAll();
   }
 };
 
@@ -240,7 +244,6 @@ const FilterCountyView = {
     }
     countyFilter.addEventListener("change", function() {
       //console.log(thi);
-      //FetchModel.fetchAll(this.id);
 
       let countyIndex = countyFilter.selectedIndex;
       console.log("county index: ", countyIndex);
@@ -248,6 +251,8 @@ const FilterCountyView = {
         countyIndex
       ].id;
       console.log("selected county: ", selectedCounty);
+      countyID = selectedCounty;
+      FetchModel.fetchAll();
     });
   }
 };
@@ -281,7 +286,7 @@ if (!ResponseController.getJobId()) {
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
-FetchModel.fetchAll(10);
+//FetchModel.fetchAll(10);
 FetchModel.fetchAllCounties();
 
 //FilterView.registerNumberOfJobs();
