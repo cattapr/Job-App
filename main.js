@@ -26,27 +26,35 @@ const FetchModel = {
       })
       .catch(error => console.log(error));
   },
-	fetchById(annonsId, viewType){
-		return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
-			 .then((response) => response.json())
-			 .then((job) => {
-				 switch(viewType) {
-					 	case 'summary':
-							 View.displaySavedJobCard(job);
-							 break;
-				    case 'detailed':
-				        View.displayJobDetails(job);
-				        break;
-						}
-			  View.displayJobDetails(job);
+  //detailed
+  fetchByIdHTML(annonsId) {
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}/typ=html`
+    )
+      .then(response => response.text())
+      .then(job => {
+        console.log(job);
+        View.displayJobDetails(job);
+
         const goBackButton = document.getElementById("goBack");
         goBackButton.addEventListener("click", function() {
           window.history.go(-1);
           NavigationView.showLandingPage();
         });
       })
-	 .catch(error => console.log(error));
-	}
+      .catch(error => console.log(error));
+  },
+  //summary
+  fetchByIdJSON(annonsId) {
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`
+    )
+      .then(response => response.json())
+      .then(job => {
+        View.displaySavedJobCard(job);
+      })
+      .catch(error => console.log(error));
+  }
 };
 
 const ResponseController = {
@@ -79,9 +87,9 @@ const ResponseController = {
   getJobDetails() {
     const buttons = document.getElementsByClassName("showDetails");
     for (const button of buttons) {
-        button.addEventListener("click", function() {
+      button.addEventListener("click", function() {
         console.log("ParentELementID: ", this.parentElement.id);
-        FetchModel.fetchById(this.parentElement.id);
+        FetchModel.fetchByIdHTML(this.parentElement.id);
         window.location.hash = `?jobDetail=${this.parentElement.id}`;
         NavigationView.showJobDetails();
       });
@@ -117,39 +125,42 @@ const View = {
     jobContainer.insertAdjacentHTML("beforeEnd", jobCardHTML);
   },
 
-
   containerJobDetails: document.getElementById("containerJobDetails"),
-	containerSavedJobs: document.getElementById('containerSavedJobs'),
-	
-  displaySavedJobCard(annonsId){
-		let job = annonsId.platsannons;
-		console.log(job);
+  containerSavedJobs: document.getElementById("containerSavedJobs"),
 
-		const savedJobCardHTML = `<div>
+  displaySavedJobCard(annonsId) {
+    let job = annonsId.platsannons;
+    console.log(job);
+
+    const savedJobCardHTML = `<div>
 			<h2>${job.annons.annonsrubrik}</h2>
 			<p class="profession">${job.annons.yrkesbenamning}</p>
 			<p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
 			<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
 			<p class="municipality">${job.annons.kommunnamn}</p>
 			<p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
-			<a href="${job.annons.platsannonsUrl}" target="_blank"><p class="link">Läs mer</p></a>
+			<a href="${
+        job.annons.platsannonsUrl
+      }" target="_blank"><p class="link">Läs mer</p></a>
 			<button class="delete" id="${job.annons.annonsid}">Delete</button>
 		</div>`;
 
-		containerSavedJobs.insertAdjacentHTML('beforeEnd', savedJobCardHTML);
-	},
+    containerSavedJobs.insertAdjacentHTML("beforeEnd", savedJobCardHTML);
+  },
 
-  displayJobDetails(annonsId) {
-    console.log("Job details: ", annonsId);
-    console.log(annonsId.platsannons.annons.annonstext);
+  displayJobDetails(jobDetailsCardHTML) {
+    const goBackButton = `
+     	<button id="goBack" class="goBack">Gå tillbaka</button>
+      `;
 
-    const jobDetailsCardHTML = `
-		 	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
-			<p>${annonsId.platsannons.annons.annonstext}</p>
-			<button id="goBack" class="goBack">Gå tillbaka</button>
-		 `;
+    //const jobDetailsCardHTML = `
+    //  	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
+    // 	<p>${annonsId.platsannons.annons.annonstext}</p>
+    // 	<button id="goBack" class="goBack">Gå tillbaka</button>
+    //  `;
 
     containerJobDetails.innerHTML = jobDetailsCardHTML;
+    containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
   }
 }; // End of View module
 
@@ -185,10 +196,10 @@ const NavigationView = {
       NavigationView.containerSavedJobs.classList.remove("hidden");
       console.log(storedJobs);
 
-			for (annonsId of storedJobs){
-				console.log(annonsId);
-				FetchModel.fetchById(annonsId, 'summary');
-			}
+      for (annonsId of storedJobs) {
+        console.log(annonsId);
+        FetchModel.fetchByIdJSON(annonsId);
+      }
     });
   }
 };
@@ -217,7 +228,7 @@ function loadData() {
 if (!ResponseController.getJobId()) {
   FetchModel.fetchAll();
 } else {
-  FetchModel.fetchById(ResponseController.getJobId());
+  FetchModel.fetchByIdHTML(ResponseController.getJobId());
 }
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
