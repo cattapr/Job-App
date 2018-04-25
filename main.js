@@ -2,22 +2,22 @@
 let storedJobs = [];
 loadData();
 
-const FilterView = {
-  selectNumberOfJobs () {
-    const numberOfJobsInput = document.getElementById('numberOfJobs');
-	 let numberOfJobs = numberOfJobsInput.selectedIndex; 
-
-	numberOfJobsInput.addEventListener('change', function () {
-		let filterNumber = document.getElementsByTagName('option')[numberOfJobs].value;   
-		FilterView.registerNumberOfJobs(filterNumber);    	
-	});
-  },
-
-	registerNumberOfJobs(filterNumber) {
-		console.log(filterNumber);
-		FetchModel.fetchAll(filterNumber);		
-	}
-};
+		const FilterView = {
+		  selectNumberOfJobs() {
+		    const numberOfJobsInput = document.getElementById('numberOfJobs');
+			  
+			numberOfJobsInput.addEventListener('change', function () {
+				let numberOfJobs = numberOfJobsInput.selectedIndex; 
+				let filterNumber = document.getElementsByTagName('option')[numberOfJobs].value;
+				FilterView.registerNumberOfJobs(filterNumber);
+			});
+		  },
+			registerNumberOfJobs(filterNumber) {
+				console.log(filterNumber);
+				View.jobContainer.innerHTML = "";
+				FetchModel.fetchAll(filterNumber);		
+			}
+		};
 
 
 const FetchModel = {
@@ -255,5 +255,6 @@ if (!ResponseController.getJobId()) {
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
+FetchModel.fetchAll(10);
 
 //FilterView.registerNumberOfJobs();
