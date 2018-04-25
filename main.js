@@ -2,35 +2,16 @@
 let storedJobs = [];
 loadData();
 
-		const FilterView = {
-		  selectNumberOfJobs() {
-		    const numberOfJobsInput = document.getElementById('numberOfJobs');
-			  
-			numberOfJobsInput.addEventListener('change', function () {
-				let numberOfJobs = numberOfJobsInput.selectedIndex; 
-				let filterNumber = document.getElementsByTagName('option')[numberOfJobs].value;
-				FilterView.registerNumberOfJobs(filterNumber);
-			});
-		  },
-			registerNumberOfJobs(filterNumber) {
-				console.log(filterNumber);
-				View.jobContainer.innerHTML = "";
-				FetchModel.fetchAll(filterNumber);		
-			}
-		};
-
-
 const FetchModel = {
   fetchAll(numberOfJobs) {
-  	let job = numberOfJobs;
-  	console.log(job);
+    let job = numberOfJobs;
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${job}&yrkesomradeid=3&lanid=1`
     )
       .then(response => response.json())
       .then(data => {
         //let listings = data.matchningslista;
-        ResponseController.sortResponse(data);
+        //ResponseController.sortResponse(data);
         ResponseController.getTotalNumberOfJobs(data);
         ResponseController.getJobDetails();
 
@@ -38,8 +19,6 @@ const FetchModel = {
 
         for (const button of buttons) {
           button.addEventListener("click", function() {
-            console.log("its click");
-            console.log(this.parentElement.id);
             updateLocalStorage(this.parentElement.id);
           });
         }
@@ -53,7 +32,6 @@ const FetchModel = {
     )
       .then(response => response.text())
       .then(job => {
-        console.log(job);
         View.displayJobDetails(job);
 
         const goBackButton = document.getElementById("goBack");
@@ -74,6 +52,19 @@ const FetchModel = {
         View.displaySavedJobCard(job);
       })
       .catch(error => console.log(error));
+  },
+
+  fetchAllCounties() {
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/lan`
+    )
+      .then(response => response.json())
+      .then(counties => {
+        const countiesArray = counties.soklista.sokdata;
+        console.log(counties.soklista.sokdata);
+        FilterCountyView.selectCounty(countiesArray);
+      })
+      .catch(error => console.log(error));
   }
 };
 
@@ -82,16 +73,14 @@ const ResponseController = {
     const urlString = window.location.href;
     const url = new URL(urlString);
     const jobID = url.searchParams.get("jobDetail");
-    console.log("jobid: ", jobID);
     //FetchModel.fetchById(jobID);
     return jobID;
   },
-  sortResponse(data) {
-    console.log(data);
-  },
+  // sortResponse(data) {
+  //   console.log(data);
+  // },
 
   getTotalNumberOfJobs(data) {
-    console.log(data.matchningslista.antal_platsannonser);
     let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
     let latestJobs = data.matchningslista.matchningdata;
     ResponseController.getLatestJobs(latestJobs);
@@ -108,7 +97,6 @@ const ResponseController = {
     const buttons = document.getElementsByClassName("showDetails");
     for (const button of buttons) {
       button.addEventListener("click", function() {
-        console.log("ParentELementID: ", this.parentElement.id);
         FetchModel.fetchByIdHTML(this.parentElement.id);
         window.location.hash = `?jobDetail=${this.parentElement.id}`;
         NavigationView.showJobDetails();
@@ -150,7 +138,6 @@ const View = {
 
   displaySavedJobCard(annonsId) {
     let job = annonsId.platsannons;
-    console.log(job);
 
     const savedJobCardHTML = `<div>
 			<h2>${job.annons.annonsrubrik}</h2>
@@ -214,17 +201,56 @@ const NavigationView = {
       NavigationView.containerLandingPage.classList.add("hidden");
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
-      console.log(storedJobs);
 
       for (annonsId of storedJobs) {
-        console.log(annonsId);
         FetchModel.fetchByIdJSON(annonsId);
       }
     });
   }
 }; // End of NavigationView
 
+const FilterView = {
+  selectNumberOfJobs() {
+    const numberOfJobsInput = document.getElementById("numberOfJobs");
 
+    numberOfJobsInput.addEventListener("change", function() {
+      let numberOfJobs = numberOfJobsInput.selectedIndex;
+      let filterNumber = document.getElementsByTagName("option")[numberOfJobs]
+        .value;
+      FilterView.registerNumberOfJobs(filterNumber);
+    });
+  },
+  registerNumberOfJobs(filterNumber) {
+    View.jobContainer.innerHTML = "";
+    FetchModel.fetchAll(filterNumber);
+  }
+};
+
+const FilterCountyView = {
+  selectCounty(counties) {
+    const countyFilter = document.getElementById("county");
+    for (const county of counties) {
+      //console.log(county);
+      const countyOption = document.createElement("option");
+      countyOption.innerText = county.namn;
+      countyOption.id = county.id;
+      countyOption.classList.add("county");
+      console.log("county id: ", county.id);
+      countyFilter.appendChild(countyOption);
+    }
+    countyFilter.addEventListener("change", function() {
+      //console.log(thi);
+      //FetchModel.fetchAll(this.id);
+
+      let countyIndex = countyFilter.selectedIndex;
+      console.log("county index: ", countyIndex);
+      let selectedCounty = document.getElementsByClassName("county")[
+        countyIndex
+      ].id;
+      console.log("selected county: ", selectedCounty);
+    });
+  }
+};
 
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
@@ -256,5 +282,6 @@ NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
 FetchModel.fetchAll(10);
+FetchModel.fetchAllCounties();
 
 //FilterView.registerNumberOfJobs();
