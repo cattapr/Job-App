@@ -2,12 +2,30 @@
 let storedJobs = [];
 loadData();
 
-let numberOfJobs = 10;
+const FilterView = {
+  selectNumberOfJobs () {
+    const numberOfJobsInput = document.getElementById('numberOfJobs');
+	 let numberOfJobs = numberOfJobsInput.selectedIndex; 
+
+	numberOfJobsInput.addEventListener('change', function () {
+		let filterNumber = document.getElementsByTagName('option')[numberOfJobs].value;   
+		FilterView.registerNumberOfJobs(filterNumber);    	
+	});
+  },
+
+	registerNumberOfJobs(filterNumber) {
+		console.log(filterNumber);
+		FetchModel.fetchAll(filterNumber);		
+	}
+};
+
 
 const FetchModel = {
   fetchAll(numberOfJobs) {
+  	let job = numberOfJobs;
+  	console.log(job);
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=3&lanid=1`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${job}&yrkesomradeid=3&lanid=1`
     )
       .then(response => response.json())
       .then(data => {
@@ -206,22 +224,7 @@ const NavigationView = {
   }
 }; // End of NavigationView
 
-const FilterView = {
-  selectNumberOfJobs () {
-    const numberOfJobsInput = document.getElementById('numberOfJobs');
-	  
-	numberOfJobsInput.addEventListener('change', function () {
-		let numberOfJobs = numberOfJobsInput.selectedIndex;
-		let filterNumber = document.getElementsByTagName('option')[numberOfJobs].value;
-		console.log(filterNumber);
-      	return filterNumber;
-	});
-  },
-	registerNumberOfJobs() {
-		numberOfJobs = FilterView.selectNumberOfJobs();
-		FetchModel.fetchAll(numberOfJobs);
-	}
-};
+
 
 function updateLocalStorage(annonsId) {
   //push the annonsId into the array
@@ -245,11 +248,12 @@ function loadData() {
 /************* CALL FUNCTIONS **********/
 /***************************************/
 if (!ResponseController.getJobId()) {
-  FetchModel.fetchAll();
+  FilterView.selectNumberOfJobs();
 } else {
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
 }
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
-FilterView.registerNumberOfJobs();
+
+//FilterView.registerNumberOfJobs();
