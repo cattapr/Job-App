@@ -2,10 +2,12 @@
 let storedJobs = [];
 loadData();
 
+let numberOfJobs = 10;
+
 const FetchModel = {
   fetchAll() {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=10&yrkesomradeid=3&lanid=1`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=3&lanid=1`
     )
       .then(response => response.json())
       .then(data => {
@@ -202,6 +204,22 @@ const NavigationView = {
       }
     });
   }
+}; // End of NavigationView
+
+const FilterView = {
+  selectNumberOfJobs () {
+    const numberOfJobsInput = document.getElementById('numberOfJobs');
+	  
+	numberOfJobsInput.addEventListener('change', function () {
+		let numberOfJobs = numberOfJobsInput.selectedIndex;
+		let filterNumber = document.getElementsByTagName('option')[numberOfJobs].value;
+		console.log(filterNumber);
+      	return filterNumber;
+	});
+  },
+	registerNumberOfJobs() {
+		numberOfJobs = FilterView.selectNumberOfJobs();
+	}
 };
 
 function updateLocalStorage(annonsId) {
