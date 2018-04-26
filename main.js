@@ -115,13 +115,8 @@ const FilterController = {
 			let numberOfJobs = numberOfJobsInput.selectedIndex;
 			let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
 			.value;
-			FilterController.registerNumberOfJobs(filterAmount, FilterController.countyID);
+			FilterView.registerNumberOfJobs(filterAmount, FilterController.countyID);
 		});
-	},
-	registerNumberOfJobs(filterAmount) {
-		View.jobContainer.innerHTML = "";
-		FilterController.numberOfJobs = filterAmount;
-		FetchModel.fetchAll(FilterController.numberOfJobs);
 	},
 
 	selectCounty(counties) {
@@ -135,19 +130,17 @@ const FilterController = {
       console.log("county id: ", county.id);
       countyFilter.appendChild(countyOption);
   }
-  countyFilter.addEventListener("change", function() {
+ 	 countyFilter.addEventListener("change", function() {
       //console.log(thi);
 
       let countyIndex = countyFilter.selectedIndex;
       let selectedCounty = document.getElementsByClassName("county")[
-      countyIndex
-      ].id;
-      
-      View.jobContainer.innerHTML = "";
-      FilterController.countyID = selectedCounty;
-      FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
-  });
-}
+      countyIndex].id;
+
+      FilterView.registerSelectedCounty(selectedCounty);
+  	});
+  }
+
 };
 
 const View = {
@@ -253,6 +246,21 @@ const NavigationView = {
 		});
 	}
 }; // End of NavigationView
+
+const FilterView = {
+
+	registerNumberOfJobs(filterAmount) {
+		View.jobContainer.innerHTML = "";
+		FilterController.numberOfJobs = filterAmount;
+		FetchModel.fetchAll(FilterController.numberOfJobs);
+	},
+	
+  	registerSelectedCounty(selectedCounty){
+  	  View.jobContainer.innerHTML = "";
+      FilterController.countyID = selectedCounty;
+      FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
+     }
+};
 
 
 function updateLocalStorage(annonsId) {
