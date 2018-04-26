@@ -22,21 +22,35 @@
 		<div id="totalNumberOfJobsHeader" class="header__number-of-jobs"></div>
 
 		<form id="filters" class="filters">
-			<label for="numberOfJobs">Antal träffar</label>
-			<select id="numberOfJobs">
-				<option name="filterNumber" value="10" selected>10</option>
-				<option name="filterNumber" value="20">20</option>
-				<option name="filterNumber" value="30">30</option>
-				<option name="filterNumber" value="40">40</option>
-				<option name="filterNumber" value="50">50</option>
-			</select>
-			<select name="county" id="county">
-				<!-- Option tags generated in JS -->
-			</select>
-			<select name="jobCategory" id="jobCategory">
-				<!-- Option tags generated in JS -->
-			</select>
-			<input type="search" id="searchOccupation">
+			<div class="formDiv">
+				<label for="numberOfJobs">Antal träffar</label>
+				<select id="numberOfJobs">
+					<option name="filterNumber" value="10" selected>10</option>
+					<option name="filterNumber" value="20">20</option>
+					<option name="filterNumber" value="30">30</option>
+					<option name="filterNumber" value="40">40</option>
+					<option name="filterNumber" value="50">50</option>
+				</select>
+			</div>
+
+			<div class="formDiv">
+				<label for="county">Välj län</label>
+				<select name="county" id="county">
+					<!-- Option tags generated in JS -->
+				</select>
+			</div>
+
+			<div class="formDiv">
+				<label for="jobCategory">Välj yrke</label>
+				<select name="jobCategory" id="jobCategory">
+					<!-- Option tags generated in JS -->
+				</select>
+			</div>
+
+			<div class="formDiv">
+				<label for="search">Sök</label>
+				<input type="search" name="search" id="searchOccupation">
+			</div>
 		</form>
 
 		<div id="jobContainer"></div>

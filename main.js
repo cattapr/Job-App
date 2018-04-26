@@ -86,13 +86,13 @@ const FetchModel = {
 
  fetchSearch(yrkesbenamning) {
    return fetch(
-    `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrken/${yrkesbenamning}`
+    `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}`
     )
    .then(response => response.json())
    .then(occupations => {
   		//FilterController.searchOccupation(occupations.soklista.sokdata);
   		console.log(occupations);
-  		console.log(occupations.soklista.sokdata);
+  		console.log(occupations.matchningslista.matchningdata);
   	})
    .catch(error => console.log(error));
 
@@ -203,14 +203,15 @@ const FilterController = {
 
   },
 
-  searchOccupation(occupations) {
+  searchOccupation() {
   	const searchInput = document.getElementById("searchOccupation");
 
-    searchInput.addEventListener("keyup", function() {
+    searchInput.addEventListener("change", function() {
+      console.log(searchInput); 
       let searchInputValue = this.value;	
-      console.log('hej');
-      yrkesbenamning = searchInputValue;
-      FetchModel.fetchSearch(searchInputValue);
+      FilterController.yrkesbenamning = searchInputValue;
+      FetchModel.fetchSearch(FilterController.yrkesbenamning);
+      console.log(FilterController.yrkesbenamning);
     }); 
   }
 };
@@ -389,6 +390,7 @@ NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
 FilterController.selectNumberOfJobs();
+FilterController.searchOccupation();
 FetchModel.fetchAllCounties();
 
 FetchModel.fetchAllJobCategory();
