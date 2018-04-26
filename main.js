@@ -106,9 +106,9 @@ const ResponseController = {
 };
 
 const FilterController = {
-	numberOfJobs: "10",
-	countyID: "1",
-	selectNumberOfJobs() {
+  numberOfJobs: "10",
+  countyID: "1",
+  selectNumberOfJobs() {
     const numberOfJobsInput = document.getElementById("numberOfJobs");
 
     numberOfJobsInput.addEventListener("change", function() {
@@ -120,7 +120,7 @@ const FilterController = {
   },
   registerNumberOfJobs(filterAmount) {
     View.jobContainer.innerHTML = "";
-	FilterController.numberOfJobs = filterAmount;
+  FilterController.numberOfJobs = filterAmount;
     FetchModel.fetchAll(FilterController.numberOfJobs);
   }
 };
@@ -129,26 +129,26 @@ const View = {
   totalNumberOfJobsHeader: document.getElementById("totalNumberOfJobsHeader"),
   displayTotalNumberOfJobs(totalNumberOfJobs) {
     totalNumberOfJobsHeader.innerHTML = `
-			<div class="numberOfJobs">
-				<h1>${totalNumberOfJobs}</h1>
-				<p>Available jobs in Stockholm</p>
-			</div>`;
+      <div class="numberOfJobs">
+        <h1>${totalNumberOfJobs}</h1>
+        <p>Available jobs in Stockholm</p>
+      </div>`;
   },
 
   jobContainer: document.getElementById("jobContainer"),
 
   displayLatestJob(job) {
     const jobCardHTML = `<div id="${job.annonsid}">
-			<h2>${job.annonsrubrik}</h2>
-			<p class="profession">${job.yrkesbenamning}</p>
-			<p class="company">${job.arbetsplatsnamn}</p>
-			<p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
-			<p class="municipality">${job.kommunnamn}</p>
-			<p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
-			<a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
-			<button class="save">Spara</button>
-			<button class="showDetails">Visa detaljer</button>
-		</div>`;
+      <h2>${job.annonsrubrik}</h2>
+      <p class="profession">${job.yrkesbenamning}</p>
+      <p class="company">${job.arbetsplatsnamn}</p>
+      <p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
+      <p class="municipality">${job.kommunnamn}</p>
+      <p class="deadline">Sök före ${job.sista_ansokningsdag}</p>
+      <a href="${job.annonsurl}" target="_blank"><p class="link">Läs mer</p></a>
+      <button class="save">Spara</button>
+      <button class="showDetails">Visa detaljer</button>
+    </div>`;
 
     jobContainer.insertAdjacentHTML("beforeEnd", jobCardHTML);
   },
@@ -160,30 +160,30 @@ const View = {
     let job = annonsId.platsannons;
 
     const savedJobCardHTML = `<div>
-			<h2>${job.annons.annonsrubrik}</h2>
-			<p class="profession">${job.annons.yrkesbenamning}</p>
-			<p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
-			<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
-			<p class="municipality">${job.annons.kommunnamn}</p>
-			<p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
-			<a href="${
+      <h2>${job.annons.annonsrubrik}</h2>
+      <p class="profession">${job.annons.yrkesbenamning}</p>
+      <p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
+      <p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
+      <p class="municipality">${job.annons.kommunnamn}</p>
+      <p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
+      <a href="${
         job.annons.platsannonsUrl
       }" target="_blank"><p class="link">Läs mer</p></a>
-			<button class="delete" id="${job.annons.annonsid}">Delete</button>
-		</div>`;
+      <button class="delete" id="${job.annons.annonsid}">Delete</button>
+    </div>`;
 
     containerSavedJobs.insertAdjacentHTML("beforeEnd", savedJobCardHTML);
   },
 
   displayJobDetails(jobDetailsCardHTML) {
     const goBackButton = `
-     	<button id="goBack" class="goBack">Gå tillbaka</button>
+      <button id="goBack" class="goBack">Gå tillbaka</button>
       `;
 
     //const jobDetailsCardHTML = `
-    //  	<h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
-    // 	<p>${annonsId.platsannons.annons.annonstext}</p>
-    // 	<button id="goBack" class="goBack">Gå tillbaka</button>
+    //    <h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
+    //  <p>${annonsId.platsannons.annons.annonstext}</p>
+    //  <button id="goBack" class="goBack">Gå tillbaka</button>
     //  `;
 
     containerJobDetails.innerHTML = jobDetailsCardHTML;
@@ -278,7 +278,7 @@ function loadData() {
 /************* CALL FUNCTIONS **********/
 /***************************************/
 if (!ResponseController.getJobId()) {
-	FetchModel.fetchAll();
+  FetchModel.fetchAll();
 } else {
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
 }
