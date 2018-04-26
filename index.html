@@ -11,16 +11,48 @@
 <body>
 	<header>
 		<nav>
-			<h1>Platsbanken</h1>
+			<h1 id="header" class="pointer">Platsbanken</h1>
 			<ul>
-				<li>Mina sparade annonser</li>
+				<li id="mySavedJobs" class="pointer">Mina sparade annonser</li>
 			</ul>
 		</nav>
 	</header>
-	<div class="wrapper">
-		<div id="output"></div>
+
+	<div id="containerLandingPage" class="container container__landing-page">
+		<div id="totalNumberOfJobsHeader" class="header__number-of-jobs"></div>
+
+		<form id="filters" class="filters">
+			<label for="numberOfJobs">Antal träffar</label>
+			<select id="numberOfJobs">
+				<option name="filterNumber" value="10" selected>10</option>
+				<option name="filterNumber" value="20">20</option>
+				<option name="filterNumber" value="30">30</option>
+				<option name="filterNumber" value="40">40</option>
+				<option name="filterNumber" value="50">50</option>
+			</select>
+			<select name="county" id="county">
+				<!-- Option tags generated in JS -->
+			</select>
+			<select name="jobCategory" id="jobCategory">
+				<!-- Option tags generated in JS -->
+			</select>
+			<input type="search" id="searchOccupation">
+		</form>
+
 		<div id="jobContainer"></div>
 	</div>
+
+	<div id="containerJobDetails" class="container container__job-details">
+		<!-- Generated in JS -->
+	</div>
+
+	<div id="containerSavedJobs" class="container container__saved-jobs hidden">
+		<h1>Saved jobs</h1>
+		<div id="savedJobsList">
+			<!-- Generated in JS -->
+		</div>
+	</div>
+
 	<script src="main.js"></script>
 </body>
 </html>
