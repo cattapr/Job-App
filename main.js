@@ -3,17 +3,17 @@ let storedJobs = [];
 loadData();
 
 const FetchModel = {
-
-	fetchAll(numberOfJobs = 10, countyID = 1, jobCategoryID = "") {
+  fetchAll(numberOfJobs = 10, countyID = 1, jobCategoryID = "") {
     //let job = numberOfJobs;
     return fetch(
-    	`http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}`
-    	)
-    .then(response => response.json())
-    .then(data => {
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}`
+    )
+      .then(View.showLoader())
+      .then(response => response.json())
+      .then(data => {
         //let listings = data.matchningslista;
         //ResponseController.sortResponse(data);
-        View.showLoader();
+        View.hideLoader();
         ResponseController.getTotalNumberOfJobs(data);
         ResponseController.getJobDetails();
 
@@ -26,16 +26,17 @@ const FetchModel = {
         }
       })
 
-    .catch(error => console.log(error));
-
+      .catch(error => console.log(error));
   },
   //detailed
   fetchByIdHTML(annonsId) {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}/typ=html`
     )
+      .then(View.showLoader())
       .then(response => response.text())
       .then(job => {
+        View.hideLoader();
         View.displayJobDetails(job);
 
         const goBackButton = document.getElementById("goBack");
@@ -51,30 +52,31 @@ const FetchModel = {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`
     )
+      .then(View.showLoader())
       .then(response => response.json())
       .then(job => {
+        View.hideLoader();
         View.displaySavedJobCard(job);
       })
       .catch(error => console.log(error));
   },
 
   fetchAllCounties() {
-    
-  	return fetch(
-  		`http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/lan`
-  		)
-  	.then(response => response.json())
-  	.then(counties => {
-  		const countiesArray = counties.soklista.sokdata;
-  		console.log(counties.soklista.sokdata);
-  		FilterController.selectCounty(countiesArray);
-  	})
-  	.catch(error => console.log(error));
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/lan`
+    )
+      .then(response => response.json())
+      .then(counties => {
+        const countiesArray = counties.soklista.sokdata;
+        console.log(counties.soklista.sokdata);
+        FilterController.selectCounty(countiesArray);
+      })
+      .catch(error => console.log(error));
   },
 
-  fetchAllJobCategory(){
-   return fetch(
-    `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
+  fetchAllJobCategory() {
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
     )
    .then(response => response.json())
    .then(jobCategories => {
@@ -95,9 +97,7 @@ const FetchModel = {
   		console.log(occupations.matchningslista.matchningdata);
   	})
    .catch(error => console.log(error));
-
  }
- 
 };
 
 const ResponseController = {
@@ -138,26 +138,24 @@ const ResponseController = {
 };
 
 const FilterController = {
+  numberOfJobs: "10",
+  countyID: "1",
+  jobCategoryID: "",
+  yrkesbenamning: "",
+  selectNumberOfJobs() {
+    const numberOfJobsInput = document.getElementById("numberOfJobs");
 
-	numberOfJobs: "10",
-	countyID: "1",
-	jobCategoryID: "",
-	yrkesbenamning: "",
-	selectNumberOfJobs() {
-		const numberOfJobsInput = document.getElementById("numberOfJobs");
+    numberOfJobsInput.addEventListener("change", function() {
+      let numberOfJobs = numberOfJobsInput.selectedIndex;
+      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
+        .value;
+      FilterView.registerNumberOfJobs(filterAmount, FilterController.countyID);
+    });
+  },
 
-		numberOfJobsInput.addEventListener("change", function() {
-			let numberOfJobs = numberOfJobsInput.selectedIndex;
-			let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
-			.value;
-			FilterView.registerNumberOfJobs(filterAmount, FilterController.countyID);
-		});
-	},
-
-	selectCounty(counties) {
-		const countyFilter = document.getElementById("county");
-		for (const county of counties) {
-
+  selectCounty(counties) {
+    const countyFilter = document.getElementById("county");
+    for (const county of counties) {
       //console.log(county);
       const countyOption = document.createElement("option");
       countyOption.innerText = county.namn;
@@ -176,12 +174,11 @@ const FilterController = {
 
       FilterView.registerSelectedCounty(selectedCounty);
     });
-
   },
 
   selectJobCategory(jobCategories) {
-  	const jobCategoryFilter = document.getElementById("jobCategory");
-  	for (const jobCategory of jobCategories) {
+    const jobCategoryFilter = document.getElementById("jobCategory");
+    for (const jobCategory of jobCategories) {
       //console.log(county);
       const jobCategoryOption = document.createElement("option");
       jobCategoryOption.innerText = jobCategory.namn;
@@ -196,11 +193,11 @@ const FilterController = {
 
       let jobCategoryIndex = jobCategoryFilter.selectedIndex;
       let selectedjobCategory = document.getElementsByClassName("jobCategory")[
-      jobCategoryIndex].id;
+        jobCategoryIndex
+      ].id;
 
       FilterView.registerSelectedjobCategory(selectedjobCategory);
     });
-
   },
 
   searchOccupation() {
@@ -229,8 +226,6 @@ const View = {
   jobContainer: document.getElementById("jobContainer"),
 
   displayLatestJob(job) {
-    View.hideLoader();
-
     const jobCardHTML = `<div id="${job.annonsid}">
 		<h2>${job.annonsrubrik}</h2>
 		<p class="profession">${job.yrkesbenamning}</p>
@@ -282,17 +277,16 @@ const View = {
     containerJobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
   },
-  
+
   showLoader() {
+    const loaderContainer = document.getElementById("loaderContainer");
     const loader = `<div class="loader__container" id="loaderContainer"><div class="loader" id="loader"></div></div>`;
-    //jobContainer.innerHTML = loader;
-    jobContainer.insertAdjacentHTML("beforeBegin", loader);
+    jobContainer.innerHTML = loader;
+    //jobContainer.insertAdjacentHTML("beforeBegin", loader);
   },
   hideLoader() {
     const loaderContainer = document.getElementById("loaderContainer");
-    setTimeout(function() {
-      loaderContainer.classList.add("hidden");
-    }, 500);
+    loaderContainer.classList.add("hidden");
   }
 }; // End of View module
 
@@ -310,28 +304,28 @@ const NavigationView = {
       window.location = "";
       //Clear URL here
     });
-	},
-	showLandingPage() {
-		NavigationView.containerLandingPage.classList.remove("hidden");
-		NavigationView.containerJobDetails.classList.add("hidden");
-		NavigationView.containerSavedJobs.classList.add("hidden");
-	},
-	showJobDetails() {
-		NavigationView.containerLandingPage.classList.add("hidden");
-		NavigationView.containerJobDetails.classList.remove("hidden");
-		NavigationView.containerSavedJobs.classList.add("hidden");
-	},
-	showSavedJobs() {
-		NavigationView.mySavedJobs.addEventListener("click", function() {
-			NavigationView.containerLandingPage.classList.add("hidden");
-			NavigationView.containerJobDetails.classList.add("hidden");
-			NavigationView.containerSavedJobs.classList.remove("hidden");
+  },
+  showLandingPage() {
+    NavigationView.containerLandingPage.classList.remove("hidden");
+    NavigationView.containerJobDetails.classList.add("hidden");
+    NavigationView.containerSavedJobs.classList.add("hidden");
+  },
+  showJobDetails() {
+    NavigationView.containerLandingPage.classList.add("hidden");
+    NavigationView.containerJobDetails.classList.remove("hidden");
+    NavigationView.containerSavedJobs.classList.add("hidden");
+  },
+  showSavedJobs() {
+    NavigationView.mySavedJobs.addEventListener("click", function() {
+      NavigationView.containerLandingPage.classList.add("hidden");
+      NavigationView.containerJobDetails.classList.add("hidden");
+      NavigationView.containerSavedJobs.classList.remove("hidden");
 
-			for (annonsId of storedJobs) {
-				FetchModel.fetchByIdJSON(annonsId);
-			}
-		});
-	}
+      for (annonsId of storedJobs) {
+        FetchModel.fetchByIdJSON(annonsId);
+      }
+    });
+  }
 }; // End of NavigationView
 
 const FilterView = {
@@ -341,23 +335,27 @@ const FilterView = {
     FetchModel.fetchAll(FilterController.numberOfJobs);
   },
 
-	registerNumberOfJobs(filterAmount) {
-		View.jobContainer.innerHTML = "";
-		FilterController.numberOfJobs = filterAmount;
-		FetchModel.fetchAll(FilterController.numberOfJobs);
-	},
+  registerNumberOfJobs(filterAmount) {
+    View.jobContainer.innerHTML = "";
+    FilterController.numberOfJobs = filterAmount;
+    FetchModel.fetchAll(FilterController.numberOfJobs);
+  },
 
- registerSelectedCounty(selectedCounty){
-   View.jobContainer.innerHTML = "";
-   FilterController.countyID = selectedCounty;
-   FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
- },
+  registerSelectedCounty(selectedCounty) {
+    View.jobContainer.innerHTML = "";
+    FilterController.countyID = selectedCounty;
+    FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
+  },
 
- registerSelectedjobCategory(selectedjobCategory){
-   View.jobContainer.innerHTML = "";
-   FilterController.jobCategoryID = selectedjobCategory;
-   FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.selectedCounty, selectedjobCategory);
- },
+  registerSelectedjobCategory(selectedjobCategory) {
+    View.jobContainer.innerHTML = "";
+    FilterController.jobCategoryID = selectedjobCategory;
+    FetchModel.fetchAll(
+      FilterController.numberOfJobs,
+      FilterController.selectedCounty,
+      selectedjobCategory
+    );
+  }
 };
 
 function updateLocalStorage(annonsId) {
