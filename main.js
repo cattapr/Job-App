@@ -108,7 +108,22 @@ const ResponseController = {
 const FilterController = {
 	numberOfJobs: "10",
 	countyID: "1",
-}
+	selectNumberOfJobs() {
+    const numberOfJobsInput = document.getElementById("numberOfJobs");
+
+    numberOfJobsInput.addEventListener("change", function() {
+      let numberOfJobs = numberOfJobsInput.selectedIndex;
+      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
+        .value;
+      FilterController.registerNumberOfJobs(filterAmount);
+    });
+  },
+  registerNumberOfJobs(filterAmount) {
+    View.jobContainer.innerHTML = "";
+	FilterController.numberOfJobs = filterAmount;
+    FetchModel.fetchAll(FilterController.numberOfJobs);
+  }
+};
 
 const View = {
   totalNumberOfJobsHeader: document.getElementById("totalNumberOfJobsHeader"),
@@ -214,24 +229,6 @@ const NavigationView = {
   }
 }; // End of NavigationView
 
-const FilterView = {
-  selectNumberOfJobs() {
-    const numberOfJobsInput = document.getElementById("numberOfJobs");
-
-    numberOfJobsInput.addEventListener("change", function() {
-      let numberOfJobs = numberOfJobsInput.selectedIndex;
-      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
-        .value;
-      FilterView.registerNumberOfJobs(filterAmount);
-    });
-  },
-  registerNumberOfJobs(filterAmount) {
-    View.jobContainer.innerHTML = "";
-	FilterController.numberOfJobs = filterAmount;
-    FetchModel.fetchAll(FilterController.numberOfJobs);
-  }
-};
-
 const FilterCountyView = {
   selectCounty(counties) {
     const countyFilter = document.getElementById("county");
@@ -288,7 +285,5 @@ if (!ResponseController.getJobId()) {
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
-FilterView.selectNumberOfJobs();
+FilterController.selectNumberOfJobs();
 FetchModel.fetchAllCounties();
-
-//FilterView.registerNumberOfJobs();
