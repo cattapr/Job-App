@@ -104,6 +104,11 @@ button {
 /***************************************/
 /*********** INPUTS/BUTTONS ************/
 /***************************************/
+form {
+    margin-bottom: 80px;
+    background: #f7f7f7;
+    padding: 1em;
+}
 .filters {
   display:flex;
   flex-direction: column;
@@ -116,11 +121,20 @@ button {
 .searchDiv {
   width:100%;
 }
+
+label {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: .8rem;
+  margin-bottom: 5px;
+}
+
 input, select {
   font-size: .8rem;
   height: 40px;
   width: 100%;
-  margin:10px auto;
+  margin: 0 auto 10px;
   outline:none;
   border: 1px solid rgb(166, 166, 166);
   background: white;
