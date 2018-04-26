@@ -100,6 +100,54 @@ button {
   }
 }
 
+
+/***************************************/
+/*********** INPUTS/BUTTONS ************/
+/***************************************/
+form {
+    margin-bottom: 80px;
+    background: #f7f7f7;
+    padding: 1em;
+}
+.filters {
+  display:flex;
+  flex-direction: column;
+}
+.formDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.searchDiv {
+  width:100%;
+}
+
+label {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: .8rem;
+  margin-bottom: 5px;
+}
+
+input, select {
+  font-size: .8rem;
+  height: 40px;
+  width: 100%;
+  margin: 0 auto 10px;
+  outline:none;
+  border: 1px solid rgb(166, 166, 166);
+  background: white;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+input:focus, 
+select:focus {
+  border: 2px solid #6baa9b;
+  border-radius: 3px;
+}
+
 /*****************************
 *********** LOADER ***********
 *****************************/
