@@ -3,7 +3,12 @@
 /***************************************/
 /*********** INPUTS/BUTTONS ************/
 /***************************************/
-
-input, select {
+.filters {
+  flex-direction: row;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.formDiv {
   width: calc(100% / 3);
+  margin:5px;
 }
