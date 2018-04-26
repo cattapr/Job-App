@@ -100,6 +100,29 @@ button {
   }
 }
 
+
+/***************************************/
+/*********** INPUTS/BUTTONS ************/
+/***************************************/
+
+input, select {
+  font-size: .8rem;
+  height: 40px;
+  width: 100%;
+  margin:10px auto;
+  outline:none;
+  border: 1px solid rgb(166, 166, 166);
+  background: white;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+input:focus, 
+select:focus {
+  border: 2px solid #6baa9b;
+  border-radius: 3px;
+}
+
 /*****************************
 *********** LOADER ***********
 *****************************/
