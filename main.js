@@ -2,11 +2,8 @@
 let storedJobs = [];
 loadData();
 
-let numberOfJobs = "";
-let countyID = "";
-
 const FetchModel = {
-  fetchAll() {
+  fetchAll(numberOfJobs = 10, countyID = 1) {
     //let job = numberOfJobs;
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?sida=1&antalrader=${numberOfJobs}&yrkesomradeid=3&lanid=${countyID}`
@@ -107,6 +104,11 @@ const ResponseController = {
     }
   }
 };
+
+const FilterController = {
+	numberOfJobs: "10",
+	countyID: "1",
+}
 
 const View = {
   totalNumberOfJobsHeader: document.getElementById("totalNumberOfJobsHeader"),
@@ -218,15 +220,15 @@ const FilterView = {
 
     numberOfJobsInput.addEventListener("change", function() {
       let numberOfJobs = numberOfJobsInput.selectedIndex;
-      let filterNumber = document.getElementsByTagName("option")[numberOfJobs]
+      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
         .value;
-      FilterView.registerNumberOfJobs(filterNumber);
+      FilterView.registerNumberOfJobs(filterAmount);
     });
   },
-  registerNumberOfJobs(filterNumber) {
+  registerNumberOfJobs(filterAmount) {
     View.jobContainer.innerHTML = "";
-    numberOfJobs = filterNumber;
-    FetchModel.fetchAll();
+	FilterController.numberOfJobs = filterAmount;
+    FetchModel.fetchAll(FilterController.numberOfJobs);
   }
 };
 
@@ -279,14 +281,14 @@ function loadData() {
 /************* CALL FUNCTIONS **********/
 /***************************************/
 if (!ResponseController.getJobId()) {
-  FilterView.selectNumberOfJobs();
+	FetchModel.fetchAll();
 } else {
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
 }
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
-//FetchModel.fetchAll(10);
+FilterView.selectNumberOfJobs();
 FetchModel.fetchAllCounties();
 
 //FilterView.registerNumberOfJobs();
