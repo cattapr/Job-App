@@ -22,9 +22,9 @@ const FetchModel = {
         		updateLocalStorage(this.parentElement.id);
         	});
         }
-    })
+      })
     .catch(error => console.log(error));
-},
+  },
   //detailed
   fetchByIdHTML(annonsId) {
   	return fetch(
@@ -68,17 +68,31 @@ const FetchModel = {
   },
 
   fetchAllJobCategory(){
-	return fetch(
-		`http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
-  		)
-  	.then(response => response.json())
-  	.then(jobCategories => {
-  		FilterController.selectJobCategory(jobCategories.soklista.sokdata);
-  		
+   return fetch(
+    `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
+    )
+   .then(response => response.json())
+   .then(jobCategories => {
+    FilterController.selectJobCategory(jobCategories.soklista.sokdata);
+    
+  })
+   .catch(error => console.log(error));
+ },
+
+ fetchSearch(yrkesbenamning) {
+   return fetch(
+    `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrken/${yrkesbenamning}`
+    )
+   .then(response => response.json())
+   .then(occupations => {
+  		//FilterController.searchOccupation(occupations.soklista.sokdata);
+  		console.log(occupations);
+  		console.log(occupations.soklista.sokdata);
   	})
-  	.catch(error => console.log(error));
-  }
-  
+   .catch(error => console.log(error));
+
+ }
+ 
 };
 
 const ResponseController = {
@@ -88,7 +102,7 @@ const ResponseController = {
 		const jobID = url.searchParams.get("jobDetail");
     //FetchModel.fetchById(jobID);
     return jobID;
-},
+  },
   // sortResponse(data) {
   //   console.log(data);
   // },
@@ -122,6 +136,7 @@ const FilterController = {
 	numberOfJobs: "10",
 	countyID: "1",
 	jobCategoryID: "",
+	yrkesbenamning: "",
 	selectNumberOfJobs() {
 		const numberOfJobsInput = document.getElementById("numberOfJobs");
 
@@ -143,8 +158,8 @@ const FilterController = {
       countyOption.classList.add("county");
       console.log("county id: ", county.id);
       countyFilter.appendChild(countyOption);
-  }
- 	 countyFilter.addEventListener("change", function() {
+    }
+    countyFilter.addEventListener("change", function() {
       //console.log(thi);
 
       let countyIndex = countyFilter.selectedIndex;
@@ -152,7 +167,7 @@ const FilterController = {
       countyIndex].id;
 
       FilterView.registerSelectedCounty(selectedCounty);
-  	});
+    });
   },
 
   selectJobCategory(jobCategories) {
@@ -165,9 +180,9 @@ const FilterController = {
       jobCategoryOption.classList.add("jobCategory");
       console.log("jobCategory id: ", jobCategory.id);
       jobCategoryFilter.appendChild(jobCategoryOption);
-  }
+    }
 
-  	jobCategoryFilter.addEventListener("change", function() {
+    jobCategoryFilter.addEventListener("change", function() {
       //console.log(thi);
 
       let jobCategoryIndex = jobCategoryFilter.selectedIndex;
@@ -175,8 +190,19 @@ const FilterController = {
       jobCategoryIndex].id;
 
       FilterView.registerSelectedjobCategory(selectedjobCategory);
-  	});
+    });
 
+  },
+
+  searchOccupation(occupations) {
+  	const searchInput = document.getElementById("searchOccupation");
+
+    searchInput.addEventListener("keyup", function() {
+      let searchInputValue = this.value;	
+      console.log('hej');
+      yrkesbenamning = searchInputValue;
+      FetchModel.fetchSearch(searchInputValue);
+    }); 	
   }
 
 };
@@ -244,7 +270,7 @@ const View = {
 
     containerJobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
-}
+  }
 }; // End of View module
 
 const NavigationView = {
@@ -260,7 +286,7 @@ const NavigationView = {
 			location.reload();
 			window.location = "";
       //Clear URL here
-  });
+    });
 	},
 	showLandingPage() {
 		NavigationView.containerLandingPage.classList.remove("hidden");
@@ -293,17 +319,17 @@ const FilterView = {
 		FetchModel.fetchAll(FilterController.numberOfJobs);
 	},
 
-  	registerSelectedCounty(selectedCounty){
-      	  View.jobContainer.innerHTML = "";
-	      FilterController.countyID = selectedCounty;
-	      FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
-     },
+ registerSelectedCounty(selectedCounty){
+   View.jobContainer.innerHTML = "";
+   FilterController.countyID = selectedCounty;
+   FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
+ },
 
-     registerSelectedjobCategory(selectedjobCategory){
-      	  View.jobContainer.innerHTML = "";
-	      FilterController.jobCategoryID = selectedjobCategory;
-	      FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.selectedCounty, selectedjobCategory);
-     },
+ registerSelectedjobCategory(selectedjobCategory){
+   View.jobContainer.innerHTML = "";
+   FilterController.jobCategoryID = selectedjobCategory;
+   FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.selectedCounty, selectedjobCategory);
+ },
 
 
 };
@@ -341,3 +367,6 @@ NavigationView.showSavedJobs();
 FilterController.selectNumberOfJobs();
 FetchModel.fetchAllCounties();
 FetchModel.fetchAllJobCategory();
+
+
+
