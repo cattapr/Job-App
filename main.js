@@ -212,7 +212,8 @@ const View = {
   },
   showLoader() {
     const loader = `<div class="loader__container" id="loaderContainer"><div class="loader" id="loader"></div></div>`;
-    jobContainer.innerHTML = loader;
+    //jobContainer.innerHTML = loader;
+    jobContainer.insertAdjacentHTML("beforeBegin", loader);
   },
   hideLoader() {
     const loaderContainer = document.getElementById("loaderContainer");
