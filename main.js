@@ -78,25 +78,26 @@ const FetchModel = {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
     )
-      .then(response => response.json())
-      .then(jobCategories => {
-        FilterController.selectJobCategory(jobCategories.soklista.sokdata);
-      })
-      .catch(error => console.log(error));
-  },
+   .then(response => response.json())
+   .then(jobCategories => {
+    FilterController.selectJobCategory(jobCategories.soklista.sokdata);
+    
+  })
+   .catch(error => console.log(error));
+ },
 
-  fetchSearch(yrkesbenamning) {
-    return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrken/${yrkesbenamning}`
+ fetchSearch(yrkesbenamning) {
+   return fetch(
+    `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}`
     )
-      .then(response => response.json())
-      .then(occupations => {
-        //FilterController.searchOccupation(occupations.soklista.sokdata);
-        console.log(occupations);
-        console.log(occupations.soklista.sokdata);
-      })
-      .catch(error => console.log(error));
-  }
+   .then(response => response.json())
+   .then(occupations => {
+  		//FilterController.searchOccupation(occupations.soklista.sokdata);
+  		console.log(occupations);
+  		console.log(occupations.matchningslista.matchningdata);
+  	})
+   .catch(error => console.log(error));
+ }
 };
 
 const ResponseController = {
@@ -199,15 +200,16 @@ const FilterController = {
     });
   },
 
-  searchOccupation(occupations) {
-    const searchInput = document.getElementById("searchOccupation");
+  searchOccupation() {
+  	const searchInput = document.getElementById("searchOccupation");
 
-    searchInput.addEventListener("keyup", function() {
-      let searchInputValue = this.value;
-      console.log("hej");
-      yrkesbenamning = searchInputValue;
-      FetchModel.fetchSearch(searchInputValue);
-    });
+    searchInput.addEventListener("change", function() {
+      console.log(searchInput); 
+      let searchInputValue = this.value;	
+      FilterController.yrkesbenamning = searchInputValue;
+      FetchModel.fetchSearch(FilterController.yrkesbenamning);
+      console.log(FilterController.yrkesbenamning);
+    }); 
   }
 };
 
@@ -386,6 +388,7 @@ NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
 FilterController.selectNumberOfJobs();
+FilterController.searchOccupation();
 FetchModel.fetchAllCounties();
 
 FetchModel.fetchAllJobCategory();
