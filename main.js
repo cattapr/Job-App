@@ -1,18 +1,17 @@
-// Array for savedJobs list
-let storedJobs = [];
-loadData();
-
 const FetchModel = {
-
-	fetchAll(numberOfJobs = "10", countyID = "1", jobCategoryID = "", page = "1") {
+  fetchAll(
+    numberOfJobs = "10",
+    countyID = "1",
+    jobCategoryID = "",
+    page = "1"
+  ) {
     //let job = numberOfJobs;
     return fetch(
-    	`http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&sida=${page}`
-    	)
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&sida=${page}`
+    )
       .then(View.showLoader())
       .then(response => response.json())
       .then(data => {
-
         //let listings = data.matchningslista;
         //ResponseController.sortResponse(data);
         View.hideLoader();
@@ -23,7 +22,7 @@ const FetchModel = {
 
         for (const button of buttons) {
           button.addEventListener("click", function() {
-            updateLocalStorage(this.parentElement.id);
+            LocalStorageModel.updateLocalStorage(this.parentElement.id);
           });
         }
       })
@@ -51,16 +50,16 @@ const FetchModel = {
   },
   //summary
   fetchByIdJSON(annonsId) {
-    return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`
-    )
-      .then(View.showLoader())
-      .then(response => response.json())
-      .then(job => {
-        View.hideLoader();
-        View.displaySavedJobCard(job);
-      })
-      .catch(error => console.log(error));
+    return (
+      fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
+        // .then(View.showLoader())
+        .then(response => response.json())
+        .then(job => {
+          View.hideLoader();
+          View.displaySavedJobCard(job);
+        })
+        .catch(error => console.log(error))
+    );
   },
 
   fetchAllCounties() {
@@ -80,26 +79,52 @@ const FetchModel = {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
     )
-   .then(response => response.json())
-   .then(jobCategories => {
-    FilterController.selectJobCategory(jobCategories.soklista.sokdata);
-    
-  })
-   .catch(error => console.log(error));
- },
+      .then(response => response.json())
+      .then(jobCategories => {
+        FilterController.selectJobCategory(jobCategories.soklista.sokdata);
+      })
+      .catch(error => console.log(error));
+  },
 
- fetchSearch(yrkesbenamning) {
-   return fetch(
-    `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}`
+  fetchSearch(yrkesbenamning) {
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}`
     )
-   .then(response => response.json())
-   .then(occupations => {
-  		//FilterController.searchOccupation(occupations.soklista.sokdata);
-  		console.log(occupations);
-  		console.log(occupations.matchningslista.matchningdata);
-  	})
-   .catch(error => console.log(error));
- }
+      .then(response => response.json())
+      .then(occupations => {
+        //FilterController.searchOccupation(occupations.soklista.sokdata);
+        console.log(occupations);
+        console.log(occupations.matchningslista.matchningdata);
+      })
+      .catch(error => console.log(error));
+  }
+};
+
+const LocalStorageModel = {
+  // Array for savedJobs list
+  storedJobs: [],
+  updateLocalStorage(annonsId) {
+    //push the annonsId into the array
+    LocalStorageModel.storedJobs.push(annonsId);
+
+    // set the savedJobs on localStorage with the storedJobs data.
+    localStorage.setItem(
+      "savedJobs",
+      JSON.stringify(LocalStorageModel.storedJobs)
+    );
+  },
+
+  loadData() {
+    // Checks if there is anything in local storage,
+    // and makes storedJobs equal to savedJobs in localStorage
+    if (localStorage.getItem("savedJobs")) {
+      LocalStorageModel.storedJobs = JSON.parse(
+        localStorage.getItem("savedJobs")
+      );
+    } else {
+      LocalStorageModel.storedJobs = [];
+    }
+  }
 };
 
 const ResponseController = {
@@ -155,28 +180,26 @@ const FilterController = {
     });
   },
 
-
-	numberOfJobs: "10",
-	countyID: "1",
-	jobCategoryID: "",
-	yrkesbenamning: "",
+  numberOfJobs: "10",
+  countyID: "1",
+  jobCategoryID: "",
+  yrkesbenamning: "",
   page: "1",
 
-	selectNumberOfJobs() {
-		const numberOfJobsInput = document.getElementById("numberOfJobs");
+  selectNumberOfJobs() {
+    const numberOfJobsInput = document.getElementById("numberOfJobs");
 
-		numberOfJobsInput.addEventListener("change", function() {
-			let numberOfJobs = numberOfJobsInput.selectedIndex;
-			let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
-			.value;
-			FilterView.registerNumberOfJobs(filterAmount);
-		});
-	},
+    numberOfJobsInput.addEventListener("change", function() {
+      let numberOfJobs = numberOfJobsInput.selectedIndex;
+      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
+        .value;
+      FilterView.registerNumberOfJobs(filterAmount);
+    });
+  },
 
-	selectCounty(counties) {
-		const countyFilter = document.getElementById("county");
-		for (const county of counties) {
-
+  selectCounty(counties) {
+    const countyFilter = document.getElementById("county");
+    for (const county of counties) {
       //console.log(county);
       const countyOption = document.createElement("option");
       countyOption.innerText = county.namn;
@@ -222,42 +245,59 @@ const FilterController = {
   },
 
   searchOccupation() {
-  	const searchInput = document.getElementById("searchOccupation");
+    const searchInput = document.getElementById("searchOccupation");
 
     searchInput.addEventListener("change", function() {
-      console.log(searchInput); 
-      let searchInputValue = this.value;	
+      console.log(searchInput);
+      let searchInputValue = this.value;
       FilterController.yrkesbenamning = searchInputValue;
       FetchModel.fetchSearch(FilterController.yrkesbenamning);
       console.log(FilterController.yrkesbenamning);
-    }); 
-  },
-
-  nextPage(nextPageButton) {
-    nextPageButton.addEventListener('click', function(){
-      FilterController.page++; 
-      console.log('next page', FilterController.page);
-      View.jobContainer.innerHTML = "";
-      FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.countyID, FilterController.jobCategoryID, FilterController.yrkesbenamning, FilterController.page)
     });
   },
 
-   previousPage(previousPageButton) {
-    previousPageButton.addEventListener('click', function(){
-        if(FilterController.page > 1){
-          FilterController.page--; 
-          console.log('previous page', FilterController.page);
-          View.jobContainer.innerHTML = "";
-          FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.countyID, FilterController.jobCategoryID, FilterController.yrkesbenamning, FilterController.page)
-        
+  nextPage(nextPageButton) {
+    nextPageButton.addEventListener("click", function() {
+      FilterController.page++;
+      console.log("next page", FilterController.page);
+      View.jobContainer.innerHTML = "";
+      FetchModel.fetchAll(
+        FilterController.numberOfJobs,
+        FilterController.countyID,
+        FilterController.jobCategoryID,
+        FilterController.yrkesbenamning,
+        FilterController.page
+      );
+    });
+  },
+
+  previousPage(previousPageButton) {
+    previousPageButton.addEventListener("click", function() {
+      if (FilterController.page > 1) {
+        FilterController.page--;
+        console.log("previous page", FilterController.page);
+        View.jobContainer.innerHTML = "";
+        FetchModel.fetchAll(
+          FilterController.numberOfJobs,
+          FilterController.countyID,
+          FilterController.jobCategoryID,
+          FilterController.yrkesbenamning,
+          FilterController.page
+        );
       } else {
-          FilterController.page = 1 
-          console.log('page', FilterController.page);
-          View.jobContainer.innerHTML = "";
-          FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.countyID, FilterController.jobCategoryID, FilterController.yrkesbenamning, FilterController.page)
-         }
-        });
-     }    
+        FilterController.page = 1;
+        console.log("page", FilterController.page);
+        View.jobContainer.innerHTML = "";
+        FetchModel.fetchAll(
+          FilterController.numberOfJobs,
+          FilterController.countyID,
+          FilterController.jobCategoryID,
+          FilterController.yrkesbenamning,
+          FilterController.page
+        );
+      }
+    });
+  }
 };
 
 const View = {
@@ -338,28 +378,27 @@ const View = {
 }; // End of View module
 
 const PaginationView = {
-  createNextPageElements(){
-    const nextPageDiv = document.createElement('div');
-    const nextPageButton = document.createElement('button');
-    nextPageButton.id = 'next';
-    nextPageButton.innerText = 'Nästa';
+  createNextPageElements() {
+    const nextPageDiv = document.createElement("div");
+    const nextPageButton = document.createElement("button");
+    nextPageButton.id = "next";
+    nextPageButton.innerText = "Nästa";
     containerLandingPage.appendChild(nextPageDiv);
     nextPageDiv.appendChild(nextPageButton);
 
     FilterController.nextPage(nextPageButton);
-  }, 
+  },
 
   createPreviousPageElements() {
-    const previousPageDiv = document.createElement('div');
-    const previousPageButton = document.createElement('button');
-    previousPageButton.id = 'previous';
-    previousPageButton.innerText = 'Föregående';
+    const previousPageDiv = document.createElement("div");
+    const previousPageButton = document.createElement("button");
+    previousPageButton.id = "previous";
+    previousPageButton.innerText = "Föregående";
     containerLandingPage.appendChild(previousPageDiv);
     previousPageDiv.appendChild(previousPageButton);
 
     FilterController.previousPage(previousPageButton);
-  }  
-
+  }
 };
 
 const NavigationView = {
@@ -393,7 +432,7 @@ const NavigationView = {
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
 
-      for (annonsId of storedJobs) {
+      for (annonsId of LocalStorageModel.storedJobs) {
         FetchModel.fetchByIdJSON(annonsId);
       }
     });
@@ -401,7 +440,6 @@ const NavigationView = {
 }; // End of NavigationView
 
 const FilterView = {
-
   registerNumberOfJobs(filterAmount) {
     View.jobContainer.innerHTML = "";
     FilterController.numberOfJobs = filterAmount;
@@ -414,30 +452,16 @@ const FilterView = {
     FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
   },
 
- registerSelectedjobCategory(selectedjobCategory){
-   View.jobContainer.innerHTML = "";
-   FilterController.jobCategoryID = selectedjobCategory;
-   FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.countyID, selectedjobCategory);
- },
-};
-
-function updateLocalStorage(annonsId) {
-  //push the annonsId into the array
-  storedJobs.push(annonsId);
-
-  // set the savedJobs on localStorage with the storedJobs data.
-  localStorage.setItem("savedJobs", JSON.stringify(storedJobs));
-}
-
-function loadData() {
-  // Checks if there is anything in local storage,
-  // and makes storedJobs equal to savedJobs in localStorage
-  if (localStorage.getItem("savedJobs")) {
-    storedJobs = JSON.parse(localStorage.getItem("savedJobs"));
-  } else {
-    storedJobs = [];
+  registerSelectedjobCategory(selectedjobCategory) {
+    View.jobContainer.innerHTML = "";
+    FilterController.jobCategoryID = selectedjobCategory;
+    FetchModel.fetchAll(
+      FilterController.numberOfJobs,
+      FilterController.countyID,
+      selectedjobCategory
+    );
   }
-}
+};
 
 /***************************************/
 /************* CALL FUNCTIONS **********/
@@ -458,6 +482,4 @@ FetchModel.fetchAllJobCategory();
 
 PaginationView.createNextPageElements();
 PaginationView.createPreviousPageElements();
-
-
-
+LocalStorageModel.loadData();
