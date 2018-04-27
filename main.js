@@ -306,7 +306,7 @@ const View = {
     totalNumberOfJobsHeader.innerHTML = `
 		<div class="numberOfJobs">
 		<h1>${totalNumberOfJobs}</h1>
-		<p>Available jobs in Stockholm</p>
+		<p>Available jobs</p>
 		</div>`;
   },
 
