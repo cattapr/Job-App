@@ -251,7 +251,7 @@ const FilterController = {
     searchInput.addEventListener("keyup", function() {
     	console.log('keyup');
 
-    	if(searchInput.value.length === 2){
+    	if(searchInput.value.length === 3){
     		
     		FilterController.yrkesbenamning = searchInput.value;
       		FetchModel.fetchSearch(FilterController.yrkesbenamning);
