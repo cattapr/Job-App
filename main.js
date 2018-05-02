@@ -341,9 +341,9 @@ const View = {
 		<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
 		<p class="municipality">${job.annons.kommunnamn}</p>
 		<p class="deadline">Sök före ${job.ansokan.sista_ansokningsdag}</p>
-		<a href="${
+		<p class="link"><a href="${
       job.annons.platsannonsUrl
-    }" target="_blank"><p class="link">Läs mer</p></a>
+    }" target="_blank">Läs mer på Arbetsförmedlingens webbsida </a>↗</p>
 		<button class="delete" id="${job.annons.annonsid}">Delete</button>
 		</div>`;
 
