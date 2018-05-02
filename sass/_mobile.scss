@@ -71,24 +71,6 @@ nav {
   }
 }
 
-button {
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  padding: 0.8rem 2rem 0.6rem;
-  font-size: 1rem;
-  font-family: inherit;
-  border-radius: 3px;
-  border: none;
-  outline: none;
-  margin: 10px 0;
-  transition: ease background 0.3s;
-  cursor: pointer;
-  &:hover {
-    transition: ease background 0.3s;
-    background: rgba(0, 0, 0, 0.6);
-  }
-}
-
 .pointer {
   cursor: pointer;
 }
@@ -115,6 +97,25 @@ form {
   background: #f7f7f7;
   padding: 1em;
 }
+
+button {
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 0.8rem 2rem 0.6rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  margin: 10px 0;
+  transition: ease background 0.3s;
+  cursor: pointer;
+  &:hover {
+    transition: ease background 0.3s;
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
 .filters {
   display: flex;
   flex-direction: column;
@@ -155,9 +156,11 @@ select:focus {
   border-radius: 3px;
 }
 
-/*****************************
-*********** LOADER ***********
-*****************************/
+
+
+/*****************************/
+/*********** LOADER **********/
+/*****************************/
 
 .loader__container {
   display: flex;
@@ -193,7 +196,44 @@ select:focus {
   }
 }
 
-/************ FUNCTIONAL STYLES **************/
+
+/******************************************/
+/**************** SEARCH ******************/
+/******************************************/
+.search__matchoutput {
+  li {
+    cursor:pointer;
+    padding:.5em;
+    transition:ease background .3s;
+    &:hover {
+      //background: #c8d2ec;
+      background:rgba(106,169,152,0.3);
+      border-radius:3px;
+      transition:ease background .3s;
+    }
+  }
+}
+
+/******************************************/
+/************** PAGINATION ****************/
+/******************************************/
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  button {
+    background: none;
+    color: rgba(0,0,0,.8);
+    &:hover {
+      background: rgba(0,0,0,.2);
+      color: #fff;
+    }
+  }
+}
+
+
+/******************************************/
+/*********** FUNCTIONAL STYLES ************/
+/******************************************/
 .hidden {
   display: none;
 }
