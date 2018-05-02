@@ -42,8 +42,8 @@ const FetchModel = {
 
         const goBackButton = document.getElementById("goBack");
         goBackButton.addEventListener("click", function() {
-          window.history.go(-1);
-          NavigationView.showLandingPage();
+	       location.reload();
+	       window.location = "";
         });
       })
       .catch(error => console.log(error));
@@ -92,6 +92,7 @@ const FetchModel = {
     )
       .then(response => response.json())
       .then(occupations => {
+      	View.displaySearchMatch(occupations.matchningslista.matchningdata);
         //FilterController.searchOccupation(occupations.soklista.sokdata);
         console.log(occupations);
         console.log(occupations.matchningslista.matchningdata);
@@ -247,12 +248,18 @@ const FilterController = {
   searchOccupation() {
     const searchInput = document.getElementById("searchOccupation");
 
-    searchInput.addEventListener("change", function() {
-      console.log(searchInput);
-      let searchInputValue = this.value;
-      FilterController.yrkesbenamning = searchInputValue;
-      FetchModel.fetchSearch(FilterController.yrkesbenamning);
-      console.log(FilterController.yrkesbenamning);
+    searchInput.addEventListener("keyup", function() {
+    	console.log('keyup');
+
+    	if(searchInput.value.length === 2){
+    		
+    		FilterController.yrkesbenamning = searchInput.value;
+      		FetchModel.fetchSearch(FilterController.yrkesbenamning);
+    	}
+      //console.log(searchInput);
+      //let searchInputValue = this.value;
+    
+      //console.log(FilterController.yrkesbenamning);
     });
   },
 
@@ -355,14 +362,29 @@ const View = {
 		<button id="goBack" class="goBack">Gå tillbaka</button>
 		`;
 
-    //const jobDetailsCardHTML = `
-    //    <h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
-    //  <p>${annonsId.platsannons.annons.annonstext}</p>
-    //  <button id="goBack" class="goBack">Gå tillbaka</button>
-    //  `;
 
     containerJobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
+  },
+
+  displaySearchMatch(searchResults){
+  const searchMatchUl = document.createElement('ul');
+  const searchMatchOutput = document.getElementById('searchMatchOutput');
+  searchMatchOutput.appendChild(searchMatchUl);
+ 	
+  	for (let searchResult of searchResults){
+  	  	const searchMatchLi = document.createElement('li');
+  	  	searchMatchLi.id = searchResult.annonsid;
+  		console.log(searchResult);
+  		searchMatchLi.innerText = searchResult.annonsrubrik;
+		searchMatchUl.appendChild(searchMatchLi);
+
+		searchMatchLi.addEventListener('click', function() {
+			FetchModel.fetchByIdHTML(this.id);
+			window.location.hash = `?jobDetail=${this.id}`;
+			NavigationView.showJobDetails();
+		});
+  	};
   },
 
   showLoader() {
@@ -371,6 +393,7 @@ const View = {
     jobContainer.innerHTML = loader;
     //jobContainer.insertAdjacentHTML("beforeBegin", loader);
   },
+
   hideLoader() {
     const loaderContainer = document.getElementById("loaderContainer");
     loaderContainer.classList.add("hidden");
@@ -460,7 +483,9 @@ const FilterView = {
       FilterController.countyID,
       selectedjobCategory
     );
-  }
+  },
+
+
 };
 
 /***************************************/
