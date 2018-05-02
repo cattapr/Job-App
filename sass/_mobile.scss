@@ -155,6 +155,8 @@ select:focus {
   border-radius: 3px;
 }
 
+
+
 /*****************************
 *********** LOADER ***********
 *****************************/
@@ -192,6 +194,24 @@ select:focus {
     transform: rotate(360deg);
   }
 }
+
+
+.search__matchoutput {
+  li {
+    cursor:pointer;
+    padding:.5em;
+    transition:ease background .3s;
+    &:hover {
+      //background: #c8d2ec;
+      background:rgba(106,169,152,0.3);
+      border-radius:3px;
+      transition:ease background .3s; 
+    }
+  }
+}
+
+
+
 
 /************ FUNCTIONAL STYLES **************/
 .hidden {
