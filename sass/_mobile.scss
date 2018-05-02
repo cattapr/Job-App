@@ -237,3 +237,17 @@ select:focus {
 .hidden {
   display: none;
 }
+
+/******************************************/
+/*********** MODAL URL BOX ************/
+/******************************************/
+.modal-content {
+    background: rgba(106,169,152,0.3);
+    height: 80px;
+    padding: 20px;
+    font-weight: bold;
+
+    span {
+      cursor:pointer;
+    }
+}

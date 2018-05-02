@@ -184,23 +184,7 @@ const FilterController = {
   countyID: "1",
   jobCategoryID: "",
   yrkesbenamning: "",
-  selectNumberOfJobs() {
-    const numberOfJobsInput = document.getElementById("numberOfJobs");
-
-    numberOfJobsInput.addEventListener("change", function() {
-      let numberOfJobs = numberOfJobsInput.selectedIndex;
-      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
-        .value;
-      FilterView.registerNumberOfJobs(filterAmount, FilterController.countyID);
-    });
-  },
-
-  numberOfJobs: "10",
-  countyID: "1",
-  jobCategoryID: "",
-  yrkesbenamning: "",
   page: "1",
-
   selectNumberOfJobs() {
     const numberOfJobsInput = document.getElementById("numberOfJobs");
 
@@ -208,7 +192,7 @@ const FilterController = {
       let numberOfJobs = numberOfJobsInput.selectedIndex;
       let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
         .value;
-      FilterView.registerNumberOfJobs(filterAmount);
+      FilterView.registerNumberOfJobs(filterAmount, countyID);
     });
   },
 
@@ -277,15 +261,15 @@ const FilterController = {
   nextPage(nextPageButton) {
     nextPageButton.addEventListener("click", function() {
       FilterController.page++;
-      console.log("next page", FilterController.page);
+      page = FilterController.page;
       View.jobContainer.innerHTML = "";
+      console.log('next page', page);
       FetchModel.fetchAll(
         FilterController.numberOfJobs,
         FilterController.countyID,
         FilterController.jobCategoryID,
-        FilterController.yrkesbenamning,
-        FilterController.page
-      );
+        page
+      );      
     });
   },
 
@@ -299,7 +283,6 @@ const FilterController = {
           FilterController.numberOfJobs,
           FilterController.countyID,
           FilterController.jobCategoryID,
-          FilterController.yrkesbenamning,
           FilterController.page
         );
       } else {
@@ -310,7 +293,6 @@ const FilterController = {
           FilterController.numberOfJobs,
           FilterController.countyID,
           FilterController.jobCategoryID,
-          FilterController.yrkesbenamning,
           FilterController.page
         );
       }
@@ -407,22 +389,31 @@ const View = {
     const shareButton = document.getElementById("shareURL");
     shareButton.addEventListener("click", function() {
       let modalContent = View.displayModalContent();
-
       containerJobDetails.insertAdjacentHTML("beforeend", modalContent);
+      View.hideModalContentOnSpanClick();
     });
   },
 
   displayModalContent() {
+  	const copyURL = window.location.href;
     const modal = `
-      <div id="myModal" class="modal">
+      <div id="URLModal" class="modal">
 
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>The share URL should be in this box!</p>
+        <span id="closeURL_Modal">&times;</span>
+        <p>${copyURL}</p>
       </div>
     `;
 
     return modal;
+  },
+
+  hideModalContentOnSpanClick(){
+  	const modalContent = document.getElementById('URLModal');
+  	const span = document.getElementById('closeURL_Modal');
+  	span.addEventListener("click", function(){
+  		modalContent.style.display = "none";
+  	});
   },
 
   displaySearchMatch(searchResults) {
