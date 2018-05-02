@@ -263,10 +263,12 @@ const FilterController = {
     searchInput.addEventListener("keyup", function() {
       console.log("keyup");
 
-      if (searchInput.value.length === 2) {
-        FilterController.yrkesbenamning = searchInput.value;
-        FetchModel.fetchSearch(FilterController.yrkesbenamning);
-      }
+    	if(searchInput.value.length === 3){
+    		
+    		FilterController.yrkesbenamning = searchInput.value;
+      		FetchModel.fetchSearch(FilterController.yrkesbenamning);
+    	}
+
       //console.log(searchInput);
       //let searchInputValue = this.value;
 
@@ -400,24 +402,25 @@ const View = {
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
   },
 
-  displaySearchMatch(searchResults) {
-    const searchMatchUl = document.createElement("ul");
-    const searchMatchOutput = document.getElementById("searchMatchOutput");
-    searchMatchOutput.appendChild(searchMatchUl);
+  displaySearchMatch(searchResults){
+  const searchMatchUl = document.createElement('ul');
+  const searchMatchOutput = document.getElementById('searchMatchOutput');
+  searchMatchOutput.appendChild(searchMatchUl);
 
-    for (let searchResult of searchResults) {
-      const searchMatchLi = document.createElement("li");
-      searchMatchLi.id = searchResult.annonsid;
-      console.log(searchResult);
-      searchMatchLi.innerText = searchResult.annonsrubrik;
-      searchMatchUl.appendChild(searchMatchLi);
+  	for (let searchResult of searchResults){
+  	  	const searchMatchLi = document.createElement('li');
+  	  	searchMatchLi.id = searchResult.annonsid;
+  		console.log(searchResult);
+  		searchMatchLi.innerText = searchResult.annonsrubrik;
+		searchMatchUl.appendChild(searchMatchLi);
 
-      searchMatchLi.addEventListener("click", function() {
-        FetchModel.fetchByIdHTML(this.id);
-        window.location.hash = `?jobDetail=${this.id}`;
-        NavigationView.showJobDetails();
-      });
-    }
+		searchMatchLi.addEventListener('click', function() {
+			FetchModel.fetchByIdHTML(this.id);
+			window.location.hash = `?jobDetail=${this.id}`;
+			NavigationView.showJobDetails();
+		});
+  	};
+
   },
 
   showLoader() {
@@ -434,13 +437,12 @@ const View = {
 }; // End of View module
 
 const PaginationView = {
+  paginationContainer: document.getElementById("pagination"),
   createNextPageElements() {
-    const nextPageDiv = document.createElement("div");
     const nextPageButton = document.createElement("button");
     nextPageButton.id = "next";
-    nextPageButton.innerText = "Nästa";
-    containerLandingPage.appendChild(nextPageDiv);
-    nextPageDiv.appendChild(nextPageButton);
+    nextPageButton.innerText = "Nästa →";
+    PaginationView.paginationContainer.appendChild(nextPageButton);
 
     FilterController.nextPage(nextPageButton);
   },
@@ -449,9 +451,8 @@ const PaginationView = {
     const previousPageDiv = document.createElement("div");
     const previousPageButton = document.createElement("button");
     previousPageButton.id = "previous";
-    previousPageButton.innerText = "Föregående";
-    containerLandingPage.appendChild(previousPageDiv);
-    previousPageDiv.appendChild(previousPageButton);
+    previousPageButton.innerText = "← Föregående";
+    PaginationView.paginationContainer.appendChild(previousPageButton);
 
     FilterController.previousPage(previousPageButton);
   }
@@ -536,6 +537,6 @@ FetchModel.fetchAllCounties();
 
 FetchModel.fetchAllJobCategory();
 
-PaginationView.createNextPageElements();
 PaginationView.createPreviousPageElements();
+PaginationView.createNextPageElements();
 LocalStorageModel.loadData();
