@@ -262,11 +262,10 @@ const FilterController = {
     searchInput.addEventListener("keyup", function() {
       console.log("keyup");
 
-    	if(searchInput.value.length === 3){
-    		
-    		FilterController.yrkesbenamning = searchInput.value;
-      		FetchModel.fetchSearch(FilterController.yrkesbenamning);
-    	}
+      if (searchInput.value.length === 3) {
+        FilterController.yrkesbenamning = searchInput.value;
+        FetchModel.fetchSearch(FilterController.yrkesbenamning);
+      }
 
       //console.log(searchInput);
       //let searchInputValue = this.value;
@@ -399,27 +398,51 @@ const View = {
     containerJobDetails.appendChild(jobDetails);
     jobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
+
+    const shareURLButton = `
+		<button id="shareURL" class="shareURL">Dela annons</button>
+		`;
+    containerJobDetails.insertAdjacentHTML("beforeEnd", shareURLButton);
+
+    const shareButton = document.getElementById("shareURL");
+    shareButton.addEventListener("click", function() {
+      let modalContent = View.displayModalContent();
+
+      containerJobDetails.insertAdjacentHTML("beforeend", modalContent);
+    });
   },
 
-  displaySearchMatch(searchResults){
-  const searchMatchUl = document.createElement('ul');
-  const searchMatchOutput = document.getElementById('searchMatchOutput');
-  searchMatchOutput.appendChild(searchMatchUl);
+  displayModalContent() {
+    const modal = `
+      <div id="myModal" class="modal">
 
-  	for (let searchResult of searchResults){
-  	  	const searchMatchLi = document.createElement('li');
-  	  	searchMatchLi.id = searchResult.annonsid;
-  		console.log(searchResult);
-  		searchMatchLi.innerText = searchResult.annonsrubrik;
-		searchMatchUl.appendChild(searchMatchLi);
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>The share URL should be in this box!</p>
+      </div>
+    `;
 
-		searchMatchLi.addEventListener('click', function() {
-			FetchModel.fetchByIdHTML(this.id);
-			window.location.hash = `?jobDetail=${this.id}`;
-			NavigationView.showJobDetails();
-		});
-  	};
+    return modal;
+  },
 
+  displaySearchMatch(searchResults) {
+    const searchMatchUl = document.createElement("ul");
+    const searchMatchOutput = document.getElementById("searchMatchOutput");
+    searchMatchOutput.appendChild(searchMatchUl);
+
+    for (let searchResult of searchResults) {
+      const searchMatchLi = document.createElement("li");
+      searchMatchLi.id = searchResult.annonsid;
+      console.log(searchResult);
+      searchMatchLi.innerText = searchResult.annonsrubrik;
+      searchMatchUl.appendChild(searchMatchLi);
+
+      searchMatchLi.addEventListener("click", function() {
+        FetchModel.fetchByIdHTML(this.id);
+        window.location.hash = `?jobDetail=${this.id}`;
+        NavigationView.showJobDetails();
+      });
+    }
   },
 
   showLoader() {
