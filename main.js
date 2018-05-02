@@ -355,13 +355,10 @@ const View = {
 		<button id="goBack" class="goBack">Gå tillbaka</button>
 		`;
 
-    //const jobDetailsCardHTML = `
-    //    <h2>${annonsId.platsannons.annons.annonsrubrik}</h2>
-    //  <p>${annonsId.platsannons.annons.annonstext}</p>
-    //  <button id="goBack" class="goBack">Gå tillbaka</button>
-    //  `;
-
-    containerJobDetails.innerHTML = jobDetailsCardHTML;
+    const jobDetails = document.createElement("div");
+    jobDetails.classList.add("job_details");
+    containerJobDetails.appendChild(jobDetails);
+    jobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
   },
 
