@@ -340,7 +340,7 @@ const View = {
 		<p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
 		<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
 		<p class="municipality">${job.annons.kommunnamn}</p>
-		<p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
+		<p class="deadline">Sök före ${job.ansokan.sista_ansokningsdag}</p>
 		<a href="${
       job.annons.platsannonsUrl
     }" target="_blank"><p class="link">Läs mer</p></a>
