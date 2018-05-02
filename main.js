@@ -381,7 +381,7 @@ const View = {
       const idToDelete = this.id;
       console.log("this.parenteELement = ", this.parentElement);
       this.parentElement.parentElement.removeChild(this.parentElement);
-      //LocalStorageModel.removeSavedJob(idToDelete);
+      LocalStorageModel.removeSavedJob(idToDelete);
       //View.removeSavedJobCard(idToDelete);
     });
   },
