@@ -347,10 +347,10 @@ const View = {
 		<p class="company">${job.arbetsplats.arbetsplatsnamn}</p>
 		<p class="typeOfEmpoloyment">${job.annons.anstallningstyp}</p>
 		<p class="municipality">${job.annons.kommunnamn}</p>
-		<p class="deadline">Sök före ${job.annons.sista_ansokning}</p>
-		<a href="${
+		<p class="deadline">Sök före ${job.ansokan.sista_ansokningsdag}</p>
+		<p class="link"><a href="${
       job.annons.platsannonsUrl
-    }" target="_blank"><p class="link">Läs mer</p></a>
+    }" target="_blank">Läs mer på Arbetsförmedlingens webbsida </a>↗</p>
 		<button class="delete" id="${job.annons.annonsid}">Delete</button>
 		</div>`;
 
@@ -362,8 +362,10 @@ const View = {
 		<button id="goBack" class="goBack">Gå tillbaka</button>
 		`;
 
-
-    containerJobDetails.innerHTML = jobDetailsCardHTML;
+    const jobDetails = document.createElement("div");
+    jobDetails.classList.add("job_details");
+    containerJobDetails.appendChild(jobDetails);
+    jobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
   },
 
