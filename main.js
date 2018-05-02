@@ -148,7 +148,6 @@ const ResponseController = {
     const urlString = window.location.href;
     const url = new URL(urlString);
     const jobID = url.searchParams.get("jobDetail");
-    //FetchModel.fetchById(jobID);
     return jobID;
   },
   // sortResponse(data) {
