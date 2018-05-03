@@ -427,7 +427,7 @@ const View = {
   		communityOption.id = community.id;
   		communityOption.classList.add('community');
 
-  		console.log(community.id);
+  		console.log('community by id:', community.id);
 
 		selectCommunity.appendChild(communityOption);	
   	}
@@ -439,7 +439,7 @@ const View = {
         communityIndex
       ].id;
      
-      FilterView.registerSelectedCommunity(selectedCommunity, selectedCounty);
+      FilterView.registerSelectedCommunity(selectedCommunity, selectedCounty, FilterController.jobCategoryID);
     });
 
   	
@@ -580,7 +580,7 @@ const FilterView = {
     FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
   },
 
-  registerSelectedCommunity(selectedCommunity, selectedCounty) {
+  registerSelectedCommunity(selectedCommunity, selectedCounty, selectedjobCategory) {
 
   	FilterController.countyID = selectedCounty;
   	FilterController.communityID = selectedCommunity;
@@ -588,7 +588,7 @@ const FilterView = {
   	console.log("vald kommun", selectedCommunity);
   	View.jobContainer.innerHTML = "";
    
-    FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.jobCategoryID, selectedCounty , selectedCommunity);
+    FetchModel.fetchAll(FilterController.numberOfJobs, selectedjobCategory, selectedCounty , selectedCommunity);
   },
 
   registerSelectedjobCategory(selectedjobCategory) {
