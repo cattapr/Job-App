@@ -286,9 +286,9 @@ const FilterController = {
       console.log('next page', page);
       FetchModel.fetchAll(
         FilterController.numberOfJobs,
-        FilterController.countyID,
-        FilterController.communityID,
         FilterController.jobCategoryID,
+        FilterController.countyID,
+        FilterController.communityID,   
         page
       );      
     });
@@ -302,9 +302,9 @@ const FilterController = {
         View.jobContainer.innerHTML = "";
         FetchModel.fetchAll(
           FilterController.numberOfJobs,
+          FilterController.jobCategoryID,
           FilterController.countyID,
           FilterController.communityID,
-          FilterController.jobCategoryID,
           FilterController.page
         );
       } else {
@@ -313,9 +313,9 @@ const FilterController = {
         View.jobContainer.innerHTML = "";
         FetchModel.fetchAll(
           FilterController.numberOfJobs,
+          FilterController.jobCategoryID,
           FilterController.countyID,
           FilterController.communityID,
-          FilterController.jobCategoryID,
           FilterController.page
         );
       }
