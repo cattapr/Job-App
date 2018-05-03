@@ -3,12 +3,13 @@ const FetchModel = {
     numberOfJobs = "10",
     countyID = "1",
     jobCategoryID = "",
+    communityID = "",
     page = "1"
   ) {
     //let job = numberOfJobs;
-    return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&sida=${page}`
-    )
+    return fetch(	
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&kommunid=${communityID}&sida=${page}`
+    ) 
       .then(View.showLoader())
       .then(response => response.json())
       .then(data => {
@@ -75,6 +76,17 @@ const FetchModel = {
       .catch(error => console.log(error));
   },
 
+  fetchCommunityByCountyId(countyID){
+  	return fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/kommuner?lanid=${countyID}`)
+  		.then(response => response.json())
+      	.then(communities => {
+	        console.log(communities);
+	        View.displayCommunitiesFromSelectedCounty(communities.soklista.sokdata, countyID);
+	     })
+      .catch(error => console.log(error));
+
+  },
+
   fetchAllJobCategory() {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
@@ -86,9 +98,9 @@ const FetchModel = {
       .catch(error => console.log(error));
   },
 
-  fetchSearch(yrkesbenamning) {
+  fetchSearch(yrkesbenamning, countyID = "1") {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}&lanid=${countyID}`
     )
       .then(response => response.json())
       .then(occupations => {
@@ -184,6 +196,7 @@ const FilterController = {
   countyID: "1",
   jobCategoryID: "",
   yrkesbenamning: "",
+  communityID: "",
   page: "1",
   selectNumberOfJobs() {
     const numberOfJobsInput = document.getElementById("numberOfJobs");
@@ -214,7 +227,14 @@ const FilterController = {
         countyIndex
       ].id;
 
+      if(selectedCounty){
+      	const communtityContainer = document.getElementById('communityContainer');
+      	communityContainer.style.display ="block";
+
+      }
+
       FilterView.registerSelectedCounty(selectedCounty);
+      return selectedCounty;
     });
   },
 
@@ -267,6 +287,7 @@ const FilterController = {
       FetchModel.fetchAll(
         FilterController.numberOfJobs,
         FilterController.countyID,
+        FilterController.communityID,
         FilterController.jobCategoryID,
         page
       );      
@@ -282,6 +303,7 @@ const FilterController = {
         FetchModel.fetchAll(
           FilterController.numberOfJobs,
           FilterController.countyID,
+          FilterController.communityID,
           FilterController.jobCategoryID,
           FilterController.page
         );
@@ -292,6 +314,7 @@ const FilterController = {
         FetchModel.fetchAll(
           FilterController.numberOfJobs,
           FilterController.countyID,
+          FilterController.communityID,
           FilterController.jobCategoryID,
           FilterController.page
         );
@@ -392,6 +415,34 @@ const View = {
       containerJobDetails.insertAdjacentHTML("beforeend", modalContent);
       View.hideModalContentOnSpanClick();
     });
+  },
+
+  displayCommunitiesFromSelectedCounty(communities, selectedCounty){
+  	const communityContainer = document.getElementById('communityContainer');
+  	const selectCommunity = document.getElementById('community');
+
+  	for(const community of communities){
+  		const communityOption = document.createElement('option');
+  		communityOption.innerText = community.namn;
+  		communityOption.id = community.id;
+  		communityOption.classList.add('community');
+
+  		console.log(community.id);
+
+		selectCommunity.appendChild(communityOption);	
+  	}
+
+  	selectCommunity.addEventListener("change", function() {
+
+      let communityIndex = selectCommunity.selectedIndex;
+      let selectedCommunity = document.getElementsByClassName("community")[
+        communityIndex
+      ].id;
+     
+      FilterView.registerSelectedCommunity(selectedCommunity, selectedCounty);
+    });
+
+  	
   },
 
   displayModalContent() {
@@ -516,10 +567,28 @@ const FilterView = {
     FetchModel.fetchAll(FilterController.numberOfJobs);
   },
 
+  selectCommunity(countyId){
+  	console.log('län id som ska användas:', countyId);
+  	FetchModel.fetchCommunityByCountyId(countyId);
+  	//return countyId;
+  },
+
   registerSelectedCounty(selectedCounty) {
     View.jobContainer.innerHTML = "";
     FilterController.countyID = selectedCounty;
+    FilterView.selectCommunity(selectedCounty);
     FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
+  },
+
+  registerSelectedCommunity(selectedCommunity, selectedCounty) {
+
+  	FilterController.countyID = selectedCounty;
+  	FilterController.communityID = selectedCommunity;
+  	console.log("vald län", selectedCounty);
+  	console.log("vald kommun", selectedCommunity);
+  	View.jobContainer.innerHTML = "";
+   
+    FetchModel.fetchAll(FilterController.numberOfJobs, FilterController.jobCategoryID, selectedCounty , selectedCommunity);
   },
 
   registerSelectedjobCategory(selectedjobCategory) {

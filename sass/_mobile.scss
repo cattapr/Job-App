@@ -125,6 +125,11 @@ button {
   display: flex;
   flex-direction: column;
 }
+
+#communityContainer {
+  display: none;
+}
+
 .searchDiv {
   width: 100%;
 }
