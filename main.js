@@ -290,7 +290,6 @@ const FilterController = {
       FilterController.page++;
       page = FilterController.page;
       View.jobContainer.innerHTML = "";
-      console.log("next page", page);
       FetchModel.fetchAll(
         FilterController.numberOfJobs, 
         FilterController.countyID,
