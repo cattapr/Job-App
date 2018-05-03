@@ -263,8 +263,7 @@ const FilterController = {
       let selectedjobCategory = document.getElementsByClassName("jobCategory")[
         jobCategoryIndex
       ].id;
-
-      FilterView.registerSelectedjobCategory(selectedjobCategory);
+      FilterView.registerSelectedjobCategory(selectedjobCategory, FilterController.countyID, FilterController.communityID);
     });
   },
 
@@ -293,9 +292,9 @@ const FilterController = {
       View.jobContainer.innerHTML = "";
       console.log("next page", page);
       FetchModel.fetchAll(
-        FilterController.numberOfJobs,
-        FilterController.jobCategoryID,
+        FilterController.numberOfJobs, 
         FilterController.countyID,
+        FilterController.jobCategoryID,
         FilterController.communityID,
         page
       );
@@ -310,8 +309,8 @@ const FilterController = {
         View.jobContainer.innerHTML = "";
         FetchModel.fetchAll(
           FilterController.numberOfJobs,
-          FilterController.jobCategoryID,
           FilterController.countyID,
+          FilterController.jobCategoryID,
           FilterController.communityID,
           FilterController.page
         );
@@ -320,9 +319,9 @@ const FilterController = {
         console.log("page", FilterController.page);
         View.jobContainer.innerHTML = "";
         FetchModel.fetchAll(
-          FilterController.numberOfJobs,
-          FilterController.jobCategoryID,
+          FilterController.numberOfJobs, 
           FilterController.countyID,
+          FilterController.jobCategoryID,       
           FilterController.communityID,
           FilterController.page
         );
@@ -596,20 +595,22 @@ const FilterView = {
     View.jobContainer.innerHTML = "";
 
     FetchModel.fetchAll(
-      FilterController.numberOfJobs,
-      selectedjobCategory,
+      FilterController.numberOfJobs, 
       selectedCounty,
+      selectedjobCategory,
       selectedCommunity
     );
   },
 
-  registerSelectedjobCategory(selectedjobCategory) {
+  registerSelectedjobCategory(selectedjobCategory, selectedCounty, selectedCommunity) {
     View.jobContainer.innerHTML = "";
+    console.log("jobCategory:", selectedjobCategory, "county;", selectedCounty, "community:", selectedCommunity);
     FilterController.jobCategoryID = selectedjobCategory;
     FetchModel.fetchAll(
       FilterController.numberOfJobs,
-      FilterController.countyID,
-      selectedjobCategory
+      selectedCounty,
+      selectedjobCategory,
+      selectedCommunity,     
     );
   }
 };
