@@ -102,9 +102,9 @@ const FetchModel = {
       .catch(error => console.log(error));
   },
 
-  fetchSearch(yrkesbenamning, countyID = "1") {
+  fetchSearch(yrkesbenamning, countyID = "1", communityID = "") {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}&lanid=${countyID}`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}&lanid=${countyID}&kommunid=${communityID}`
     )
       .then(response => response.json())
       .then(occupations => {
@@ -275,7 +275,7 @@ const FilterController = {
 
       if (searchInput.value.length === 3) {
         FilterController.yrkesbenamning = searchInput.value;
-        FetchModel.fetchSearch(FilterController.yrkesbenamning);
+        FetchModel.fetchSearch(FilterController.yrkesbenamning, FilterController.countyID, FilterController.communityID);
       }
 
       //console.log(searchInput);
