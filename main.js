@@ -205,7 +205,7 @@ const FilterController = {
       let numberOfJobs = numberOfJobsInput.selectedIndex;
       let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
         .value;
-      FilterView.registerNumberOfJobs(filterAmount, countyID);
+      FilterView.registerNumberOfJobs(filterAmount, FilterController.countyID);
     });
   },
 
