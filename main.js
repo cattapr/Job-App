@@ -632,36 +632,36 @@ const FilterView = {
 };
 
 const FeedbackView = {
-  feedbackPopup(successOrError, message){
-    const feedbackPopup = document.getElementById('feedbackPopup');
-
-    feedbackPopup.classList.remove('hidden');
-
-    if(successOrError === 'success'){
-      feedbackPopup.classList.add('success');
-    } else if (successOrError === 'error') {
-      feedbackPopup.classList.add('error');
-    }
-    feedbackPopup.innerText = message;
-    console.log(feedbackPopup);
-    //Hide popup when clicking outside of it
-    // document.addEventListener('click', function(event) {
-    //   var isClickInside = feedbackPopup.contains(event.target);
-    //   if (!isClickInside){
-    //     feedbackPopup.classList.add('hidden');
-    //   }
-    // });
-  },
+  // feedbackPopup(successOrError, message){
+  //   const feedbackPopup = document.getElementById('feedbackPopup');
+  //
+  //   feedbackPopup.classList.remove('hidden');
+  //
+  //   if(successOrError === 'success'){
+  //     feedbackPopup.classList.add('success');
+  //   } else if (successOrError === 'error') {
+  //     feedbackPopup.classList.add('error');
+  //   }
+  //   feedbackPopup.innerText = message;
+  //   console.log(feedbackPopup);
+  //   //Hide popup when clicking outside of it
+  //   // document.addEventListener('click', function(event) {
+  //   //   var isClickInside = feedbackPopup.contains(event.target);
+  //   //   if (!isClickInside){
+  //   //     feedbackPopup.classList.add('hidden');
+  //   //   }
+  //   // });
+  // },
   textHighlight(textToHighlight) {
-    textToHighlight.classList.add('textToHighlight');
-    setTimeout(function(){
-        textToHighlight.classList.remove('textToHighlight');
-    }, 500);
+      textToHighlight.classList.add('textToHighlight');
+      setTimeout(function(){
+          textToHighlight.classList.remove('textToHighlight');
+      }, 1000);
   },
   saveJob(button){
-    button.classList.add('saved');
-    button.innerText = 'Sparad';
-  }
+      button.classList.add('saved');
+      button.innerText = 'Sparad';
+    }
 };
 
 /***************************************/
