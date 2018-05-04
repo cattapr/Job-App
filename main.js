@@ -3,11 +3,12 @@ const FetchModel = {
     numberOfJobs = "10",
     countyID = "1",
     jobCategoryID = "",
+    communityID = "",
     page = "1"
   ) {
     //let job = numberOfJobs;
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&sida=${page}`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&kommunid=${communityID}&sida=${page}`
     )
       .then(View.showLoader())
       .then(response => response.json())
@@ -42,8 +43,8 @@ const FetchModel = {
 
         const goBackButton = document.getElementById("goBack");
         goBackButton.addEventListener("click", function() {
-	       location.reload();
-	       window.location = "";
+          location.reload();
+          window.location = "";
         });
       })
       .catch(error => console.log(error));
@@ -75,6 +76,21 @@ const FetchModel = {
       .catch(error => console.log(error));
   },
 
+  fetchCommunityByCountyId(countyID) {
+    return fetch(
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/kommuner?lanid=${countyID}`
+    )
+      .then(response => response.json())
+      .then(communities => {
+        console.log(communities);
+        View.displayCommunitiesFromSelectedCounty(
+          communities.soklista.sokdata,
+          countyID
+        );
+      })
+      .catch(error => console.log(error));
+  },
+
   fetchAllJobCategory() {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
@@ -86,13 +102,13 @@ const FetchModel = {
       .catch(error => console.log(error));
   },
 
-  fetchSearch(yrkesbenamning) {
+  fetchSearch(yrkesbenamning, countyID = "1", communityID = "") {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}`
+      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}&lanid=${countyID}&kommunid=${communityID}`
     )
       .then(response => response.json())
       .then(occupations => {
-      	View.displaySearchMatch(occupations.matchningslista.matchningdata);
+        View.displaySearchMatch(occupations.matchningslista.matchningdata);
         //FilterController.searchOccupation(occupations.soklista.sokdata);
         console.log(occupations);
         console.log(occupations.matchningslista.matchningdata);
@@ -106,13 +122,22 @@ const LocalStorageModel = {
   storedJobs: [],
   updateLocalStorage(annonsId) {
     //push the annonsId into the array
+    if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
+      alert("Denna annons har redan sparats.");
+      return;
+    }
     LocalStorageModel.storedJobs.push(annonsId);
-
     // set the savedJobs on localStorage with the storedJobs data.
     localStorage.setItem(
       "savedJobs",
       JSON.stringify(LocalStorageModel.storedJobs)
     );
+    let numberOfSavedJobs = LocalStorageModel.storedJobs.length;
+    View.updateDisplaySavedJobs(numberOfSavedJobs);
+  },
+  getNumberOfSavedJobs() {
+    let numberOfSavedJobs = LocalStorageModel.storedJobs.length;
+    return numberOfSavedJobs;
   },
 
   loadData() {
@@ -125,6 +150,22 @@ const LocalStorageModel = {
     } else {
       LocalStorageModel.storedJobs = [];
     }
+  },
+  removeSavedJob(idToDelete) {
+    console.log(idToDelete);
+    LocalStorageModel.storedJobs = JSON.parse(
+      localStorage.getItem("savedJobs")
+    );
+    LocalStorageModel.storedJobs.splice(
+      LocalStorageModel.storedJobs.indexOf(idToDelete),
+      1
+    );
+    localStorage.setItem(
+      "savedJobs",
+      JSON.stringify(LocalStorageModel.storedJobs)
+    );
+    console.log(LocalStorageModel.storedJobs);
+    View.updateDisplaySavedJobs();
   }
 };
 
@@ -133,7 +174,6 @@ const ResponseController = {
     const urlString = window.location.href;
     const url = new URL(urlString);
     const jobID = url.searchParams.get("jobDetail");
-    //FetchModel.fetchById(jobID);
     return jobID;
   },
   // sortResponse(data) {
@@ -170,6 +210,8 @@ const FilterController = {
   countyID: "1",
   jobCategoryID: "",
   yrkesbenamning: "",
+  communityID: "",
+  page: "1",
   selectNumberOfJobs() {
     const numberOfJobsInput = document.getElementById("numberOfJobs");
 
@@ -181,23 +223,6 @@ const FilterController = {
     });
   },
 
-  numberOfJobs: "10",
-  countyID: "1",
-  jobCategoryID: "",
-  yrkesbenamning: "",
-  page: "1",
-
-  selectNumberOfJobs() {
-    const numberOfJobsInput = document.getElementById("numberOfJobs");
-
-    numberOfJobsInput.addEventListener("change", function() {
-      let numberOfJobs = numberOfJobsInput.selectedIndex;
-      let filterAmount = document.getElementsByTagName("option")[numberOfJobs]
-        .value;
-      FilterView.registerNumberOfJobs(filterAmount);
-    });
-  },
-
   selectCounty(counties) {
     const countyFilter = document.getElementById("county");
     for (const county of counties) {
@@ -206,7 +231,6 @@ const FilterController = {
       countyOption.innerText = county.namn;
       countyOption.id = county.id;
       countyOption.classList.add("county");
-      console.log("county id: ", county.id);
       countyFilter.appendChild(countyOption);
     }
     countyFilter.addEventListener("change", function() {
@@ -217,7 +241,15 @@ const FilterController = {
         countyIndex
       ].id;
 
+      if (selectedCounty) {
+        const communtityContainer = document.getElementById(
+          "communityContainer"
+        );
+        communityContainer.style.display = "block";
+      }
+
       FilterView.registerSelectedCounty(selectedCounty);
+      return selectedCounty;
     });
   },
 
@@ -229,19 +261,16 @@ const FilterController = {
       jobCategoryOption.innerText = jobCategory.namn;
       jobCategoryOption.id = jobCategory.id;
       jobCategoryOption.classList.add("jobCategory");
-      console.log("jobCategory id: ", jobCategory.id);
+      //console.log("jobCategory id: ", jobCategory.id);
       jobCategoryFilter.appendChild(jobCategoryOption);
     }
 
     jobCategoryFilter.addEventListener("change", function() {
-      //console.log(thi);
-
       let jobCategoryIndex = jobCategoryFilter.selectedIndex;
       let selectedjobCategory = document.getElementsByClassName("jobCategory")[
         jobCategoryIndex
       ].id;
-
-      FilterView.registerSelectedjobCategory(selectedjobCategory);
+      FilterView.registerSelectedjobCategory(selectedjobCategory, FilterController.countyID, FilterController.communityID);
     });
   },
 
@@ -249,13 +278,13 @@ const FilterController = {
     const searchInput = document.getElementById("searchOccupation");
 
     searchInput.addEventListener("keyup", function() {
-    	console.log('keyup');
+      console.log("keyup");
 
-    	if(searchInput.value.length === 2){
+      if (searchInput.value.length === 3) {
+        FilterController.yrkesbenamning = searchInput.value;
+        FetchModel.fetchSearch(FilterController.yrkesbenamning, FilterController.countyID, FilterController.communityID);
+      }
 
-    		FilterController.yrkesbenamning = searchInput.value;
-      		FetchModel.fetchSearch(FilterController.yrkesbenamning);
-    	}
       //console.log(searchInput);
       //let searchInputValue = this.value;
 
@@ -266,14 +295,14 @@ const FilterController = {
   nextPage(nextPageButton) {
     nextPageButton.addEventListener("click", function() {
       FilterController.page++;
-      console.log("next page", FilterController.page);
+      page = FilterController.page;
       View.jobContainer.innerHTML = "";
       FetchModel.fetchAll(
-        FilterController.numberOfJobs,
+        FilterController.numberOfJobs, 
         FilterController.countyID,
         FilterController.jobCategoryID,
-        FilterController.yrkesbenamning,
-        FilterController.page
+        FilterController.communityID,
+        page
       );
     });
   },
@@ -288,7 +317,7 @@ const FilterController = {
           FilterController.numberOfJobs,
           FilterController.countyID,
           FilterController.jobCategoryID,
-          FilterController.yrkesbenamning,
+          FilterController.communityID,
           FilterController.page
         );
       } else {
@@ -296,10 +325,10 @@ const FilterController = {
         console.log("page", FilterController.page);
         View.jobContainer.innerHTML = "";
         FetchModel.fetchAll(
-          FilterController.numberOfJobs,
+          FilterController.numberOfJobs, 
           FilterController.countyID,
-          FilterController.jobCategoryID,
-          FilterController.yrkesbenamning,
+          FilterController.jobCategoryID,       
+          FilterController.communityID,
           FilterController.page
         );
       }
@@ -317,6 +346,12 @@ const View = {
 		</div>`;
   },
 
+  updateDisplaySavedJobs() {
+    const numberofSavedJobs = LocalStorageModel.getNumberOfSavedJobs();
+    const mySavedJobs = document.getElementById("mySavedJobs");
+    mySavedJobs.innerHTML = "Mina sparade annonser (" + numberofSavedJobs + ")";
+    console.log(mySavedJobs);
+  },
   jobContainer: document.getElementById("jobContainer"),
 
   displayLatestJob(job) {
@@ -351,10 +386,25 @@ const View = {
 		<p class="link"><a href="${
       job.annons.platsannonsUrl
     }" target="_blank">Läs mer på Arbetsförmedlingens webbsida </a>↗</p>
-		<button class="delete" id="${job.annons.annonsid}">Delete</button>
+		<button class="delete" id="savedJob=${job.annons.annonsid}">Delete</button>
 		</div>`;
 
     containerSavedJobs.insertAdjacentHTML("beforeEnd", savedJobCardHTML);
+
+    //console.log(annonsId.platsannons.annons.annonsid);
+
+    const deleteSavedJobButton = document.getElementById(
+      "savedJob=" + annonsId.platsannons.annons.annonsid
+    );
+    console.log(deleteSavedJobButton);
+
+    deleteSavedJobButton.addEventListener("click", function() {
+      console.log("this.id = ", this.id);
+      const idToDelete = this.id;
+      console.log("this.parenteELement = ", this.parentElement);
+      this.parentElement.parentElement.removeChild(this.parentElement);
+      LocalStorageModel.removeSavedJob(idToDelete);
+    });
   },
 
   displayJobDetails(jobDetailsCardHTML) {
@@ -367,26 +417,89 @@ const View = {
     containerJobDetails.appendChild(jobDetails);
     jobDetails.innerHTML = jobDetailsCardHTML;
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
+
+    const shareURLButton = `
+		<button id="shareURL" class="shareURL">Dela annons</button>
+		`;
+    containerJobDetails.insertAdjacentHTML("beforeEnd", shareURLButton);
+
+    const shareButton = document.getElementById("shareURL");
+    shareButton.addEventListener("click", function() {
+      let modalContent = View.displayModalContent();
+      containerJobDetails.insertAdjacentHTML("beforeend", modalContent);
+      View.hideModalContentOnSpanClick();
+    });
   },
 
-  displaySearchMatch(searchResults){
-  const searchMatchUl = document.createElement('ul');
-  const searchMatchOutput = document.getElementById('searchMatchOutput');
-  searchMatchOutput.appendChild(searchMatchUl);
+  displayCommunitiesFromSelectedCounty(communities, selectedCounty) {
+    const communityContainer = document.getElementById("communityContainer");
+    const selectCommunity = document.getElementById("community");
 
-  	for (let searchResult of searchResults){
-  	  	const searchMatchLi = document.createElement('li');
-  	  	searchMatchLi.id = searchResult.annonsid;
-  		console.log(searchResult);
-  		searchMatchLi.innerText = searchResult.annonsrubrik;
-		searchMatchUl.appendChild(searchMatchLi);
+    for (const community of communities) {
+      const communityOption = document.createElement("option");
+      communityOption.innerText = community.namn;
+      communityOption.id = community.id;
+      communityOption.classList.add("community");
 
-		searchMatchLi.addEventListener('click', function() {
-			FetchModel.fetchByIdHTML(this.id);
-			window.location.hash = `?jobDetail=${this.id}`;
-			NavigationView.showJobDetails();
-		});
-  	};
+      console.log("community by id:", community.id);
+
+      selectCommunity.appendChild(communityOption);
+    }
+
+    selectCommunity.addEventListener("change", function() {
+      let communityIndex = selectCommunity.selectedIndex;
+      let selectedCommunity = document.getElementsByClassName("community")[
+        communityIndex
+      ].id;
+
+      FilterView.registerSelectedCommunity(
+        selectedCommunity,
+        selectedCounty,
+        FilterController.jobCategoryID
+      );
+    });
+  },
+
+  displayModalContent() {
+    const copyURL = window.location.href;
+    const modal = `
+      <div id="URLModal" class="modal">
+
+      <div class="modal-content">
+        <span id="closeURL_Modal">&times;</span>
+        <p>${copyURL}</p>
+      </div>
+    `;
+
+    return modal;
+  },
+
+  hideModalContentOnSpanClick() {
+    const modalContent = document.getElementById("URLModal");
+    const span = document.getElementById("closeURL_Modal");
+    span.addEventListener("click", function() {
+      modalContent.style.display = "none";
+    });
+  },
+
+  displaySearchMatch(searchResults) {
+    const searchMatchUl = document.createElement("ul");
+    const searchMatchOutput = document.getElementById("searchMatchOutput");
+    searchMatchOutput.appendChild(searchMatchUl);
+
+    for (let searchResult of searchResults) {
+      const searchMatchLi = document.createElement("li");
+      searchMatchLi.id = searchResult.annonsid;
+      console.log(searchResult);
+      searchMatchLi.innerText = searchResult.annonsrubrik;
+      searchMatchUl.appendChild(searchMatchLi);
+
+      searchMatchLi.addEventListener("click", function() {
+        FetchModel.fetchByIdHTML(this.id);
+        window.location.hash = `?jobDetail=${this.id}`;
+        NavigationView.showJobDetails();
+      });
+    }
   },
 
   showLoader() {
@@ -469,23 +582,49 @@ const FilterView = {
     FetchModel.fetchAll(FilterController.numberOfJobs);
   },
 
+  selectCommunity(countyId) {
+    console.log("län id som ska användas:", countyId);
+    FetchModel.fetchCommunityByCountyId(countyId);
+    //return countyId;
+  },
+
   registerSelectedCounty(selectedCounty) {
     View.jobContainer.innerHTML = "";
     FilterController.countyID = selectedCounty;
+    FilterView.selectCommunity(selectedCounty);
     FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
   },
 
-  registerSelectedjobCategory(selectedjobCategory) {
+  registerSelectedCommunity(
+    selectedCommunity,
+    selectedCounty,
+    selectedjobCategory
+  ) {
+    FilterController.countyID = selectedCounty;
+    FilterController.communityID = selectedCommunity;
+    console.log("vald län", selectedCounty);
+    console.log("vald kommun", selectedCommunity);
     View.jobContainer.innerHTML = "";
-    FilterController.jobCategoryID = selectedjobCategory;
+
     FetchModel.fetchAll(
-      FilterController.numberOfJobs,
-      FilterController.countyID,
-      selectedjobCategory
+      FilterController.numberOfJobs, 
+      selectedCounty,
+      selectedjobCategory,
+      selectedCommunity
     );
   },
 
-
+  registerSelectedjobCategory(selectedjobCategory, selectedCounty, selectedCommunity) {
+    View.jobContainer.innerHTML = "";
+    console.log("jobCategory:", selectedjobCategory, "county;", selectedCounty, "community:", selectedCommunity);
+    FilterController.jobCategoryID = selectedjobCategory;
+    FetchModel.fetchAll(
+      FilterController.numberOfJobs,
+      selectedCounty,
+      selectedjobCategory,
+      selectedCommunity,     
+    );
+  }
 };
 
 /***************************************/
@@ -508,3 +647,4 @@ FetchModel.fetchAllJobCategory();
 PaginationView.createPreviousPageElements();
 PaginationView.createNextPageElements();
 LocalStorageModel.loadData();
+View.updateDisplaySavedJobs();

@@ -125,6 +125,11 @@ button {
   display: flex;
   flex-direction: column;
 }
+
+#communityContainer {
+  display: none;
+}
+
 .searchDiv {
   width: 100%;
 }
@@ -236,4 +241,18 @@ select:focus {
 /******************************************/
 .hidden {
   display: none;
+}
+
+/******************************************/
+/*********** MODAL URL BOX ************/
+/******************************************/
+.modal-content {
+    background: rgba(106,169,152,0.3);
+    height: 80px;
+    padding: 20px;
+    font-weight: bold;
+
+    span {
+      cursor:pointer;
+    }
 }

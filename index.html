@@ -37,8 +37,14 @@
               <div class="formDiv">
                   <label for="county">Välj län</label>
                   <select name="county" id="county">
-                      <!-- Option tags generated in JS -->
+                     <!-- Option tags generated in JS -->
                   </select>
+                  <div id="communityContainer">
+                  	<label for="county">Välj kommun</label>
+                  	<select name="community" id="community">
+                  		<!-- Option tags generated in JS -->
+                  	</select>
+                  </div>
               </div>
 
               <div class="formDiv">
@@ -51,7 +57,7 @@
 
 			<div class="searchDiv">
 				<label for="search">Sök</label>
-				<input type="search" name="search" id="searchOccupation">
+				<input type="search" name="search" id="searchOccupation" autocomplete="off">
 			</div>
 			<div id="searchMatchOutput" class="search__matchoutput"></div>
 		</form>
