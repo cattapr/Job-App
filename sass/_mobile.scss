@@ -25,6 +25,14 @@ button a {
 }
 
 /*******************************************/
+/************** VARIABLES ******************/
+/*******************************************/
+$color__accent--light: #d2e5e0;
+$color__accent--dark: #6baa9b;
+
+$color__bg--accent: #f7f7f7;
+
+/*******************************************/
 /*********** JOB DETAILS PAGE **************/
 /*******************************************/
 .job_details {
@@ -57,24 +65,9 @@ nav {
   padding: 120px 10px;
 }
 
-#jobContainer {
-  & > div:not(.loader__container) {
-    border: 1px solid #d0d0d0;
-    padding: 4% 7%;
-    border-radius: 3px;
-    margin-bottom: 25px;
-  }
-  .profession {
-    font-weight: 700;
-    letter-spacing: 1px;
-    opacity: 0.5;
-  }
-}
-
-.pointer {
-  cursor: pointer;
-}
-
+/*******************************************/
+/*********** LANDING PAGE HEADER ***********/
+/*******************************************/
 .header__number-of-jobs {
   h1 {
     padding: 50px 50px 0;
@@ -89,12 +82,33 @@ nav {
   }
 }
 
+/*******************************************/
+/*************** JOB CARDS *****************/
+/*******************************************/
+#jobContainer, #savedJobsList {
+  & > div:not(.loader__container) {
+    border: 1px solid #d0d0d0;
+    padding: 4% 7%;
+    border-radius: 3px;
+    margin-bottom: 25px;
+  }
+  .profession {
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.5;
+  }
+}
+
+.container__saved-jobs h1 {
+  margin:40px 0;
+}
+
 /***************************************/
 /*********** INPUTS/BUTTONS ************/
 /***************************************/
 form {
   margin-bottom: 80px;
-  background: #f7f7f7;
+  background: $color__bg--accent;
   padding: 1em;
 }
 
@@ -132,6 +146,9 @@ button {
 
 .searchDiv {
   width: 100%;
+  input {
+    text-indent:6px;
+  }
 }
 
 label {
@@ -149,7 +166,7 @@ select {
   width: 100%;
   margin: 0 auto 10px;
   outline: none;
-  border: 1px solid rgb(166, 166, 166);
+  border: 1px solid #a6a6a6;
   background: white;
   border-radius: 3px;
   box-sizing: border-box;
@@ -157,7 +174,7 @@ select {
 
 input:focus,
 select:focus {
-  border: 2px solid #6baa9b;
+  border: 2px solid $color__accent--dark;
   border-radius: 3px;
 }
 
@@ -212,13 +229,46 @@ select:focus {
     transition:ease background .3s;
     &:hover {
       //background: #c8d2ec;
-      background:rgba(106,169,152,0.3);
+      background:$color__accent--light;
       border-radius:3px;
       transition:ease background .3s;
     }
   }
 }
 
+/******************************************/
+/************** SAVED ADS *****************/
+/******************************************/
+.header-top {
+  margin-bottom: 20px;
+  h3 {
+    font-size: 2em;
+  }
+  .cinfo {
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    opacity: 0.5;
+  }
+}
+.job_details .header + div {
+  margin-bottom: 30px;
+}
+
+.iHeader, .iHeader-right {
+  font-weight: bold;
+  display: block;
+}
+
+.iHeader {
+  margin-top: 20px;
+}
+.iInfo {
+  margin:0 20px 10px 0;
+}
+.goBack {
+  margin-top:40px;
+}
 /******************************************/
 /************** PAGINATION ****************/
 /******************************************/
@@ -235,6 +285,44 @@ select:focus {
   }
 }
 
+/******************************************/
+/**************** FEEDBACK ****************/
+/******************************************/
+.popup {
+  $width: 400px;
+  width:$width;
+  position: fixed;
+  top: 160px;
+  margin-left: calc(#{$width} / 2);
+  z-index: 999;
+  box-sizing: border-box;
+  padding: 2em;
+  text-align: center;
+  border-radius: 3px;
+}
+.success {
+  background-color: $color__accent--light;
+}
+.error {
+  background-color: tomato;
+}
+
+.saved {
+  background: $color__accent--dark;
+  &:hover {
+    background: $color__accent--dark;
+  }
+}
+
+#mySavedJobs {
+  padding:.5em .5em .2em;
+}
+.textToHighlight {
+  color:#333;
+  background:$color__accent--light;
+  border-radius: 3px;
+  transition: ease .5s background;
+}
 
 /******************************************/
 /*********** FUNCTIONAL STYLES ************/
@@ -242,12 +330,15 @@ select:focus {
 .hidden {
   display: none;
 }
+.pointer {
+  cursor: pointer;
+}
 
 /******************************************/
 /*********** MODAL URL BOX ************/
 /******************************************/
 .modal-content {
-    background: rgba(106,169,152,0.3);
+    background: $color__accent--light;
     height: 80px;
     padding: 20px;
     font-weight: bold;
