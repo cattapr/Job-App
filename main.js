@@ -662,7 +662,11 @@ const FeedbackView = {
   saveJob(button){
       button.classList.add('saved');
       button.innerText = 'Sparad';
-    }
+      // Get the array of saved jobs
+      // In a loop: getElementById using all the saved job-ID's
+      // In the loop, go into every div to target the save-buttons
+      // Add the class .saved and innerText = 'Saved' to each button
+    },
 };
 
 /***************************************/
