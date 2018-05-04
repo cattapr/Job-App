@@ -25,6 +25,14 @@ button a {
 }
 
 /*******************************************/
+/************** VARIABLES ******************/
+/*******************************************/
+$color__accent--light: rgba(106,169,152,0.3);
+$color__accent--dark: #6baa9b;
+
+$color__bg--accent: #f7f7f7;
+
+/*******************************************/
 /*********** JOB DETAILS PAGE **************/
 /*******************************************/
 .job_details {
@@ -94,7 +102,7 @@ nav {
 /***************************************/
 form {
   margin-bottom: 80px;
-  background: #f7f7f7;
+  background: $color__bg--accent;
   padding: 1em;
 }
 
@@ -149,7 +157,7 @@ select {
   width: 100%;
   margin: 0 auto 10px;
   outline: none;
-  border: 1px solid rgb(166, 166, 166);
+  border: 1px solid #a6a6a6;
   background: white;
   border-radius: 3px;
   box-sizing: border-box;
@@ -157,7 +165,7 @@ select {
 
 input:focus,
 select:focus {
-  border: 2px solid #6baa9b;
+  border: 2px solid $color__accent--dark;
   border-radius: 3px;
 }
 
@@ -212,7 +220,7 @@ select:focus {
     transition:ease background .3s;
     &:hover {
       //background: #c8d2ec;
-      background:rgba(106,169,152,0.3);
+      background:$color__accent--light;
       border-radius:3px;
       transition:ease background .3s;
     }
@@ -235,6 +243,15 @@ select:focus {
   }
 }
 
+/******************************************/
+/************** FEEDBACK ******************/
+/******************************************/
+.saved {
+  background: $color__accent--dark;
+  &:hover {
+    background: $color__accent--dark;
+  }
+}
 
 /******************************************/
 /*********** FUNCTIONAL STYLES ************/
