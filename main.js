@@ -635,6 +635,7 @@ if (!ResponseController.getJobId()) {
 } else {
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
 }
+
 NavigationView.refreshLandingPage();
 NavigationView.showSavedJobs();
 
