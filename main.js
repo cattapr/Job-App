@@ -376,6 +376,7 @@ const View = {
 
   containerJobDetails: document.getElementById("containerJobDetails"),
   containerSavedJobs: document.getElementById("containerSavedJobs"),
+  savedJobsList: document.getElementById("savedJobsList"),
 
   displaySavedJobCard(annonsId) {
     let job = annonsId.platsannons;
@@ -393,7 +394,7 @@ const View = {
 		<button class="delete" id="savedJob=${job.annons.annonsid}">Delete</button>
 		</div>`;
 
-    containerSavedJobs.insertAdjacentHTML("beforeEnd", savedJobCardHTML);
+    savedJobsList.insertAdjacentHTML("beforeEnd", savedJobCardHTML);
 
     //console.log(annonsId.platsannons.annons.annonsid);
 
