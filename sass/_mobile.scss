@@ -228,6 +228,39 @@ select:focus {
 }
 
 /******************************************/
+/*************** ARTICLES *****************/
+/******************************************/
+.header-top {
+  margin-bottom: 20px;
+  h3 {
+    font-size: 2em;
+  }
+  .cinfo {
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    opacity: 0.5;
+  }
+}
+.job_details .header + div {
+  margin-bottom: 30px;
+}
+
+.iHeader, .iHeader-right {
+  font-weight: bold;
+  display: block;
+}
+
+.iHeader {
+  margin-top: 20px;
+}
+.iInfo {
+  margin:0 20px 10px 0;
+}
+.goBack {
+  margin-top:40px;
+}
+/******************************************/
 /************** PAGINATION ****************/
 /******************************************/
 .pagination {
