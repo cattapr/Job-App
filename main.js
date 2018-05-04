@@ -24,8 +24,7 @@ const FetchModel = {
         for (const button of buttons) {
           button.addEventListener("click", function() {
             LocalStorageModel.updateLocalStorage(this.parentElement.id);
-            button.classList.add('saved');
-            button.innerText = "Saved";
+            FeedbackView.saveJob(button);
           });
         }
       })
@@ -628,6 +627,13 @@ const FilterView = {
     );
   }
 };
+
+const FeedbackView = {
+  saveJob(button){
+    button.classList.add('saved');
+    button.innerText = "Saved";
+  }
+}
 
 /***************************************/
 /************* CALL FUNCTIONS **********/
