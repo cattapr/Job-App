@@ -28,6 +28,7 @@ button a {
 /************** VARIABLES ******************/
 /*******************************************/
 $color__accent--light: rgba(106,169,152,0.3);
+$color__accent--light: #d2e5e0;
 $color__accent--dark: #6baa9b;
 
 $color__bg--accent: #f7f7f7;
@@ -253,6 +254,16 @@ select:focus {
   }
 }
 
+#mySavedJobs {
+  padding:.5em .5em .2em;
+}
+.textToHighlight {
+  color:#333;
+  background:$color__accent--light;
+  border-radius: 3px;
+  transition: ease .5s background;
+}
+
 /******************************************/
 /*********** FUNCTIONAL STYLES ************/
 /******************************************/
@@ -265,6 +276,7 @@ select:focus {
 /******************************************/
 .modal-content {
     background: rgba(106,169,152,0.3);
+    background: $color__accent--light;
     height: 80px;
     padding: 20px;
     font-weight: bold;

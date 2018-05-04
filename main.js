@@ -25,6 +25,8 @@ const FetchModel = {
           button.addEventListener("click", function() {
             LocalStorageModel.updateLocalStorage(this.parentElement.id);
             FeedbackView.saveJob(button);
+            const mySavedJobs = document.getElementById('mySavedJobs');
+            FeedbackView.textHighlight(mySavedJobs);
           });
         }
       })
@@ -629,11 +631,17 @@ const FilterView = {
 };
 
 const FeedbackView = {
+  textHighlight(textToHighlight) {
+    textToHighlight.classList.add('textToHighlight');
+    setTimeout(function(){
+        textToHighlight.classList.remove('textToHighlight');
+    }, 500);
+  },
   saveJob(button){
     button.classList.add('saved');
     button.innerText = "Saved";
   }
-}
+  }
 
 /***************************************/
 /************* CALL FUNCTIONS **********/
