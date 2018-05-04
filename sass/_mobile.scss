@@ -65,7 +65,27 @@ nav {
   padding: 120px 10px;
 }
 
-#jobContainer {
+/*******************************************/
+/*********** LANDING PAGE HEADER ***********/
+/*******************************************/
+.header__number-of-jobs {
+  h1 {
+    padding: 50px 50px 0;
+    margin: auto;
+    text-align: center;
+    font-size: 5rem;
+  }
+  p {
+    margin: auto;
+    text-align: center;
+    padding: 0 0 50px;
+  }
+}
+
+/*******************************************/
+/*************** JOB CARDS *****************/
+/*******************************************/
+#jobContainer, #savedJobsList {
   & > div:not(.loader__container) {
     border: 1px solid #d0d0d0;
     padding: 4% 7%;
@@ -79,22 +99,8 @@ nav {
   }
 }
 
-.pointer {
-  cursor: pointer;
-}
-
-.header__number-of-jobs {
-  h1 {
-    padding: 50px 50px 0;
-    margin: auto;
-    text-align: center;
-    font-size: 5rem;
-  }
-  p {
-    margin: auto;
-    text-align: center;
-    padding: 0 0 50px;
-  }
+.container__saved-jobs h1 {
+  margin:40px 0;
 }
 
 /***************************************/
@@ -228,7 +234,7 @@ select:focus {
 }
 
 /******************************************/
-/*************** ARTICLES *****************/
+/************** SAVED ADS *****************/
 /******************************************/
 .header-top {
   margin-bottom: 20px;
@@ -277,7 +283,7 @@ select:focus {
 }
 
 /******************************************/
-/************** FEEDBACK ******************/
+/**************** FEEDBACK ****************/
 /******************************************/
 .popup {
   $width: 400px;
@@ -320,6 +326,9 @@ select:focus {
 /******************************************/
 .hidden {
   display: none;
+}
+.pointer {
+  cursor: pointer;
 }
 
 /******************************************/
