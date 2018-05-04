@@ -123,7 +123,7 @@ const LocalStorageModel = {
   updateLocalStorage(annonsId) {
     //push the annonsId into the array
     if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
-      console.log("can't add as duplicate");
+      alert("Denna annons har redan sparats.");
       return;
     }
     LocalStorageModel.storedJobs.push(annonsId);
@@ -132,6 +132,12 @@ const LocalStorageModel = {
       "savedJobs",
       JSON.stringify(LocalStorageModel.storedJobs)
     );
+    let numberOfSavedJobs = LocalStorageModel.storedJobs.length;
+    View.updateDisplaySavedJobs(numberOfSavedJobs);
+  },
+  getNumberOfSavedJobs() {
+    let numberOfSavedJobs = LocalStorageModel.storedJobs.length;
+    return numberOfSavedJobs;
   },
 
   loadData() {
@@ -159,6 +165,7 @@ const LocalStorageModel = {
       JSON.stringify(LocalStorageModel.storedJobs)
     );
     console.log(LocalStorageModel.storedJobs);
+    View.updateDisplaySavedJobs();
   }
 };
 
@@ -339,6 +346,12 @@ const View = {
 		</div>`;
   },
 
+  updateDisplaySavedJobs() {
+    const numberofSavedJobs = LocalStorageModel.getNumberOfSavedJobs();
+    const mySavedJobs = document.getElementById("mySavedJobs");
+    mySavedJobs.innerHTML = "Mina sparade annonser (" + numberofSavedJobs + ")";
+    console.log(mySavedJobs);
+  },
   jobContainer: document.getElementById("jobContainer"),
 
   displayLatestJob(job) {
@@ -634,3 +647,4 @@ FetchModel.fetchAllJobCategory();
 PaginationView.createPreviousPageElements();
 PaginationView.createNextPageElements();
 LocalStorageModel.loadData();
+View.updateDisplaySavedJobs();
