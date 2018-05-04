@@ -25,6 +25,7 @@ const FetchModel = {
           button.addEventListener("click", function() {
             LocalStorageModel.updateLocalStorage(this.parentElement.id);
             FeedbackView.saveJob(button);
+            //FeedbackView.feedbackPopup('success', 'Job saved!');
             const mySavedJobs = document.getElementById('mySavedJobs');
             FeedbackView.textHighlight(mySavedJobs);
           });
@@ -631,6 +632,26 @@ const FilterView = {
 };
 
 const FeedbackView = {
+  feedbackPopup(successOrError, message){
+    const feedbackPopup = document.getElementById('feedbackPopup');
+
+    feedbackPopup.classList.remove('hidden');
+
+    if(successOrError === 'success'){
+      feedbackPopup.classList.add('success');
+    } else if (successOrError === 'error') {
+      feedbackPopup.classList.add('error');
+    }
+    feedbackPopup.innerText = message;
+    console.log(feedbackPopup);
+    //Hide popup when clicking outside of it
+    // document.addEventListener('click', function(event) {
+    //   var isClickInside = feedbackPopup.contains(event.target);
+    //   if (!isClickInside){
+    //     feedbackPopup.classList.add('hidden');
+    //   }
+    // });
+  },
   textHighlight(textToHighlight) {
     textToHighlight.classList.add('textToHighlight');
     setTimeout(function(){
@@ -639,9 +660,9 @@ const FeedbackView = {
   },
   saveJob(button){
     button.classList.add('saved');
-    button.innerText = "Saved";
+    button.innerText = 'Sparad';
   }
-  }
+};
 
 /***************************************/
 /************* CALL FUNCTIONS **********/

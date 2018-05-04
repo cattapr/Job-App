@@ -27,7 +27,6 @@ button a {
 /*******************************************/
 /************** VARIABLES ******************/
 /*******************************************/
-$color__accent--light: rgba(106,169,152,0.3);
 $color__accent--light: #d2e5e0;
 $color__accent--dark: #6baa9b;
 
@@ -247,6 +246,25 @@ select:focus {
 /******************************************/
 /************** FEEDBACK ******************/
 /******************************************/
+.popup {
+  $width: 400px;
+  width:$width;
+  position: fixed;
+  top: 160px;
+  margin-left: calc(#{$width} / 2);
+  z-index: 999;
+  box-sizing: border-box;
+  padding: 2em;
+  text-align: center;
+  border-radius: 3px;
+}
+.success {
+  background-color: $color__accent--light;
+}
+.error {
+  background-color: tomato;
+}
+
 .saved {
   background: $color__accent--dark;
   &:hover {
@@ -275,7 +293,6 @@ select:focus {
 /*********** MODAL URL BOX ************/
 /******************************************/
 .modal-content {
-    background: rgba(106,169,152,0.3);
     background: $color__accent--light;
     height: 80px;
     padding: 20px;
