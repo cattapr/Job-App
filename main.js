@@ -298,7 +298,7 @@ const FilterController = {
       page = FilterController.page;
       View.jobContainer.innerHTML = "";
       FetchModel.fetchAll(
-        FilterController.numberOfJobs, 
+        FilterController.numberOfJobs,
         FilterController.countyID,
         FilterController.jobCategoryID,
         FilterController.communityID,
@@ -325,9 +325,9 @@ const FilterController = {
         console.log("page", FilterController.page);
         View.jobContainer.innerHTML = "";
         FetchModel.fetchAll(
-          FilterController.numberOfJobs, 
+          FilterController.numberOfJobs,
           FilterController.countyID,
-          FilterController.jobCategoryID,       
+          FilterController.jobCategoryID,
           FilterController.communityID,
           FilterController.page
         );
@@ -342,7 +342,7 @@ const View = {
     totalNumberOfJobsHeader.innerHTML = `
 		<div class="numberOfJobs">
 		<h1>${totalNumberOfJobs}</h1>
-		<p>Available jobs</p>
+		<p>tillgängliga jobb</p>
 		</div>`;
   },
 
@@ -607,7 +607,7 @@ const FilterView = {
     View.jobContainer.innerHTML = "";
 
     FetchModel.fetchAll(
-      FilterController.numberOfJobs, 
+      FilterController.numberOfJobs,
       selectedCounty,
       selectedjobCategory,
       selectedCommunity
@@ -622,7 +622,7 @@ const FilterView = {
       FilterController.numberOfJobs,
       selectedCounty,
       selectedjobCategory,
-      selectedCommunity,     
+      selectedCommunity,
     );
   }
 };
