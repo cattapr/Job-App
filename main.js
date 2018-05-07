@@ -177,7 +177,9 @@ const ResponseController = {
   getJobId() {
     const urlString = window.location.href;
     const url = new URL(urlString);
-    const jobID = url.searchParams.get("jobDetail");
+    console.log(urlString);
+    console.log(url.hash.split('=')[1]);
+    const jobID = url.hash.split('=')[1];
     return jobID;
   },
   // sortResponse(data) {
@@ -553,7 +555,7 @@ const NavigationView = {
   refreshLandingPage() {
     NavigationView.header.addEventListener("click", function() {
       location.reload();
-      window.location = "";
+      window.location.hash = "#";
       //Clear URL here
     });
   },
@@ -672,10 +674,13 @@ const FeedbackView = {
 /***************************************/
 /************* CALL FUNCTIONS **********/
 /***************************************/
+
 if (!ResponseController.getJobId()) {
   FetchModel.fetchAll();
 } else {
+	console.log(ResponseController.getJobId());
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
+  NavigationView.showJobDetails();
 }
 
 NavigationView.refreshLandingPage();
