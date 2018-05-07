@@ -5,7 +5,7 @@ const FetchModel = {
     jobCategoryID = "",
     communityID = "",
     page = "1",
-    chosenArea = 'Stockholm'
+    chosenArea = "Stockholm"
   ) {
     //let job = numberOfJobs;
     return fetch(
@@ -371,6 +371,19 @@ const View = {
 		</div>`;
   },
 
+  checkForSavedJobs() {
+    if (LocalStorageModel.storedJobs.length === 0) {
+      const containerSavedJobs = document.getElementById("containerSavedJobs");
+      let noSavedJobsMessageHTML = `
+      <p>Ingenting att se här...</p>
+      `;
+      containerSavedJobs.insertAdjacentHTML(
+        "beforeend",
+        noSavedJobsMessageHTML
+      );
+    }
+  },
+
   updateDisplaySavedJobs() {
     const numberofSavedJobs = LocalStorageModel.getNumberOfSavedJobs();
     const mySavedJobs = document.getElementById("mySavedJobs");
@@ -424,13 +437,13 @@ const View = {
     console.log(deleteSavedJobButton);
 
     deleteSavedJobButton.addEventListener("click", function() {
-      const confirmMessage = confirm('Är det ditt slutgiltiga svar???');
-      if(confirmMessage){
+      const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
+      if (confirmMessage) {
         console.log("this.id = ", this.id);
-      const idToDelete = this.id;
-      console.log("this.parenteELement = ", this.parentElement);
-      this.parentElement.parentElement.removeChild(this.parentElement);
-      LocalStorageModel.removeSavedJob(idToDelete);
+        const idToDelete = this.id;
+        console.log("this.parenteELement = ", this.parentElement);
+        this.parentElement.parentElement.removeChild(this.parentElement);
+        LocalStorageModel.removeSavedJob(idToDelete);
       }
     });
   },
@@ -598,6 +611,7 @@ const NavigationView = {
   showSavedJobs() {
     NavigationView.mySavedJobs.addEventListener("click", function() {
       NavigationView.clearSavedJobs();
+      View.checkForSavedJobs();
       NavigationView.containerLandingPage.classList.add("hidden");
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
@@ -627,19 +641,26 @@ const FilterView = {
     //return countyId;
   },
 
-
   registerSelectedCounty(selectedCounty, chosenCounty) {
-    console.log('The one', chosenCounty);
+    console.log("The one", chosenCounty);
     View.jobContainer.innerHTML = "";
     FilterController.countyID = selectedCounty;
     FilterView.selectCommunity(selectedCounty);
-    FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty, FilterController.jobCategoryID, FilterController.communtyID, FilterController.page, chosenCounty);
+    FetchModel.fetchAll(
+      FilterController.numberOfJobs,
+      selectedCounty,
+      FilterController.jobCategoryID,
+      FilterController.communtyID,
+      FilterController.page,
+      chosenCounty
+    );
   },
 
   registerSelectedCommunity(
     selectedCommunity,
     selectedCounty,
-    selectedjobCategory, chosenCommunity
+    selectedjobCategory,
+    chosenCommunity
   ) {
     FilterController.countyID = selectedCounty;
     FilterController.communityID = selectedCommunity;
