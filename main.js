@@ -4,7 +4,8 @@ const FetchModel = {
     countyID = "1",
     jobCategoryID = "",
     communityID = "",
-    page = "1"
+    page = "1",
+    chosenCounty = 'Stockholm'
   ) {
     //let job = numberOfJobs;
     return fetch(
@@ -15,8 +16,9 @@ const FetchModel = {
       .then(data => {
         //let listings = data.matchningslista;
         //ResponseController.sortResponse(data);
+
         View.hideLoader();
-        ResponseController.getTotalNumberOfJobs(data);
+        ResponseController.getTotalNumberOfJobs(data, chosenCounty);
         ResponseController.getJobDetails();
 
         const buttons = document.getElementsByClassName("save");
@@ -186,11 +188,11 @@ const ResponseController = {
   //   console.log(data);
   // },
 
-  getTotalNumberOfJobs(data) {
+  getTotalNumberOfJobs(data, chosenCounty) {
     let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
     let latestJobs = data.matchningslista.matchningdata;
     ResponseController.getLatestJobs(latestJobs);
-    View.displayTotalNumberOfJobs(totalNumberOfJobs);
+    View.displayTotalNumberOfJobs(totalNumberOfJobs, chosenCounty);
   },
 
   getLatestJobs(latestJobs) {
@@ -247,6 +249,10 @@ const FilterController = {
         countyIndex
       ].id;
 
+      let selectedCountyName = document.getElementsByClassName("county")[
+        countyIndex
+      ].innerText;
+
       if (selectedCounty) {
         const communtityContainer = document.getElementById(
           "communityContainer"
@@ -254,7 +260,8 @@ const FilterController = {
         communityContainer.style.display = "block";
       }
 
-      FilterView.registerSelectedCounty(selectedCounty);
+      FilterView.registerSelectedCounty(selectedCounty, selectedCountyName);
+
       return selectedCounty;
     });
   },
@@ -346,11 +353,11 @@ const FilterController = {
 
 const View = {
   totalNumberOfJobsHeader: document.getElementById("totalNumberOfJobsHeader"),
-  displayTotalNumberOfJobs(totalNumberOfJobs) {
+  displayTotalNumberOfJobs(totalNumberOfJobs, chosenCounty) {
     totalNumberOfJobsHeader.innerHTML = `
 		<div class="numberOfJobs">
 		<h1>${totalNumberOfJobs}</h1>
-		<p>tillgängliga jobb</p>
+		<p>Tillgängliga jobb i ${chosenCounty}</p>
 		</div>`;
   },
 
@@ -408,11 +415,14 @@ const View = {
     console.log(deleteSavedJobButton);
 
     deleteSavedJobButton.addEventListener("click", function() {
-      console.log("this.id = ", this.id);
+      const confirmMessage = confirm('Är det ditt slutgiltiga svar???');
+      if(confirmMessage){
+        console.log("this.id = ", this.id);
       const idToDelete = this.id;
       console.log("this.parenteELement = ", this.parentElement);
       this.parentElement.parentElement.removeChild(this.parentElement);
       LocalStorageModel.removeSavedJob(idToDelete);
+      }
     });
   },
 
@@ -597,11 +607,13 @@ const FilterView = {
     //return countyId;
   },
 
-  registerSelectedCounty(selectedCounty) {
+
+  registerSelectedCounty(selectedCounty, chosenCounty) {
+    console.log('The one', chosenCounty);
     View.jobContainer.innerHTML = "";
     FilterController.countyID = selectedCounty;
     FilterView.selectCommunity(selectedCounty);
-    FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty);
+    FetchModel.fetchAll(FilterController.numberOfJobs, selectedCounty, FilterController.jobCategoryID, FilterController.communtyID, FilterController.page, chosenCounty);
   },
 
   registerSelectedCommunity(
