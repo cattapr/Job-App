@@ -179,8 +179,8 @@ const ResponseController = {
     const urlString = window.location.href;
     const url = new URL(urlString);
     console.log(urlString);
-    console.log(url.hash.split('=')[1]);
-    const jobID = url.hash.split('=')[1];
+    console.log(url.hash.split("=")[1]);
+    const jobID = url.hash.split("=")[1];
     return jobID;
   },
   // sortResponse(data) {
@@ -310,7 +310,7 @@ const FilterController = {
 
   nextPage(nextPageButton) {
     nextPageButton.addEventListener("click", function() {
-       window.scrollTo(0, 380);
+      window.scrollTo(0, 380);
       FilterController.page++;
       page = FilterController.page;
       View.jobContainer.innerHTML = "";
@@ -582,6 +582,7 @@ const NavigationView = {
   },
   showSavedJobs() {
     NavigationView.mySavedJobs.addEventListener("click", function() {
+      NavigationView.clearSavedJobs();
       NavigationView.containerLandingPage.classList.add("hidden");
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
@@ -590,6 +591,11 @@ const NavigationView = {
         FetchModel.fetchByIdJSON(annonsId);
       }
     });
+  },
+
+  clearSavedJobs() {
+    const savedJobsList = document.getElementById("savedJobsList");
+    savedJobsList.innerHTML = "";
   }
 }; // End of NavigationView
 
@@ -721,7 +727,7 @@ const FeedbackView = {
 if (!ResponseController.getJobId()) {
   FetchModel.fetchAll();
 } else {
-	console.log(ResponseController.getJobId());
+  console.log(ResponseController.getJobId());
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
   NavigationView.showJobDetails();
 }
