@@ -28,7 +28,7 @@ const FetchModel = {
             LocalStorageModel.updateLocalStorage(this.parentElement.id);
             FeedbackView.saveJob(button);
             //FeedbackView.feedbackPopup('success', 'Job saved!');
-            const mySavedJobs = document.getElementById('mySavedJobs');
+            const mySavedJobs = document.getElementById("mySavedJobs");
             FeedbackView.textHighlight(mySavedJobs);
           });
         }
@@ -143,6 +143,7 @@ const LocalStorageModel = {
   },
   getNumberOfSavedJobs() {
     let numberOfSavedJobs = LocalStorageModel.storedJobs.length;
+
     return numberOfSavedJobs;
   },
 
@@ -180,8 +181,8 @@ const ResponseController = {
     const urlString = window.location.href;
     const url = new URL(urlString);
     console.log(urlString);
-    console.log(url.hash.split('=')[1]);
-    const jobID = url.hash.split('=')[1];
+    console.log(url.hash.split("=")[1]);
+    const jobID = url.hash.split("=")[1];
     return jobID;
   },
   // sortResponse(data) {
@@ -199,6 +200,7 @@ const ResponseController = {
     for (let job of latestJobs) {
       View.displayLatestJob(job);
     }
+    FeedbackView.highlightSavedJobButtons();
   },
 
   getJobDetails() {
@@ -283,7 +285,11 @@ const FilterController = {
       let selectedjobCategory = document.getElementsByClassName("jobCategory")[
         jobCategoryIndex
       ].id;
-      FilterView.registerSelectedjobCategory(selectedjobCategory, FilterController.countyID, FilterController.communityID);
+      FilterView.registerSelectedjobCategory(
+        selectedjobCategory,
+        FilterController.countyID,
+        FilterController.communityID
+      );
     });
   },
 
@@ -295,7 +301,11 @@ const FilterController = {
 
       if (searchInput.value.length === 3) {
         FilterController.yrkesbenamning = searchInput.value;
-        FetchModel.fetchSearch(FilterController.yrkesbenamning, FilterController.countyID, FilterController.communityID);
+        FetchModel.fetchSearch(
+          FilterController.yrkesbenamning,
+          FilterController.countyID,
+          FilterController.communityID
+        );
       }
 
       //console.log(searchInput);
@@ -307,7 +317,7 @@ const FilterController = {
 
   nextPage(nextPageButton) {
     nextPageButton.addEventListener("click", function() {
-       window.scrollTo(0, 380);
+      window.scrollTo(0, 380);
       FilterController.page++;
       page = FilterController.page;
       View.jobContainer.innerHTML = "";
@@ -365,7 +375,6 @@ const View = {
     const numberofSavedJobs = LocalStorageModel.getNumberOfSavedJobs();
     const mySavedJobs = document.getElementById("mySavedJobs");
     mySavedJobs.innerHTML = "Mina sparade annonser (" + numberofSavedJobs + ")";
-    console.log(mySavedJobs);
   },
   jobContainer: document.getElementById("jobContainer"),
 
@@ -588,6 +597,7 @@ const NavigationView = {
   },
   showSavedJobs() {
     NavigationView.mySavedJobs.addEventListener("click", function() {
+      NavigationView.clearSavedJobs();
       NavigationView.containerLandingPage.classList.add("hidden");
       NavigationView.containerJobDetails.classList.add("hidden");
       NavigationView.containerSavedJobs.classList.remove("hidden");
@@ -596,6 +606,11 @@ const NavigationView = {
         FetchModel.fetchByIdJSON(annonsId);
       }
     });
+  },
+
+  clearSavedJobs() {
+    const savedJobsList = document.getElementById("savedJobsList");
+    savedJobsList.innerHTML = "";
   }
 }; // End of NavigationView
 
@@ -642,15 +657,26 @@ const FilterView = {
     );
   },
 
-  registerSelectedjobCategory(selectedjobCategory, selectedCounty, selectedCommunity) {
+  registerSelectedjobCategory(
+    selectedjobCategory,
+    selectedCounty,
+    selectedCommunity
+  ) {
     View.jobContainer.innerHTML = "";
-    console.log("jobCategory:", selectedjobCategory, "county;", selectedCounty, "community:", selectedCommunity);
+    console.log(
+      "jobCategory:",
+      selectedjobCategory,
+      "county;",
+      selectedCounty,
+      "community:",
+      selectedCommunity
+    );
     FilterController.jobCategoryID = selectedjobCategory;
     FetchModel.fetchAll(
       FilterController.numberOfJobs,
       selectedCounty,
       selectedjobCategory,
-      selectedCommunity,
+      selectedCommunity
     );
   }
 };
@@ -677,19 +703,40 @@ const FeedbackView = {
   //   // });
   // },
   textHighlight(textToHighlight) {
-      textToHighlight.classList.add('textToHighlight');
-      setTimeout(function(){
-          textToHighlight.classList.remove('textToHighlight');
-      }, 1000);
+    textToHighlight.classList.add("textToHighlight");
+    setTimeout(function() {
+      textToHighlight.classList.remove("textToHighlight");
+    }, 1000);
   },
-  saveJob(button){
-      button.classList.add('saved');
-      button.innerText = 'Sparad';
-      // Get the array of saved jobs
-      // In a loop: getElementById using all the saved job-ID's
-      // In the loop, go into every div to target the save-buttons
-      // Add the class .saved and innerText = 'Saved' to each button
-    },
+  saveJob(button) {
+    button.classList.add("saved");
+    button.innerText = "Sparad";
+    console.log(button);
+  },
+
+  highlightSavedJobButtons() {
+    // Get the array of saved jobs
+    console.log(LocalStorageModel.storedJobs);
+
+    const buttons = document.getElementsByClassName("save");
+    console.log(buttons);
+    for (let button of buttons) {
+      if (LocalStorageModel.storedJobs.includes(button.parentElement.id)) {
+        button.classList.add("saved");
+        button.innerText = "Sparad";
+      }
+    }
+    //
+    // for (const savedJobID of LocalStorageModel.storedJobs) {
+    //   // In a loop: getElementById using all the saved job-ID's
+    //   let savedJobDiv = document.getElementById(savedJobID);
+    //
+    //   console.log(savedJobDiv);
+
+    // In the loop, go into every div to target the save-buttons
+    // Add the class .saved and innerText = 'Saved' to each button
+    //}
+  }
 };
 
 /***************************************/
@@ -699,7 +746,7 @@ const FeedbackView = {
 if (!ResponseController.getJobId()) {
   FetchModel.fetchAll();
 } else {
-	console.log(ResponseController.getJobId());
+  console.log(ResponseController.getJobId());
   FetchModel.fetchByIdHTML(ResponseController.getJobId());
   NavigationView.showJobDetails();
 }
@@ -717,3 +764,5 @@ PaginationView.createPreviousPageElements();
 PaginationView.createNextPageElements();
 LocalStorageModel.loadData();
 View.updateDisplaySavedJobs();
+
+FeedbackView.highlightSavedJobButtons();
