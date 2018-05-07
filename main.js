@@ -26,7 +26,7 @@ const FetchModel = {
             LocalStorageModel.updateLocalStorage(this.parentElement.id);
             FeedbackView.saveJob(button);
             //FeedbackView.feedbackPopup('success', 'Job saved!');
-            const mySavedJobs = document.getElementById('mySavedJobs');
+            const mySavedJobs = document.getElementById("mySavedJobs");
             FeedbackView.textHighlight(mySavedJobs);
           });
         }
@@ -141,6 +141,7 @@ const LocalStorageModel = {
   },
   getNumberOfSavedJobs() {
     let numberOfSavedJobs = LocalStorageModel.storedJobs.length;
+
     return numberOfSavedJobs;
   },
 
@@ -197,6 +198,7 @@ const ResponseController = {
     for (let job of latestJobs) {
       View.displayLatestJob(job);
     }
+    FeedbackView.highlightSavedJobButtons();
   },
 
   getJobDetails() {
@@ -276,7 +278,11 @@ const FilterController = {
       let selectedjobCategory = document.getElementsByClassName("jobCategory")[
         jobCategoryIndex
       ].id;
-      FilterView.registerSelectedjobCategory(selectedjobCategory, FilterController.countyID, FilterController.communityID);
+      FilterView.registerSelectedjobCategory(
+        selectedjobCategory,
+        FilterController.countyID,
+        FilterController.communityID
+      );
     });
   },
 
@@ -288,7 +294,11 @@ const FilterController = {
 
       if (searchInput.value.length === 3) {
         FilterController.yrkesbenamning = searchInput.value;
-        FetchModel.fetchSearch(FilterController.yrkesbenamning, FilterController.countyID, FilterController.communityID);
+        FetchModel.fetchSearch(
+          FilterController.yrkesbenamning,
+          FilterController.countyID,
+          FilterController.communityID
+        );
       }
 
       //console.log(searchInput);
@@ -358,7 +368,6 @@ const View = {
     const numberofSavedJobs = LocalStorageModel.getNumberOfSavedJobs();
     const mySavedJobs = document.getElementById("mySavedJobs");
     mySavedJobs.innerHTML = "Mina sparade annonser (" + numberofSavedJobs + ")";
-    console.log(mySavedJobs);
   },
   jobContainer: document.getElementById("jobContainer"),
 
@@ -623,15 +632,26 @@ const FilterView = {
     );
   },
 
-  registerSelectedjobCategory(selectedjobCategory, selectedCounty, selectedCommunity) {
+  registerSelectedjobCategory(
+    selectedjobCategory,
+    selectedCounty,
+    selectedCommunity
+  ) {
     View.jobContainer.innerHTML = "";
-    console.log("jobCategory:", selectedjobCategory, "county;", selectedCounty, "community:", selectedCommunity);
+    console.log(
+      "jobCategory:",
+      selectedjobCategory,
+      "county;",
+      selectedCounty,
+      "community:",
+      selectedCommunity
+    );
     FilterController.jobCategoryID = selectedjobCategory;
     FetchModel.fetchAll(
       FilterController.numberOfJobs,
       selectedCounty,
       selectedjobCategory,
-      selectedCommunity,
+      selectedCommunity
     );
   }
 };
@@ -658,19 +678,40 @@ const FeedbackView = {
   //   // });
   // },
   textHighlight(textToHighlight) {
-      textToHighlight.classList.add('textToHighlight');
-      setTimeout(function(){
-          textToHighlight.classList.remove('textToHighlight');
-      }, 1000);
+    textToHighlight.classList.add("textToHighlight");
+    setTimeout(function() {
+      textToHighlight.classList.remove("textToHighlight");
+    }, 1000);
   },
-  saveJob(button){
-      button.classList.add('saved');
-      button.innerText = 'Sparad';
-      // Get the array of saved jobs
-      // In a loop: getElementById using all the saved job-ID's
-      // In the loop, go into every div to target the save-buttons
-      // Add the class .saved and innerText = 'Saved' to each button
-    },
+  saveJob(button) {
+    button.classList.add("saved");
+    button.innerText = "Sparad";
+    console.log(button);
+  },
+
+  highlightSavedJobButtons() {
+    // Get the array of saved jobs
+    console.log(LocalStorageModel.storedJobs);
+
+    const buttons = document.getElementsByClassName("save");
+    console.log(buttons);
+    for (let button of buttons) {
+      if (LocalStorageModel.storedJobs.includes(button.parentElement.id)) {
+        button.classList.add("saved");
+        button.innerText = "Sparad";
+      }
+    }
+    //
+    // for (const savedJobID of LocalStorageModel.storedJobs) {
+    //   // In a loop: getElementById using all the saved job-ID's
+    //   let savedJobDiv = document.getElementById(savedJobID);
+    //
+    //   console.log(savedJobDiv);
+
+    // In the loop, go into every div to target the save-buttons
+    // Add the class .saved and innerText = 'Saved' to each button
+    //}
+  }
 };
 
 /***************************************/
@@ -698,3 +739,5 @@ PaginationView.createPreviousPageElements();
 PaginationView.createNextPageElements();
 LocalStorageModel.loadData();
 View.updateDisplaySavedJobs();
+
+FeedbackView.highlightSavedJobButtons();
