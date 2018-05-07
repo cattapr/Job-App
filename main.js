@@ -5,7 +5,7 @@ const FetchModel = {
     jobCategoryID = "",
     communityID = "",
     page = "1",
-    chosenCounty = 'Stockholm'
+    chosenArea = 'Stockholm'
   ) {
     //let job = numberOfJobs;
     return fetch(
@@ -18,7 +18,7 @@ const FetchModel = {
         //ResponseController.sortResponse(data);
 
         View.hideLoader();
-        ResponseController.getTotalNumberOfJobs(data, chosenCounty);
+        ResponseController.getTotalNumberOfJobs(data, chosenArea);
         ResponseController.getJobDetails();
 
         const buttons = document.getElementsByClassName("save");
@@ -188,11 +188,11 @@ const ResponseController = {
   //   console.log(data);
   // },
 
-  getTotalNumberOfJobs(data, chosenCounty) {
+  getTotalNumberOfJobs(data, chosenArea) {
     let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
     let latestJobs = data.matchningslista.matchningdata;
     ResponseController.getLatestJobs(latestJobs);
-    View.displayTotalNumberOfJobs(totalNumberOfJobs, chosenCounty);
+    View.displayTotalNumberOfJobs(totalNumberOfJobs, chosenArea);
   },
 
   getLatestJobs(latestJobs) {
@@ -471,10 +471,15 @@ const View = {
         communityIndex
       ].id;
 
+      selectedCommunityName = document.getElementsByClassName("community")[
+        communityIndex
+      ].innerText;
+
       FilterView.registerSelectedCommunity(
         selectedCommunity,
         selectedCounty,
-        FilterController.jobCategoryID
+        FilterController.jobCategoryID,
+        selectedCommunityName
       );
     });
   },
@@ -619,7 +624,7 @@ const FilterView = {
   registerSelectedCommunity(
     selectedCommunity,
     selectedCounty,
-    selectedjobCategory
+    selectedjobCategory, chosenCommunity
   ) {
     FilterController.countyID = selectedCounty;
     FilterController.communityID = selectedCommunity;
@@ -631,7 +636,9 @@ const FilterView = {
       FilterController.numberOfJobs,
       selectedCounty,
       selectedjobCategory,
-      selectedCommunity
+      selectedCommunity,
+      FilterController.page,
+      chosenCommunity
     );
   },
 
