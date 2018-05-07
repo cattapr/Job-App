@@ -300,6 +300,7 @@ const FilterController = {
 
   nextPage(nextPageButton) {
     nextPageButton.addEventListener("click", function() {
+       window.scrollTo(0, 380);
       FilterController.page++;
       page = FilterController.page;
       View.jobContainer.innerHTML = "";
@@ -316,6 +317,7 @@ const FilterController = {
   previousPage(previousPageButton) {
     previousPageButton.addEventListener("click", function() {
       if (FilterController.page > 1) {
+        window.scrollTo(0, 380);
         FilterController.page--;
         console.log("previous page", FilterController.page);
         View.jobContainer.innerHTML = "";
