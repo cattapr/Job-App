@@ -663,13 +663,13 @@ const FeedbackView = {
     } else if (successOrError === 'error') {
       feedbackPopup.classList.add('error');
     }
-    feedbackPopup.innerText = message;
 
-    const button = document.createElement('p');
-    button.value = "OK";
-    feedbackPopup.insertAdjacentHTML('beforeEnd', button);
-
-    confirm.addEventListener('click', function(){
+    feedbackPopup.innerHTML = `
+      <p>${ message }</p>
+      <button id="ok"><small>OK</small></button>
+    `;
+    const ok = document.getElementById('ok');
+    ok.addEventListener('click', function(){
       feedbackPopup.classList.add('hidden');
     });
   },
