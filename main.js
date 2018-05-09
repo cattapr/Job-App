@@ -442,13 +442,16 @@ const View = {
 
     deleteSavedJobButton.addEventListener("click", function() {
       FeedbackView.feedbackPopup("success", "Ta bort ur dina sparade annonser?");
-
+      const feedbackPopup = document.getElementById('feedbackPopup');
+      const deleteButton = event.target;
+      const idToDelete = event.target.id.split("=")[1];
       const ok = document.getElementById('ok');
+
       ok.addEventListener('click', function(){
-          const idToDelete = this.id;
-          this.parentElement.parentElement.removeChild(this.parentElement);
-          LocalStorageModel.removeSavedJob(idToDelete);
-          View.checkForSavedJobs();
+        feedbackPopup.classList.add('hidden');
+        deleteButton.parentElement.parentElement.removeChild(deleteButton.parentElement);
+        LocalStorageModel.removeSavedJob(idToDelete);
+        View.checkForSavedJobs();
       });
 
       //const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
@@ -705,8 +708,10 @@ const FeedbackView = {
 
     if(successOrError === 'success'){
       feedbackPopup.classList.add('success');
+      feedbackPopup.classList.remove('error');
     } else if (successOrError === 'error') {
       feedbackPopup.classList.add('error');
+      feedbackPopup.classList.remove('success');
     }
 
     feedbackPopup.innerHTML = `
@@ -773,6 +778,3 @@ LocalStorageModel.loadData();
 View.updateDisplaySavedJobs();
 
 FeedbackView.highlightSavedJobButtons();
-
-FeedbackView.feedbackPopup("success", "You rock");
-FeedbackView.hideFeedbackPopup();
