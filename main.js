@@ -665,8 +665,10 @@ const FeedbackView = {
     }
     feedbackPopup.innerText = message;
 
-    feedbackPopup.innerHTML = `<button id="confirm">OK</button>`;
-    const confirm = document.getElementById('confirm');
+    const button = document.createElement('p');
+    button.value = "OK";
+    feedbackPopup.insertAdjacentHTML('beforeEnd', button);
+
     confirm.addEventListener('click', function(){
       feedbackPopup.classList.add('hidden');
     });
