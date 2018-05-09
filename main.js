@@ -431,7 +431,7 @@ const View = {
 		<p class="link"><a href="${
       job.annons.platsannonsUrl
     }" target="_blank">Läs mer på Arbetsförmedlingens webbsida </a>↗</p>
-		<button class="delete" id="savedJob=${job.annons.annonsid}">Delete</button>
+		<button class="delete" id="savedJob=${job.annons.annonsid}">Ta bort</button>
 		</div>`;
 
     savedJobsList.insertAdjacentHTML("beforeEnd", savedJobCardHTML);
