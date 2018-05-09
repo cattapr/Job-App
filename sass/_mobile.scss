@@ -90,7 +90,8 @@ nav {
 /*******************************************/
 /*************** JOB CARDS *****************/
 /*******************************************/
-#jobContainer, #savedJobsList {
+#jobContainer,
+#savedJobsList {
   & > div:not(.loader__container) {
     border: 1px solid #d0d0d0;
     padding: 4% 7%;
@@ -105,7 +106,7 @@ nav {
 }
 
 .container__saved-jobs h1 {
-  margin:40px 0;
+  margin: 40px 0;
 }
 
 a {
@@ -113,7 +114,7 @@ a {
 }
 
 .adHeading {
-   cursor: pointer;
+  cursor: pointer;
   &:hover {
     transition: ease background 0.3s;
     color: $color__accent--dark;
@@ -164,7 +165,7 @@ button {
 .searchDiv {
   width: 100%;
   input {
-    text-indent:6px;
+    text-indent: 6px;
   }
 }
 
@@ -194,8 +195,6 @@ select:focus {
   border: 2px solid $color__accent--dark;
   border-radius: 3px;
 }
-
-
 
 /*****************************/
 /*********** LOADER **********/
@@ -235,20 +234,19 @@ select:focus {
   }
 }
 
-
 /******************************************/
 /**************** SEARCH ******************/
 /******************************************/
 .search__matchoutput {
   li {
-    cursor:pointer;
-    padding:.5em;
-    transition:ease background .3s;
+    cursor: pointer;
+    padding: 0.5em;
+    transition: ease background 0.3s;
     &:hover {
       //background: #c8d2ec;
-      background:$color__accent--light;
-      border-radius:3px;
-      transition:ease background .3s;
+      background: $color__accent--light;
+      border-radius: 3px;
+      transition: ease background 0.3s;
     }
   }
 }
@@ -272,7 +270,8 @@ select:focus {
   margin-bottom: 30px;
 }
 
-.iHeader, .iHeader-right {
+.iHeader,
+.iHeader-right {
   font-weight: bold;
   display: block;
 }
@@ -281,10 +280,10 @@ select:focus {
   margin-top: 20px;
 }
 .iInfo {
-  margin:0 20px 10px 0;
+  margin: 0 20px 10px 0;
 }
 .goBack {
-  margin-top:40px;
+  margin-top: 40px;
 }
 /******************************************/
 /************** PAGINATION ****************/
@@ -294,9 +293,9 @@ select:focus {
   justify-content: space-between;
   button {
     background: none;
-    color: rgba(0,0,0,.8);
-    &:hover {
-      background: rgba(0,0,0,.2);
+    color: rgba(0, 0, 0, 0.8);
+    &:hover  {
+      background: rgba(0, 0, 0, 0.2);
       color: #fff;
     }
   }
@@ -306,7 +305,7 @@ select:focus {
 /**************** FEEDBACK ****************/
 /******************************************/
 .popup {
-  width:400px;
+  width: 400px;
   position: fixed;
   top: 160px;
   left: 50%;
@@ -317,7 +316,7 @@ select:focus {
   text-align: center;
   border-radius: 3px;
   background: #fff;
-  box-shadow: 5px 5px 30px rgba(0,0,0,.2);
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
 }
 .success {
   border-top: 6px solid lightseagreen;
@@ -334,13 +333,13 @@ select:focus {
 }
 
 #mySavedJobs {
-  padding:.5em .5em .2em;
+  padding: 0.5em 0.5em 0.2em;
 }
 .textToHighlight {
-  color:#333;
-  background:$color__accent--light;
+  color: #333;
+  background: $color__accent--light;
   border-radius: 3px;
-  transition: ease .5s background;
+  transition: ease 0.5s background;
 }
 
 /******************************************/
@@ -357,12 +356,32 @@ select:focus {
 /*********** MODAL URL BOX ************/
 /******************************************/
 .modal-content {
-    background: $color__accent--light;
-    height: 80px;
-    padding: 20px;
-    font-weight: bold;
+  background: $color__accent--light;
+  height: auto;
+  padding: 30px 40px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
 
-    span {
-      cursor:pointer;
-    }
+  & > div {
+    width: 100%;
+  }
+
+  p {
+    margin-top: 0;
+  }
+  .close {
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  p.link-heading {
+    font-weight: bold;
+    font-size: 1.4em;
+    text-align: left;
+  }
+  p.permalink {
+    word-wrap: break-word;
+    text-align: left;
+  }
 }
