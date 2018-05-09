@@ -7,36 +7,21 @@ const FetchModel = {
     page = "1",
     chosenArea = "Stockholm"
   ) {
-    //let job = numberOfJobs;
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&kommunid=${communityID}&sida=${page}`
     )
       .then(View.showLoader())
       .then(response => response.json())
       .then(data => {
-        //let listings = data.matchningslista;
-        //ResponseController.sortResponse(data);
 
         View.hideLoader();
         ResponseController.getTotalNumberOfJobs(data, chosenArea);
         ResponseController.getJobDetails();
-
-        const buttons = document.getElementsByClassName("save");
-
-        for (const button of buttons) {
-          button.addEventListener("click", function() {
-            LocalStorageModel.updateLocalStorage(this.parentElement.id);
-            FeedbackView.saveJob(button);
-            //FeedbackView.feedbackPopup('success', 'Job saved!');
-            const mySavedJobs = document.getElementById("mySavedJobs");
-            FeedbackView.textHighlight(mySavedJobs);
-          });
-        }
+        View.saveJobButton();
       })
-
       .catch(error => console.log(error));
   },
-  //detailed
+  // Get detailed ad in HTML-format
   fetchByIdHTML(annonsId) {
     return fetch(
       `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}/typ=html`
@@ -55,7 +40,7 @@ const FetchModel = {
       })
       .catch(error => console.log(error));
   },
-  //summary
+  // Get short version in JSON
   fetchByIdJSON(annonsId) {
     return (
       fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
@@ -371,6 +356,20 @@ const View = {
 		</div>`;
   },
 
+  saveJobButton(){
+    const buttons = document.getElementsByClassName("save");
+
+    for (const button of buttons) {
+      button.addEventListener("click", function() {
+        LocalStorageModel.updateLocalStorage(this.parentElement.id);
+        //Visual feedback
+        FeedbackView.saveJob(button);
+        const mySavedJobs = document.getElementById("mySavedJobs");
+        FeedbackView.textHighlight(mySavedJobs);
+      });
+    }
+  },
+
   checkForSavedJobs() {
     if (LocalStorageModel.storedJobs.length === 0) {
       const savedJobsContainer = document.getElementById("savedJobsList");
@@ -451,7 +450,7 @@ const View = {
 
   displayJobDetails(jobDetailsCardHTML) {
     const goBackButton = `
-		<button id="goBack" class="goBack">Gå tillbaka</button>
+		  <button id="goBack" class="goBack">Gå tillbaka</button>
 		`;
 
     const jobDetails = document.createElement("div");
@@ -461,7 +460,7 @@ const View = {
     containerJobDetails.insertAdjacentHTML("beforeEnd", goBackButton);
 
     const shareURLButton = `
-		<button id="shareURL" class="shareURL">Dela annons</button>
+		  <button id="shareURL" class="shareURL">Dela annons</button>
 		`;
     containerJobDetails.insertAdjacentHTML("beforeEnd", shareURLButton);
 
@@ -741,23 +740,13 @@ const FeedbackView = {
     console.log(LocalStorageModel.storedJobs);
 
     const buttons = document.getElementsByClassName("save");
-    console.log(buttons);
+
     for (let button of buttons) {
       if (LocalStorageModel.storedJobs.includes(button.parentElement.id)) {
         button.classList.add("saved");
         button.innerText = "Sparad";
       }
     }
-    //
-    // for (const savedJobID of LocalStorageModel.storedJobs) {
-    //   // In a loop: getElementById using all the saved job-ID's
-    //   let savedJobDiv = document.getElementById(savedJobID);
-    //
-    //   console.log(savedJobDiv);
-
-    // In the loop, go into every div to target the save-buttons
-    // Add the class .saved and innerText = 'Saved' to each button
-    //}
   }
 };
 
