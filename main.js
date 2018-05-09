@@ -20,7 +20,10 @@ const FetchModel = {
         ResponseController.getJobDetails();
         View.saveJobButton();
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
   // Get detailed ad in HTML-format
   fetchByIdHTML(annonsId) {
@@ -39,7 +42,10 @@ const FetchModel = {
           window.location = "";
         });
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
   // Get short version in JSON
   fetchByIdJSON(annonsId) {
@@ -50,7 +56,10 @@ const FetchModel = {
           View.hideLoader();
           View.displaySavedJobCard(job);
         })
-        .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."))
+        .catch(function(error) {
+          FeedbackView.feedbackPopup("error", "Something went wrong.");
+          FeedbackView.hideFeedbackPopup();
+        })
     );
   },
 
@@ -63,7 +72,10 @@ const FetchModel = {
         const countiesArray = counties.soklista.sokdata;
         FilterController.selectCounty(countiesArray);
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchCommunityByCountyId(countyID) {
@@ -77,7 +89,10 @@ const FetchModel = {
           countyID
         );
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchAllJobCategory() {
@@ -88,7 +103,10 @@ const FetchModel = {
       .then(jobCategories => {
         FilterController.selectJobCategory(jobCategories.soklista.sokdata);
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchSearch(yrkesbenamning, countyID = "1", communityID = "") {
@@ -99,7 +117,10 @@ const FetchModel = {
       .then(occupations => {
         View.displaySearchMatch(occupations.matchningslista.matchningdata);
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   }
 };
 
@@ -109,9 +130,8 @@ const LocalStorageModel = {
   updateLocalStorage(annonsId) {
     // Push the annonsId into the array
     if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
-      FeedbackView.feedbackPopup("Success", "Denna annons har redan sparats.");
-      // alert("Denna annons har redan sparats.");
-      // return;
+      FeedbackView.feedbackPopup("success", "Denna annons har redan sparats.");
+      return;
     }
     LocalStorageModel.storedJobs.push(annonsId);
     // Set the savedJobs on localStorage with the storedJobs data.
@@ -185,7 +205,7 @@ const ResponseController = {
   			FetchModel.fetchByIdHTML(this.parentElement.id);
 	        window.location.hash = `?jobDetail=${this.parentElement.id}`;
 	        NavigationView.showJobDetails();
-  		}); 
+  		});
   	}
 
   },
@@ -421,13 +441,26 @@ const View = {
     );
 
     deleteSavedJobButton.addEventListener("click", function() {
-      const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
-      if (confirmMessage) {
-        const idToDelete = this.id;
-        this.parentElement.parentElement.removeChild(this.parentElement);
+      FeedbackView.feedbackPopup("success", "Ta bort ur dina sparade annonser?");
+      const feedbackPopup = document.getElementById('feedbackPopup');
+      const deleteButton = event.target;
+      const idToDelete = event.target.id.split("=")[1];
+      const ok = document.getElementById('ok');
+
+      ok.addEventListener('click', function(){
+        feedbackPopup.classList.add('hidden');
+        deleteButton.parentElement.parentElement.removeChild(deleteButton.parentElement);
         LocalStorageModel.removeSavedJob(idToDelete);
         View.checkForSavedJobs();
-      }
+      });
+
+      //const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
+      // if (confirmMessage) {
+      //   const idToDelete = this.id;
+      //   this.parentElement.parentElement.removeChild(this.parentElement);
+      //   LocalStorageModel.removeSavedJob(idToDelete);
+      //   View.checkForSavedJobs();
+      // }
     });
   },
 
@@ -675,19 +708,27 @@ const FeedbackView = {
 
     if(successOrError === 'success'){
       feedbackPopup.classList.add('success');
+      feedbackPopup.classList.remove('error');
     } else if (successOrError === 'error') {
       feedbackPopup.classList.add('error');
+      feedbackPopup.classList.remove('success');
     }
 
     feedbackPopup.innerHTML = `
       <p>${ message }</p>
       <button id="ok"><small>OK</small></button>
     `;
+  },
+
+  hideFeedbackPopup(){
+    const feedbackPopup = document.getElementById('feedbackPopup');
     const ok = document.getElementById('ok');
     ok.addEventListener('click', function(){
       feedbackPopup.classList.add('hidden');
+      console.log("hide feedback working");
     });
   },
+
   textHighlight(textToHighlight) {
     textToHighlight.classList.add("textToHighlight");
     setTimeout(function() {
