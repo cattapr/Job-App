@@ -13,7 +13,6 @@ const FetchModel = {
       .then(View.showLoader())
       .then(response => response.json())
       .then(data => {
-
         View.hideLoader();
         ResponseController.getTotalNumberOfJobs(data, chosenArea);
         ResponseController.getJobDetailsOnHeadingClick();
@@ -49,18 +48,18 @@ const FetchModel = {
   },
   // Get short version in JSON
   fetchByIdJSON(annonsId) {
-    return (
-      fetch(`https://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
-        .then(response => response.json())
-        .then(job => {
-          View.hideLoader();
-          View.displaySavedJobCard(job);
-        })
-        .catch(function(error) {
-          FeedbackView.feedbackPopup("error", "Something went wrong.");
-          FeedbackView.hideFeedbackPopup();
-        })
-    );
+    return fetch(
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`
+    )
+      .then(response => response.json())
+      .then(job => {
+        View.hideLoader();
+        View.displaySavedJobCard(job);
+      })
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchAllCounties() {
@@ -198,16 +197,15 @@ const ResponseController = {
   },
 
   getJobDetailsOnHeadingClick() {
-  	const adHeadings = document.getElementsByClassName('adHeading');
+    const adHeadings = document.getElementsByClassName("adHeading");
 
-  	for(const adHeading of adHeadings){
-  		adHeading.addEventListener('click', function() {
-  			FetchModel.fetchByIdHTML(this.parentElement.id);
-	        window.location.hash = `?jobDetail=${this.parentElement.id}`;
-	        NavigationView.showJobDetails();
-  		});
-  	}
-
+    for (const adHeading of adHeadings) {
+      adHeading.addEventListener("click", function() {
+        FetchModel.fetchByIdHTML(this.parentElement.id);
+        window.location.hash = `?jobDetail=${this.parentElement.id}`;
+        NavigationView.showJobDetails();
+      });
+    }
   },
 
   getJobDetails() {
@@ -364,7 +362,7 @@ const View = {
 		</div>`;
   },
 
-  saveJobButton(){
+  saveJobButton() {
     const buttons = document.getElementsByClassName("save");
 
     for (const button of buttons) {
@@ -441,15 +439,20 @@ const View = {
     );
 
     deleteSavedJobButton.addEventListener("click", function() {
-      FeedbackView.feedbackPopup("success", "Ta bort ur dina sparade annonser?");
-      const feedbackPopup = document.getElementById('feedbackPopup');
+      FeedbackView.feedbackPopup(
+        "success",
+        "Ta bort ur dina sparade annonser?"
+      );
+      const feedbackPopup = document.getElementById("feedbackPopup");
       const deleteButton = event.target;
       const idToDelete = event.target.id.split("=")[1];
-      const ok = document.getElementById('ok');
+      const ok = document.getElementById("ok");
 
-      ok.addEventListener('click', function(){
-        feedbackPopup.classList.add('hidden');
-        deleteButton.parentElement.parentElement.removeChild(deleteButton.parentElement);
+      ok.addEventListener("click", function() {
+        feedbackPopup.classList.add("hidden");
+        deleteButton.parentElement.parentElement.removeChild(
+          deleteButton.parentElement
+        );
         LocalStorageModel.removeSavedJob(idToDelete);
         View.checkForSavedJobs();
       });
@@ -523,10 +526,12 @@ const View = {
     const copyURL = window.location.href;
     const modal = `
       <div id="URLModal" class="modal">
-
       <div class="modal-content">
-        <span id="closeURL_Modal">&times;</span>
-        <p>${copyURL}</p>
+        <div>
+          <p class="link-heading">Kopiera länken:</p>
+          <p class="permalink">${copyURL}</p>
+        </div>
+        <p class="close" id="closeURL_Modal">&times;</p>
       </div>
     `;
 
@@ -701,30 +706,30 @@ const FilterView = {
 };
 
 const FeedbackView = {
-  feedbackPopup(successOrError, message){
-    const feedbackPopup = document.getElementById('feedbackPopup');
+  feedbackPopup(successOrError, message) {
+    const feedbackPopup = document.getElementById("feedbackPopup");
 
-    feedbackPopup.classList.remove('hidden');
+    feedbackPopup.classList.remove("hidden");
 
-    if(successOrError === 'success'){
-      feedbackPopup.classList.add('success');
-      feedbackPopup.classList.remove('error');
-    } else if (successOrError === 'error') {
-      feedbackPopup.classList.add('error');
-      feedbackPopup.classList.remove('success');
+    if (successOrError === "success") {
+      feedbackPopup.classList.add("success");
+      feedbackPopup.classList.remove("error");
+    } else if (successOrError === "error") {
+      feedbackPopup.classList.add("error");
+      feedbackPopup.classList.remove("success");
     }
 
     feedbackPopup.innerHTML = `
-      <p>${ message }</p>
+      <p>${message}</p>
       <button id="ok"><small>OK</small></button>
     `;
   },
 
-  hideFeedbackPopup(){
-    const feedbackPopup = document.getElementById('feedbackPopup');
-    const ok = document.getElementById('ok');
-    ok.addEventListener('click', function(){
-      feedbackPopup.classList.add('hidden');
+  hideFeedbackPopup() {
+    const feedbackPopup = document.getElementById("feedbackPopup");
+    const ok = document.getElementById("ok");
+    ok.addEventListener("click", function() {
+      feedbackPopup.classList.add("hidden");
       console.log("hide feedback working");
     });
   },
