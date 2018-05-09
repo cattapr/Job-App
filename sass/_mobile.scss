@@ -302,22 +302,24 @@ select:focus {
 /**************** FEEDBACK ****************/
 /******************************************/
 .popup {
-  $width: 400px;
-  width:$width;
+  width:400px;
   position: fixed;
   top: 160px;
-  margin-left: calc(#{$width} / 2);
+  left: 50%;
+  margin-left: -200px;
   z-index: 999;
   box-sizing: border-box;
   padding: 2em;
   text-align: center;
   border-radius: 3px;
+  background: #fff;
+  box-shadow: 5px 5px 30px rgba(0,0,0,.2);
 }
 .success {
-  background-color: $color__accent--light;
+  border-top: 6px solid lightseagreen;
 }
 .error {
-  background-color: tomato;
+  border-top: 6px solid tomato;
 }
 
 .saved {
