@@ -10,6 +10,7 @@ h1 {
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
 }
+
 ul {
   list-style: none;
   -webkit-margin-before: 0em;
@@ -101,6 +102,18 @@ nav {
 
 .container__saved-jobs h1 {
   margin:40px 0;
+}
+
+a {
+  color: $color__accent--dark;
+}
+
+.adHeading {
+   cursor: pointer;
+  &:hover {
+    transition: ease background 0.3s;
+    color: $color__accent--dark;
+  }
 }
 
 /***************************************/
