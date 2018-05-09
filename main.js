@@ -375,7 +375,7 @@ const View = {
     if (LocalStorageModel.storedJobs.length === 0) {
       const savedJobsContainer = document.getElementById("savedJobsList");
       let noSavedJobsMessageHTML = `
-      <p id="no-saved-jobs-message">Ingenting att se här...</p>
+      <p class="no-saved-jobs-message" id="no-saved-jobs-message">Inga sparade annonser ännu.</p>
       `;
       savedJobsContainer.insertAdjacentHTML(
         "beforeend",
