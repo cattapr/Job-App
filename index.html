@@ -6,21 +6,80 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Tajawal:400,500,700" rel="stylesheet">
+		<link rel="icon" href="images/favicon.png">
 	<title>	Jobbannons App</title>
 </head>
 <body>
 	<header>
 		<nav>
-			<h1>Platsbanken</h1>
+			<h1 id="header" class="pointer">Platsbanken</h1>
 			<ul>
-				<li>Mina sparade annonser</li>
+				<li id="mySavedJobs" class="pointer">Mina sparade annonser</li>
 			</ul>
 		</nav>
 	</header>
-	<div class="wrapper">
-		<div id="output"></div>
+
+	<div id="containerLandingPage" class="container container__landing-page">
+		<div id="totalNumberOfJobsHeader" class="header__number-of-jobs"></div>
+
+		<form id="filters">
+		  <div class="filters">
+              <div class="formDiv">
+                  <label for="numberOfJobs">Antal träffar</label>
+                  <select id="numberOfJobs">
+                      <option name="filterNumber" value="10" selected>10</option>
+                      <option name="filterNumber" value="20">20</option>
+                      <option name="filterNumber" value="30">30</option>
+                      <option name="filterNumber" value="40">40</option>
+                      <option name="filterNumber" value="50">50</option>
+                  </select>
+              </div>
+
+              <div class="formDiv">
+                  <label for="county">Välj län</label>
+                  <select name="county" id="county">
+                     <!-- Option tags generated in JS -->
+                  </select>
+                  <div id="communityContainer">
+                  	<label for="county">Välj kommun</label>
+                  	<select name="community" id="community">
+                  		<!-- Option tags generated in JS -->
+                  	</select>
+                  </div>
+              </div>
+
+              <div class="formDiv">
+                  <label for="jobCategory">Välj yrke</label>
+                  <select name="jobCategory" id="jobCategory">
+                      <!-- Option tags generated in JS -->
+                  </select>
+              </div>
+		  </div>
+
+			<div class="searchDiv">
+				<label for="search">Sök</label>
+				<input type="search" name="search" id="searchOccupation" autocomplete="off">
+			</div>
+			<div id="searchMatchOutput" class="search__matchoutput"></div>
+		</form>
+
 		<div id="jobContainer"></div>
+		<div id="pagination" class="pagination"></div>
 	</div>
+
+	<div id="containerJobDetails" class="container container__job-details">
+		<!-- Generated in JS -->
+	</div>
+
+	<div id="containerSavedJobs" class="container container__saved-jobs hidden">
+		<h1>Saved jobs</h1>
+		<div id="savedJobsList">
+			<!-- Generated in JS -->
+		</div>
+	</div>
+
+	<div id="feedbackPopup" class="popup hidden"></div>
+
 	<script src="main.js"></script>
 </body>
 </html>

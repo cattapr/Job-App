@@ -2,3 +2,6 @@
 css
 *.log
 node_modules
+
+dist
+.cache

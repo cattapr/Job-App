@@ -1,11 +1,10 @@
 @import "_mobile";
 
-// Tablet and small devices ->
-//@media screen and (min-width: 768px){
-//    @import "_tablet";
-//}
-//
-//// Desktop ->
-//@media screen and (min-width: 992px){
-//    @import "_desktop";
-//}
+//xTablet and small devices ->
+@media screen and (min-width: 768px){
+    @import "_tablet";
+}
+// Desktop ->
+@media screen and (min-width: 992px){
+    @import "_desktop";
+}
