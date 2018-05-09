@@ -16,6 +16,7 @@ const FetchModel = {
 
         View.hideLoader();
         ResponseController.getTotalNumberOfJobs(data, chosenArea);
+        ResponseController.getJobDetailsOnHeadingClick();
         ResponseController.getJobDetails();
         View.saveJobButton();
       })
@@ -108,8 +109,9 @@ const LocalStorageModel = {
   updateLocalStorage(annonsId) {
     // Push the annonsId into the array
     if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
-      alert("Denna annons har redan sparats.");
-      return;
+      FeedbackView.feedbackPopup("Success", "Denna annons har redan sparats.");
+      // alert("Denna annons har redan sparats.");
+      // return;
     }
     LocalStorageModel.storedJobs.push(annonsId);
     // Set the savedJobs on localStorage with the storedJobs data.
@@ -173,6 +175,19 @@ const ResponseController = {
       View.displayLatestJob(job);
     }
     FeedbackView.highlightSavedJobButtons();
+  },
+
+  getJobDetailsOnHeadingClick() {
+  	const adHeadings = document.getElementsByClassName('adHeading');
+
+  	for(const adHeading of adHeadings){
+  		adHeading.addEventListener('click', function() {
+  			FetchModel.fetchByIdHTML(this.parentElement.id);
+	        window.location.hash = `?jobDetail=${this.parentElement.id}`;
+	        NavigationView.showJobDetails();
+  		}); 
+  	}
+
   },
 
   getJobDetails() {
@@ -365,7 +380,7 @@ const View = {
 
   displayLatestJob(job) {
     const jobCardHTML = `<div id="${job.annonsid}">
-		<h2>${job.annonsrubrik}</h2>
+		<h2 class="adHeading">${job.annonsrubrik}</h2>
 		<p class="profession">${job.yrkesbenamning}</p>
 		<p class="company">${job.arbetsplatsnamn}</p>
 		<p class="typeOfEmpoloyment">${job.anstallningstyp}</p>
