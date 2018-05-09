@@ -20,7 +20,7 @@ const FetchModel = {
         ResponseController.getJobDetails();
         View.saveJobButton();
       })
-      .catch(error => {
+      .catch(function(error) {
         FeedbackView.feedbackPopup("error", "Something went wrong.");
         FeedbackView.hideFeedbackPopup();
       });
@@ -42,7 +42,10 @@ const FetchModel = {
           window.location = "";
         });
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
   // Get short version in JSON
   fetchByIdJSON(annonsId) {
@@ -53,7 +56,10 @@ const FetchModel = {
           View.hideLoader();
           View.displaySavedJobCard(job);
         })
-        .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."))
+        .catch(function(error) {
+          FeedbackView.feedbackPopup("error", "Something went wrong.");
+          FeedbackView.hideFeedbackPopup();
+        })
     );
   },
 
@@ -66,7 +72,10 @@ const FetchModel = {
         const countiesArray = counties.soklista.sokdata;
         FilterController.selectCounty(countiesArray);
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchCommunityByCountyId(countyID) {
@@ -80,7 +89,10 @@ const FetchModel = {
           countyID
         );
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchAllJobCategory() {
@@ -91,7 +103,10 @@ const FetchModel = {
       .then(jobCategories => {
         FilterController.selectJobCategory(jobCategories.soklista.sokdata);
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
 
   fetchSearch(yrkesbenamning, countyID = "1", communityID = "") {
@@ -102,7 +117,10 @@ const FetchModel = {
       .then(occupations => {
         View.displaySearchMatch(occupations.matchningslista.matchningdata);
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(function(error) {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   }
 };
 
