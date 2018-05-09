@@ -44,13 +44,12 @@ const FetchModel = {
   fetchByIdJSON(annonsId) {
     return (
       fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
-        // .then(View.showLoader())
         .then(response => response.json())
         .then(job => {
           View.hideLoader();
           View.displaySavedJobCard(job);
         })
-        .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+        .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."))
     );
   },
 
@@ -107,13 +106,13 @@ const LocalStorageModel = {
   // Array for savedJobs list
   storedJobs: [],
   updateLocalStorage(annonsId) {
-    //push the annonsId into the array
+    // Push the annonsId into the array
     if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
       alert("Denna annons har redan sparats.");
       return;
     }
     LocalStorageModel.storedJobs.push(annonsId);
-    // set the savedJobs on localStorage with the storedJobs data.
+    // Set the savedJobs on localStorage with the storedJobs data.
     localStorage.setItem(
       "savedJobs",
       JSON.stringify(LocalStorageModel.storedJobs)
@@ -161,6 +160,7 @@ const ResponseController = {
     const jobID = url.hash.split("=")[1];
     return jobID;
   },
+
   getTotalNumberOfJobs(data, chosenArea) {
     let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
     let latestJobs = data.matchningslista.matchningdata;
@@ -559,7 +559,6 @@ const NavigationView = {
     NavigationView.header.addEventListener("click", function() {
       location.reload();
       window.location.hash = "#";
-      //Clear URL here
     });
   },
   showLandingPage() {
@@ -666,8 +665,10 @@ const FeedbackView = {
     }
     feedbackPopup.innerText = message;
 
-    feedbackPopup.innerHTML = `<button id="confirm">OK</button>`;
-    const confirm = document.getElementById('confirm');
+    const button = document.createElement('p');
+    button.value = "OK";
+    feedbackPopup.insertAdjacentHTML('beforeEnd', button);
+
     confirm.addEventListener('click', function(){
       feedbackPopup.classList.add('hidden');
     });
