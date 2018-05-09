@@ -8,7 +8,7 @@ const FetchModel = {
     chosenArea = "Stockholm"
   ) {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&kommunid=${communityID}&sida=${page}`
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?antalrader=${numberOfJobs}&yrkesomradeid=${jobCategoryID}&lanid=${countyID}&kommunid=${communityID}&sida=${page}`
     )
       .then(View.showLoader())
       .then(response => response.json())
@@ -28,7 +28,7 @@ const FetchModel = {
   // Get detailed ad in HTML-format
   fetchByIdHTML(annonsId) {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}/typ=html`
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}/typ=html`
     )
       .then(View.showLoader())
       .then(response => response.text())
@@ -50,7 +50,7 @@ const FetchModel = {
   // Get short version in JSON
   fetchByIdJSON(annonsId) {
     return (
-      fetch(`http://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
+      fetch(`https://api.arbetsformedlingen.se/af/v0/platsannonser/${annonsId}`)
         .then(response => response.json())
         .then(job => {
           View.hideLoader();
@@ -65,7 +65,7 @@ const FetchModel = {
 
   fetchAllCounties() {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/lan`
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/lan`
     )
       .then(response => response.json())
       .then(counties => {
@@ -80,7 +80,7 @@ const FetchModel = {
 
   fetchCommunityByCountyId(countyID) {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/kommuner?lanid=${countyID}`
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/kommuner?lanid=${countyID}`
     )
       .then(response => response.json())
       .then(communities => {
@@ -97,7 +97,7 @@ const FetchModel = {
 
   fetchAllJobCategory() {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/soklista/yrkesomraden`
     )
       .then(response => response.json())
       .then(jobCategories => {
@@ -111,7 +111,7 @@ const FetchModel = {
 
   fetchSearch(yrkesbenamning, countyID = "1", communityID = "") {
     return fetch(
-      `http://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}&lanid=${countyID}&kommunid=${communityID}`
+      `https://api.arbetsformedlingen.se/af/v0/platsannonser/matchning?nyckelord=${yrkesbenamning}&lanid=${countyID}&kommunid=${communityID}`
     )
       .then(response => response.json())
       .then(occupations => {

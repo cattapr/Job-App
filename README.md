@@ -4,7 +4,7 @@ Av Vanja Ivanovic, Catalina Pradilla Rocha, Lisa Sundberg och Caroline Wood
 
 Gå till repository: <https://github.com/cattapr/Job-App>
 
-Se appen på GitHub Pages: <URL>
+Se appen på GitHub Pages: <https://cattapr.github.io/Job-App/>
 
 ## Beskrivning
 
@@ -12,25 +12,25 @@ Se appen på GitHub Pages: <URL>
 
 Arbetssökande kan:
 
-* söka av yrkesomrade
-* söka av län
+* söka på yrkesomrade
+* söka på län
 * söka efter jobb med hjälp av fri text search
 * välja antalet av jobb som ska returneras
 * spara jobb till localStorage
-* dela jobb med permanent link.
+* dela jobb med permanent länk.
 
-### Built with
+### Verktyg som vi använt:
 
 * HTML & SASS/CSS
 * JavaScript
 
 ### Processen
 
-Vi jobbade tillsammans med hjälp av Mobb programmering som var toppen! Vi lärde oss en massa nya saker från varandra och lössade en hel del av problem tillsammans, som kände bra.
+Vi jobbade tillsammans med hjälp av Mobb programmering som var toppen! Vi lärde oss en massa nya saker från varandra och löste en hel del av problem tillsammans, det kände bra.
 
-### Att göra
+### Det som vi skulle vilja utveckla med appen:
 
-Om vi hade mer tid, skulle vi ha gjort föjljande:
+Om vi hade mer tid, skulle vi ha gjort följande:
 
-* skapa en ’spara knappen’ funktion som vi kan återanvända knappen på olika del av sidan.
-* skapa en visa detaljer knappen’ funktion som kan återanvändas genom sidan.
+* skapa en ’spara’ knapp funktion som vi kan återanvända den på olika delar av sidan.
+* skapa en ’visa detaljer’ knapp funktion som kan återanvändas genom sidan.
