@@ -19,7 +19,7 @@ const FetchModel = {
         ResponseController.getJobDetails();
         View.saveJobButton();
       })
-      .catch(error => console.log(error));
+      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
   },
   // Get detailed ad in HTML-format
   fetchByIdHTML(annonsId) {
@@ -38,7 +38,7 @@ const FetchModel = {
           window.location = "";
         });
       })
-      .catch(error => console.log(error));
+      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
   },
   // Get short version in JSON
   fetchByIdJSON(annonsId) {
@@ -50,7 +50,7 @@ const FetchModel = {
           View.hideLoader();
           View.displaySavedJobCard(job);
         })
-        .catch(error => console.log(error))
+        .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."))
     );
   },
 
@@ -64,7 +64,7 @@ const FetchModel = {
         console.log(counties.soklista.sokdata);
         FilterController.selectCounty(countiesArray);
       })
-      .catch(error => console.log(error));
+      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
   },
 
   fetchCommunityByCountyId(countyID) {
@@ -79,7 +79,7 @@ const FetchModel = {
           countyID
         );
       })
-      .catch(error => console.log(error));
+      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
   },
 
   fetchAllJobCategory() {
@@ -90,7 +90,7 @@ const FetchModel = {
       .then(jobCategories => {
         FilterController.selectJobCategory(jobCategories.soklista.sokdata);
       })
-      .catch(error => console.log(error));
+      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
   },
 
   fetchSearch(yrkesbenamning, countyID = "1", communityID = "") {
@@ -104,7 +104,7 @@ const FetchModel = {
         console.log(occupations);
         console.log(occupations.matchningslista.matchningdata);
       })
-      .catch(error => console.log(error));
+      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
   }
 };
 
@@ -165,14 +165,9 @@ const ResponseController = {
   getJobId() {
     const urlString = window.location.href;
     const url = new URL(urlString);
-    console.log(urlString);
-    console.log(url.hash.split("=")[1]);
     const jobID = url.hash.split("=")[1];
     return jobID;
   },
-  // sortResponse(data) {
-  //   console.log(data);
-  // },
 
   getTotalNumberOfJobs(data, chosenArea) {
     let totalNumberOfJobs = data.matchningslista.antal_platsannonser;
@@ -703,26 +698,6 @@ const FilterView = {
 };
 
 const FeedbackView = {
-  // feedbackPopup(successOrError, message){
-  //   const feedbackPopup = document.getElementById('feedbackPopup');
-  //
-  //   feedbackPopup.classList.remove('hidden');
-  //
-  //   if(successOrError === 'success'){
-  //     feedbackPopup.classList.add('success');
-  //   } else if (successOrError === 'error') {
-  //     feedbackPopup.classList.add('error');
-  //   }
-  //   feedbackPopup.innerText = message;
-  //   console.log(feedbackPopup);
-  //   //Hide popup when clicking outside of it
-  //   // document.addEventListener('click', function(event) {
-  //   //   var isClickInside = feedbackPopup.contains(event.target);
-  //   //   if (!isClickInside){
-  //   //     feedbackPopup.classList.add('hidden');
-  //   //   }
-  //   // });
-  // },
   feedbackPopup(successOrError, message){
     const feedbackPopup = document.getElementById('feedbackPopup');
 
