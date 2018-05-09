@@ -456,14 +456,6 @@ const View = {
         LocalStorageModel.removeSavedJob(idToDelete);
         View.checkForSavedJobs();
       });
-
-      //const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
-      // if (confirmMessage) {
-      //   const idToDelete = this.id;
-      //   this.parentElement.parentElement.removeChild(this.parentElement);
-      //   LocalStorageModel.removeSavedJob(idToDelete);
-      //   View.checkForSavedJobs();
-      // }
     });
   },
 
@@ -730,7 +722,6 @@ const FeedbackView = {
     const ok = document.getElementById("ok");
     ok.addEventListener("click", function() {
       feedbackPopup.classList.add("hidden");
-      console.log("hide feedback working");
     });
   },
 
