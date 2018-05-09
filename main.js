@@ -723,6 +723,24 @@ const FeedbackView = {
   //   //   }
   //   // });
   // },
+  feedbackPopup(successOrError, message){
+    const feedbackPopup = document.getElementById('feedbackPopup');
+
+    feedbackPopup.classList.remove('hidden');
+
+    if(successOrError === 'success'){
+      feedbackPopup.classList.add('success');
+    } else if (successOrError === 'error') {
+      feedbackPopup.classList.add('error');
+    }
+    feedbackPopup.innerText = message;
+
+    feedbackPopup.innerHTML = `<button id="confirm">OK</button>`;
+    const confirm = document.getElementById('confirm');
+    confirm.addEventListener('click', function(){
+      feedbackPopup.classList.add('hidden');
+    });
+  },
   textHighlight(textToHighlight) {
     textToHighlight.classList.add("textToHighlight");
     setTimeout(function() {
