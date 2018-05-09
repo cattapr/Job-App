@@ -20,7 +20,10 @@ const FetchModel = {
         ResponseController.getJobDetails();
         View.saveJobButton();
       })
-      .catch(error => FeedbackView.feedbackPopup("error", "Something went wrong."));
+      .catch(error => {
+        FeedbackView.feedbackPopup("error", "Something went wrong.");
+        FeedbackView.hideFeedbackPopup();
+      });
   },
   // Get detailed ad in HTML-format
   fetchByIdHTML(annonsId) {
@@ -109,9 +112,8 @@ const LocalStorageModel = {
   updateLocalStorage(annonsId) {
     // Push the annonsId into the array
     if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
-      FeedbackView.feedbackPopup("Success", "Denna annons har redan sparats.");
-      // alert("Denna annons har redan sparats.");
-      // return;
+      FeedbackView.feedbackPopup("success", "Denna annons har redan sparats.");
+      return;
     }
     LocalStorageModel.storedJobs.push(annonsId);
     // Set the savedJobs on localStorage with the storedJobs data.
@@ -185,7 +187,7 @@ const ResponseController = {
   			FetchModel.fetchByIdHTML(this.parentElement.id);
 	        window.location.hash = `?jobDetail=${this.parentElement.id}`;
 	        NavigationView.showJobDetails();
-  		}); 
+  		});
   	}
 
   },
@@ -421,13 +423,23 @@ const View = {
     );
 
     deleteSavedJobButton.addEventListener("click", function() {
-      const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
-      if (confirmMessage) {
-        const idToDelete = this.id;
-        this.parentElement.parentElement.removeChild(this.parentElement);
-        LocalStorageModel.removeSavedJob(idToDelete);
-        View.checkForSavedJobs();
-      }
+      FeedbackView.feedbackPopup("success", "Ta bort ur dina sparade annonser?");
+
+      const ok = document.getElementById('ok');
+      ok.addEventListener('click', function(){
+          const idToDelete = this.id;
+          this.parentElement.parentElement.removeChild(this.parentElement);
+          LocalStorageModel.removeSavedJob(idToDelete);
+          View.checkForSavedJobs();
+      });
+
+      //const confirmMessage = confirm("Är det ditt slutgiltiga svar???");
+      // if (confirmMessage) {
+      //   const idToDelete = this.id;
+      //   this.parentElement.parentElement.removeChild(this.parentElement);
+      //   LocalStorageModel.removeSavedJob(idToDelete);
+      //   View.checkForSavedJobs();
+      // }
     });
   },
 
@@ -683,11 +695,17 @@ const FeedbackView = {
       <p>${ message }</p>
       <button id="ok"><small>OK</small></button>
     `;
+  },
+
+  hideFeedbackPopup(){
+    const feedbackPopup = document.getElementById('feedbackPopup');
     const ok = document.getElementById('ok');
     ok.addEventListener('click', function(){
       feedbackPopup.classList.add('hidden');
+      console.log("hide feedback working");
     });
   },
+
   textHighlight(textToHighlight) {
     textToHighlight.classList.add("textToHighlight");
     setTimeout(function() {
@@ -737,3 +755,6 @@ LocalStorageModel.loadData();
 View.updateDisplaySavedJobs();
 
 FeedbackView.highlightSavedJobButtons();
+
+FeedbackView.feedbackPopup("success", "You rock");
+FeedbackView.hideFeedbackPopup();
