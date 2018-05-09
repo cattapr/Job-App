@@ -109,8 +109,9 @@ const LocalStorageModel = {
   updateLocalStorage(annonsId) {
     // Push the annonsId into the array
     if (LocalStorageModel.storedJobs.includes(annonsId) === true) {
-      alert("Denna annons har redan sparats.");
-      return;
+      FeedbackView.feedbackPopup("Success", "Denna annons har redan sparats.");
+      // alert("Denna annons har redan sparats.");
+      // return;
     }
     LocalStorageModel.storedJobs.push(annonsId);
     // Set the savedJobs on localStorage with the storedJobs data.
