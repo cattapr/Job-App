@@ -444,6 +444,7 @@ const View = {
         console.log("this.parenteELement = ", this.parentElement);
         this.parentElement.parentElement.removeChild(this.parentElement);
         LocalStorageModel.removeSavedJob(idToDelete);
+        View.checkForSavedJobs();
       }
     });
   },
